@@ -57,44 +57,43 @@ export default function PageProductDetailComponent({
   return (
     <div className="w-full   bg-zinc-50 shadow-lg flex flex-row   rounded-2xl items-center">
       <div className="rounded-full flex items-center justify-center w-[70px] h-[65px]  md:w-[90px]  md:h-[80px]  overflow-hidden">
-        <img src={product.image} 
-        className="h-[65px]  md:h-[85px]" 
-        
-        />
+        <img src={product.image} className="h-[65px]  md:h-[85px]" />
       </div>
 
       <div className="w-full flex flex-col p-3 justify-between ">
         <div className="w-full flex-col gap-4 justify-between ">
           <div className="w-full flex gap-1 mb-2 justify-between ">
-            <div className="flex items-center justify-center text-nowrap text-center px-2 py-1 bg-[#64870d] min-w-[180px]  rounded-3xl  text-white">
+            {/* <div className="flex justify-between items-center"> */}
+            <div className="flex items-center justify-center text-nowrap text-center px-2 py-1 bg-[#bb3e00] min-w-[180px]  rounded-3xl  text-white">
+              {/* bg-[#f7ad45] */}
               {productCategoryIdG !== "" && <>{product.sortOrder}.&nbsp;</>}
               {product.name}
             </div>
+            <div className="min-w-[100px] flex text-slate-500 items-center bg-[#f7ad45] justify-between   rounded-3xl">
+                <div>
+                  <CartButton cartProduct={cartProduct} />
+                 
+                </div>
+              </div>
+
+
           </div>
-<button onClick={() =>alert(product.productDesc)}>
-          <div  className="text-sm text-slate-500 font-extralight text-left max-w-fit md:max-w-[400px] max-h-[22px] overflow-hidden">
-            {product.productDesc}
-          </div>
+          <button onClick={() => alert(product.productDesc)}>
+            <div className="text-sm text-slate-500 font-extralight text-left max-w-fit md:max-w-[400px] max-h-[22px] overflow-hidden">
+              {product.productDesc}
+            </div>
           </button>
           {!product.flavors && (
-            <div className="flex text-slate-500 items-center bg-[#FADB5E] justify-between pt-1 pl-2 pr-1  rounded-3xl">
-              <div>Pack</div> <div>&euro;{price}</div>
-              <div>
-                <CartButton cartProduct={cartProduct} />
-                {/* <button
-                  className="px-1 py-1 bg-slate-400 shadow-emerald-400 shadow-2xl  rounded-full w-fit"
-                  onClick={() => {
-                    setShowProductDetailM(false);
-                  }}
-                >
-                  <IoMdAdd size={20} className="text-white " />
-                </button> */}
-              </div>
+            <div className="w-full flex justify-between items-center">
+              <div className="text-white">Pack</div> <div>&euro;{price}</div>
+             
             </div>
           )}
         </div>
 
-        {product.flavors && <AddOn baseProductName={product.name} addOnData={addOnData} />}
+        {product.flavors && (
+          <AddOn baseProductName={product.name} addOnData={addOnData} />
+        )}
       </div>
     </div>
   );

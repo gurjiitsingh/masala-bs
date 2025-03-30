@@ -31,7 +31,7 @@ const CartButton = ({ cartProduct }: {cartProduct:cartProductType}) => {
   return (
     <>
       <div className="w-full flex flex-row ">
-        <div className="flex items-center p-1 justify-center  rounded-lg gap-2 fit">
+        <div className="flex items-center  justify-center  rounded-lg gap-2 fit">
           <div>
             {quantity > 0 ? (
               <button

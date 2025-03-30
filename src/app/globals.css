@@ -19,7 +19,7 @@
   @apply px-32 py-32;
 }
 .primary{
-  @apply bg-[#FADB5E];
+  @apply bg-[#7b6f19];
 }
 .dim{
   @apply bg-blue-400;
@@ -30,7 +30,7 @@
 /* #F2F0EC; */
 /* bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1]  */
 :root {
-  --background: #fff;
+  --background: #fff1d7;
   --foreground: #171717;
 }
 
