@@ -6,7 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 //import OrderList from './OrderList'
 export default function OrderComplete() {
   const searchParams = useSearchParams();
-  const PaymentType = searchParams.get("paymentypte");
+  const PaymentType = searchParams.get("paymentType");
+  console.log("paymentType---------",PaymentType)
   const router = useRouter();
   // const { data: session } = useSession();
 
