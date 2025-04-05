@@ -129,7 +129,7 @@ type rt = {
 
 export async function deleteProduct(id:string) {
 
- const docRef = doc(db, "product", id);
+ const docRef = doc(db, "productaddon", id);
    await deleteDoc(docRef);                     
    //return { errors: "Delete not implimented jet" };
    // if (result?.rowCount === 1) {
@@ -152,7 +152,7 @@ export async function deleteProduct(id:string) {
     // }
 
        return {
-      message: { sucess: "Deleted product" },
+      message: "success",
     };
   // }else{
   //   return {errors:"Somthing went wrong, can not delete product"}

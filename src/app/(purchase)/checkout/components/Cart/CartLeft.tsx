@@ -205,19 +205,20 @@ async function proceedToOrder(){
         addressId: AddressId,
         paymentType,
       } as orderDataType;
-
+      let orderMasterId = "";
       if (cartData.length !== 0) {
-        await createNewOrder(purchaseData);
+       orderMasterId =  await createNewOrder(purchaseData);
+     // console.log("master id----------",  orderMasterId)
       }
       setIsDisabled(false)
      
       if (paymentType === "paypal") {
-        router.push("/pay");
+        router.push(`/pay?orderMasterId=${orderMasterId}`);
       }
       //console.log("going to complete--------")
       if (paymentType === "cod") {
         // console.log("going to complete")
-        router.push(`/complete?paymentypte=Barzahlung`);
+        router.push(`/complete?paymentType=Barzahlung&orderMasterId=${orderMasterId}`);
         //  router.push(`/checkout?email=${data.email}&deliverytype=${deliveryType}`)
       }
     }

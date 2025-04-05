@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 
 import {
  
@@ -37,9 +37,9 @@ const initialOptions = {
 function ProviderWrapper() {
   return (
     <PayPalScriptProvider options={initialOptions}>
-     
+     <Suspense>
       <Checkout />
-     
+      </Suspense>
     </PayPalScriptProvider>
    
   );

@@ -14,11 +14,11 @@ import { orderMasterDataT } from "@/lib/types/orderMasterType";
 
 const OrderDetail = () => {
   const searchParams = useSearchParams();
-  console.log(
-    "this is ids ---------------",
-    searchParams.get("addressId"),
-    searchParams.get("userId")
-  );
+  // console.log(
+  //   "this is ids ---------------",
+  //   searchParams.get("addressId"),
+  //   searchParams.get("userId")
+  // );
   const addressId = searchParams.get("addressId") as string;
   const masterOrderId = searchParams.get("masterId") as string;
   const [orderProducts, setOrderProducts] = useState<orderProductsT[]>([]);

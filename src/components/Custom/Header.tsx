@@ -1,6 +1,6 @@
 "use client";
 import Navbar from "@/components/Navbar";
-import Login from "./Login";
+import Login from "../Login";
 import { SessionProvider } from "next-auth/react";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 import { FaBars } from "react-icons/fa6";

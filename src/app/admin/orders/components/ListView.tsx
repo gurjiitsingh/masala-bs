@@ -61,7 +61,7 @@ const ListView = ({ title }: productTableProps) => {
               <TableHead>Payment Method</TableHead>
               <TableHead>Discount %</TableHead>
               <TableHead>Discount flate</TableHead>
-              <TableHead>Oringin</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

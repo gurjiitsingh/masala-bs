@@ -1,27 +1,26 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
-
-//import Description from "./componets/Description";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { editPorductSchema, TeditProductSchema } from "@/lib/types/productType";
-//import { Images } from "lucide-react";
-// import { fetchCategories } from "@/app/action/category/dbOperations";
-//import { fetchbrands } from "@/app/action/brads/dbOperations";
+
 import {
   editProduct,
   fetchProductById,
-} from "@/app/action/productsbase/dbOperation";
+} from "@/app/action/products/dbOperation";
 import { useRouter, useSearchParams } from "next/navigation";
-import { fetchCategories } from "@/app/action/category/dbOperations";
-import { categoryType } from "@/lib/types/categoryType";
+import {
+  addOnPorductEditSchema,
+  AddOnProductEditSchemaType,
+} from "@/lib/types/productAddOnType";
 
-const PageComp = () => {
-  const [categoryData, setCategoryData] = useState<categoryType[]>([]);
+const Form = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id") || "";
 
+  console.log("-----------", id);
+
+  //const [product, setProduct] = useState({});
   const router = useRouter();
   const {
     register,
@@ -29,65 +28,44 @@ const PageComp = () => {
     setValue,
     handleSubmit,
     // setError,
-  } = useForm<TeditProductSchema>({
-    resolver: zodResolver(editPorductSchema),
+  } = useForm<AddOnProductEditSchemaType>({
+    resolver: zodResolver(addOnPorductEditSchema),
   });
   useEffect(() => {
     let productData;
     async function prefetch() {
       productData = await fetchProductById(id);
-      //console.log("productData ----", productData);
-      const priceS = productData.price.toString().replace(/\./g, ',');
+      console.log("productData.id ----", id);
+      //setProduct(productData);
+
       setValue("id", id);
       setValue("name", productData.name);
-      setValue("productDesc", productData.productDesc);
-     // setValue("categoryId", "yishiwe");
-      setValue("oldImgageUrl", productData.image);
-      setValue("price", priceS);
-      setValue("sortOrder", productData.sortOrder!.toString());
-      setValue("categoryId", productData.categoryId!);
+      setValue("desc", productData.productDesc);
+      //  setValue("oldImgageUrl", productData.image);
+      setValue("price", productData.price.toString());
+
       setValue("isFeatured", productData.isFeatured);
     }
 
     prefetch();
   }, []);
 
-   
-    useEffect(() => {
-      async function prefetch() {
-        const categoriesData = await fetchCategories();
-        // console.log("cat id --------", categoriesData)
-        //   const brandData = await fetchbrands();
-        setCategoryData(categoriesData);
-        // setBrand(brandData);
-      }
-      prefetch();
-    }, []);
-
-  async function onsubmit(data: TeditProductSchema) {
+  async function onsubmit(data: AddOnProductEditSchemaType) {
     const formData = new FormData();
-    //console.log("---------",formData);
-    // let CatId;
-    // if(data.categoryId === "0"){
-    //  CatId = data.categoryIdOld as string; 
-    // }else{
-    //  CatId = data.categoryId as string;  
-    // }
 
     formData.append("name", data.name);
     formData.append("price", data.price);
-    formData.append("categoryId", data.categoryId!);
-    formData.append("sortOrder", data.sortOrder);
-    formData.append("productDesc", data.productDesc);
-    formData.append("image", data.image[0]);
-    formData.append("oldImgageUrl", data.oldImgageUrl!);
+    // formData.append("productCat", data.productCat);
+    formData.append("desc", data.desc);
+    // formData.append("image", data.image[0]);
+    //  formData.append("oldImgageUrl",data.oldImgageUrl!)
     // formData.append("isFeatured",data.isFeatured)
     formData.append("id", data.id!);
 
     const result = await editProduct(formData);
 
     if (!result?.errors) {
-      router.push("/admin/productsbase");
+      router.push("/admin/products");
     } else {
       alert("Some thing went wrong");
     }
@@ -109,7 +87,7 @@ const PageComp = () => {
     //   } else if (errors.productCat) {
     //     setError("productCat", {
     //       type: "server",
-    //       message: errors.productCat, 
+    //       message: errors.productCat,
     //     });
     //   }
     //   if (errors.productDesc) {
@@ -142,16 +120,16 @@ const PageComp = () => {
     <>
       <form onSubmit={handleSubmit(onsubmit)}>
         <div className="flexflex flex-col gap-4 p-5">
-          <h1>Edit Product</h1>
+          <h1>Edit Variant</h1>
 
           <div className="flex flex-col lg:flex-row gap-5 ">
             {/* left box */}
-            <div className="flex-1 flex flex-col gap-y-2">
+            <div className="flex-1 flex flex-col gap-y-5">
               <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border">
                 <h1 className="font-semibold">Product</h1>
-                <div className="flex w-full flex-col gap-2  my-2 ">
+                <div className="flex w-full flex-col gap-2  my-15 ">
                   <input {...register("id")} hidden />
-                
+                  {/* <input {...register("oldImgageUrl")} /> */}
                   <div className="flex flex-col gap-1 w-full">
                     <label className="label-style" htmlFor="product-title">
                       Product Name<span className="text-red-500">*</span>{" "}
@@ -163,20 +141,19 @@ const PageComp = () => {
                       )}
                     </span>
                   </div>
-                  <input {...register("categoryIdOld")} hidden />
-                  <div className="flex flex-col gap-1 w-full">
+
+                  {/* <div className="flex flex-col gap-1 w-full">
                     <label className="label-style" htmlFor="product-title">
                       Category<span className="text-red-500">*</span>{" "}
                     </label>
-                    <select {...register("categoryId")} className="input-style">
-                      <option key="wer" value="0">
-                        Do not change Category
+                    <select {...register("productCat")} className="input-style">
+                      <option key="wer" value="Mobile">
+                        Select Product Category
                       </option>
-                      {categoryData.map(
-                        (category: { name: string; id: string }, i: number) => {
-                         // console.log("cat id -------", category.id);
+                      {categories.map(
+                        (category: { name: string }, i: number) => {
                           return (
-                            <option key={i} value={category.id}>
+                            <option key={i} value={category.name}>
                               {category.name}
                             </option>
                           );
@@ -184,17 +161,16 @@ const PageComp = () => {
                       )}
                     </select>
                     <span className="text-[0.8rem] font-medium text-destructive">
-                      {errors.categoryId?.message && (
-                        <p>{errors.categoryId?.message}</p>
+                      {errors.productCat?.message && (
+                        <p>{errors.productCat?.message}</p>
                       )}
                     </span>
-                  </div>
-                 
+                  </div> */}
                 </div>
               </div>
               <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border">
                 <h1 className="font-semibold">Price Details</h1>
-                <div className="flex w-full flex-col gap-2  my-2 ">
+                <div className="flex w-full flex-col gap-2  my-15 ">
                   <div className="flex flex-col gap-1 w-full">
                     <label className="label-style" htmlFor="product-title">
                       Price<span className="text-red-500">*</span>{" "}
@@ -214,9 +190,9 @@ const PageComp = () => {
               </div>
             </div>
             {/* End of left box */}
-            <input {...register("oldImgageUrl")} hidden />
+
             <div className="flex-1 flex flex-col gap-5 h-full">
-              <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border">
+              {/* <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border">
                 <h1 className="font-semibold">Pictures</h1>
                 <div className="flex flex-col gap-1">
                   <label className="label-style">Product Image</label>
@@ -230,7 +206,7 @@ const PageComp = () => {
                     {errors.image && <span>Select product image</span>}
                   </p>
                 </div>
-              </div>
+              </div> */}
 
               <div className="flex-1 flex flex-col gap-3 bg-white rounded-xl p-4 border">
                 <h1 className="font-semibold">General Detail</h1>
@@ -239,13 +215,14 @@ const PageComp = () => {
                   <label className="label-style">Product description</label>
 
                   <textarea
-                    {...register("productDesc"
-                    //   , {
-                    //   validate: {
-                    //     pattern: (value: string) => !/[!]/.test(value),
-                    //   },
-                    // }
-                  )}
+                    {...register(
+                      "productDesc"
+                      //   , {
+                      //   validate: {
+                      //     pattern: (value: string) => !/[!]/.test(value),
+                      //   },
+                      // }
+                    )}
                     className="textarea-style"
                   />
                   <p className="text-[0.8rem] font-medium text-destructive">
@@ -255,15 +232,15 @@ const PageComp = () => {
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="label-style">Sort Order</label>
-                  <input {...register("sortOrder")} className="input-style" />
-                  <span className="text-[0.8rem] font-medium text-destructive">
-                    {errors.sortOrder?.message && (
-                      <span>{errors.sortOrder?.message}</span>
+                {/* <div className="flex  items-center gap-4 ">
+                  <label className="label-style">Normal Product</label>
+                  <input {...register("isFeatured")} type="radio" value="false" />
+                  <p className="text-[0.8rem] font-medium text-destructive">
+                    {errors.isFeatured?.message && (
+                      <p>{errors.isFeatured?.message}</p>
                     )}
-                  </span>
-                </div>
+                  </p>
+                </div> */}
 
                 <div className="flex    items-center gap-4">
                   <label className="label-style">Featured Product</label>
@@ -287,4 +264,4 @@ const PageComp = () => {
   );
 };
 
-export default PageComp;
+export default Form;

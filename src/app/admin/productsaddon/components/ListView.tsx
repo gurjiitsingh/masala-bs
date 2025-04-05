@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table";
 
 import TableRows from "./TableRows";
-import {  fetchProductByBaseProductId } from "@/app/action/productsaddon/dbOperation";
+import {  fetchProductAddOnByBaseProductId } from "@/app/action/productsaddon/dbOperation";
 import { useSearchParams } from "next/navigation";
 import { AddOnProductSchemaType } from "@/lib/types/productAddOnType";
 //import FeaturProductUpdate from "./FeaturProductUpdate";
@@ -37,7 +37,7 @@ const searchParams = useSearchParams();
       try {
        // const result = await fetchProducts();
        // console.log("---------", result)
-        const result = await fetchProductByBaseProductId(baseProductId);
+        const result = await fetchProductAddOnByBaseProductId(baseProductId);
        // console.log("addonproduct by baseproductid---------", result)
         setProductData(result);
       } catch (error) {
@@ -59,10 +59,8 @@ const searchParams = useSearchParams();
 
   return (
     <>
-      <div className="mt-10 p-2">
-        <h3 className="text-2xl mb-4 font-semibold">
-        Product Addons
-        </h3>
+      <div className="mt-2 p-2">
+      
         <div className="bg-slate-50 rounded-lg p-1">
           <Table>
             {/* <TableCaption>Product List</TableCaption> */}

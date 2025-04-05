@@ -28,7 +28,7 @@ export async function addUserDirect(formData: FormData) {
   querySnapshot.forEach((doc) => {
     recordId = doc.id;
     // doc.data() is never undefined for query doc snapshots
-    console.log("User allready exist ------", doc.id);
+    //console.log("User allready exist ------", doc.id);
     return doc.id;
   });
 

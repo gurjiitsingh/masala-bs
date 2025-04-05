@@ -1,19 +1,29 @@
 "use server";
 
-
 import { db } from "@/lib/firebaseConfig";
-import {  addDoc, collection, doc, getDoc, getDocs, limit, orderBy, query, where } from "@firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  updateDoc,
+  where,
+} from "@firebase/firestore";
 import { addUserDirect } from "../user/dbOperation";
 import { addCustomerAddressDirect } from "../address/dbOperations";
-import {  TOrderMaster, orderMasterDataT } from "@/lib/types/orderMasterType";
+import { TOrderMaster, orderMasterDataT } from "@/lib/types/orderMasterType";
 import { orderProductsT } from "@/lib/types/orderType";
-import {   orderDataType, purchaseDataT } from "@/lib/types/cartDataType";
+import { orderDataType, purchaseDataT } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
 
- 
-
-
-export async function createNewOrderCustomerAddress(purchaseData:purchaseDataT) {
+export async function createNewOrderCustomerAddress(
+  purchaseData: purchaseDataT
+) {
   //  console.log("--------------------- cart data in cart save draft  ",purchaseData)
   //1. user id
   //2. user address
@@ -25,8 +35,8 @@ export async function createNewOrderCustomerAddress(purchaseData:purchaseDataT) 
   // const total = purchaseData.total;
   // const totalDiscountG = purchaseData.totalDiscountG;
   //const userId = purchaseData.address.userId;
- // const password = purchaseData.address.password;
- const password = "123456";
+  // const password = purchaseData.address.password;
+  const password = "123456";
   const username = firstName + "" + lastName;
   //if(purchaseData.userId === undefined){
   const formData = new FormData();
@@ -35,7 +45,7 @@ export async function createNewOrderCustomerAddress(purchaseData:purchaseDataT) 
   formData.append("password", password);
   formData.append("confirmPassword", password);
   // const result = await addUser(formData);
-  const UserAddedId = await addUserDirect(formData) as string;
+  const UserAddedId = (await addUserDirect(formData)) as string;
 
   // Now check address or add new address
   const formDataAdd = new FormData();
@@ -56,7 +66,7 @@ export async function createNewOrderCustomerAddress(purchaseData:purchaseDataT) 
 
   const customerName = firstName + " " + lastName;
 
-  return {addressAddedId, UserAddedId, customerName};
+  return { addressAddedId, UserAddedId, customerName };
   //const now = new Date();
   // const now_india = now.toLocaleString("en-IN", {
   //   dateStyle: "medium",
@@ -64,37 +74,36 @@ export async function createNewOrderCustomerAddress(purchaseData:purchaseDataT) 
   //   timeZone: "Asia/Kolkata",
   // });
 
-//"de-DE"
+  //"de-DE"
   // const now_german = new Date().toLocaleString("en-DE", {
   //   dateStyle: "medium",
   //   timeStyle: "medium",
   //   timeZone: "Europe/Berlin",
   // });
 
- // const order = await fetchOrdersMaster()
+  // const order = await fetchOrdersMaster()
 
-//  const collectionRef = collection(db, 'orderMaster')
-    
-//  const targetQuery = query(collectionRef, orderBy("srno", "desc"), limit(1));
-//  const querySnapshot = await getDocs(targetQuery)
+  //  const collectionRef = collection(db, 'orderMaster')
 
-//  const q = query(collectionRef);
-//  const querySnapshot = await getDocs(q);
-//let new_srno =1;
-// const orderData = [] as orderMasterDataT[];
-//   querySnapshot.forEach((doc) => {
-//      const  data = doc.data() as orderMasterDataT;
-//     //   console.log("last order ----------", data)
-//        orderData.push(data)
-//      });
- 
-   
+  //  const targetQuery = query(collectionRef, orderBy("srno", "desc"), limit(1));
+  //  const querySnapshot = await getDocs(targetQuery)
+
+  //  const q = query(collectionRef);
+  //  const querySnapshot = await getDocs(q);
+  //let new_srno =1;
+  // const orderData = [] as orderMasterDataT[];
+  //   querySnapshot.forEach((doc) => {
+  //      const  data = doc.data() as orderMasterDataT;
+  //     //   console.log("last order ----------", data)
+  //        orderData.push(data)
+  //      });
+
   //  if(orderData[0]?.srno !== undefined){
   //    new_srno =orderData[0].srno + 1;
   //  }
- //  console.log("sr No ----------", new_srno)
+  //  console.log("sr No ----------", new_srno)
 
- // const timeId = new Date().toISOString();
+  // const timeId = new Date().toISOString();
   // const orderMasterData = {
   //   // also add auto increment to order,
   //   customerName,
@@ -105,11 +114,10 @@ export async function createNewOrderCustomerAddress(purchaseData:purchaseDataT) 
   //   totalDiscountG,
   //   time: now_german,
   //   srno:new_srno,
-   
-  // } as orderMasterDataT; 
 
-  
-//const orderMasterId = await addOrderToMaster(orderMasterData) as string;
+  // } as orderMasterDataT;
+
+  //const orderMasterId = await addOrderToMaster(orderMasterData) as string;
 
   // add product to productOrder
 
@@ -125,15 +133,12 @@ export async function createNewOrderCustomerAddress(purchaseData:purchaseDataT) 
   //  await deleteDoc(doc(db, "orderProducts", toBeDeleted));
 }
 
-
-export async function createNewOrder(purchaseData:orderDataType) {
+export async function createNewOrder(purchaseData: orderDataType) {
   //  console.log("--------------------- cart data in cart save draft  ",purchaseData)
   //1. user id
   //2. user address
   //3. cart data
 
-  
-  
   //const now = new Date();
   // const now_india = now.toLocaleString("en-IN", {
   //   dateStyle: "medium",
@@ -141,67 +146,58 @@ export async function createNewOrder(purchaseData:orderDataType) {
   //   timeZone: "Asia/Kolkata",
   // });
 
-//"de-DE"
+  //"de-DE"
   const now_german = new Date().toLocaleString("en-DE", {
     dateStyle: "medium",
     timeStyle: "medium",
     timeZone: "Europe/Berlin",
   });
-
- // const order = await fetchOrdersMaster()
-
- const collectionRef = collection(db, 'orderMaster')
-    
- const targetQuery = query(collectionRef, orderBy("srno", "desc"), limit(1));
- const querySnapshot = await getDocs(targetQuery)
-
-//  const q = query(collectionRef);
-//  const querySnapshot = await getDocs(q);
-let new_srno =1;
-const orderData = [] as orderMasterDataT[];
+  // const order = await fetchOrdersMaster()
+  const collectionRef = collection(db, "orderMaster");
+  const targetQuery = query(collectionRef, orderBy("srno", "desc"), limit(1));
+  const querySnapshot = await getDocs(targetQuery);
+  //  const q = query(collectionRef);
+  //  const querySnapshot = await getDocs(q);
+  let new_srno = 1;
+  const orderData = [] as orderMasterDataT[];
   querySnapshot.forEach((doc) => {
-     const  data = doc.data() as orderMasterDataT;
+    const data = doc.data() as orderMasterDataT;
     //   console.log("last order ----------", data)
-       orderData.push(data)
-     });
- 
-   
-   if(orderData[0]?.srno !== undefined){
-     new_srno =orderData[0].srno + 1;
-   }
- //  console.log("sr No ----------", new_srno)
-
- // const timeId = new Date().toISOString();
- const total = purchaseData.total;
+    orderData.push(data);
+  });
+  if (orderData[0]?.srno !== undefined) {
+    new_srno = orderData[0].srno + 1;
+  }
+  //  console.log("sr No ----------", new_srno)
+  // const timeId = new Date().toISOString();
+  const total = purchaseData.total;
   const totalDiscountG = purchaseData.totalDiscountG;
- const addressId = purchaseData.addressId;
- const userAddedId = purchaseData.addressId;
- const customerName = purchaseData.customerName;
- const paymentType = purchaseData.paymentType;
- const  flatDiscount= purchaseData.flatDiscount;
- let status = 'Pending payment';
-   if(paymentType === 'cod'){ 
-    status = 'Completed';
-   }
-
+  const addressId = purchaseData.addressId;
+  const userAddedId = purchaseData.addressId;
+  const customerName = purchaseData.customerName;
+  const paymentType = purchaseData.paymentType;
+  const flatDiscount = purchaseData.flatDiscount;
+  let status = "Payment Pending";
+  if (paymentType === "cod") {
+    status = "Completed";
+  }
 
   const orderMasterData = {
     // also add auto increment to order,
-    customerName:customerName,
+    customerName: customerName,
     userId: userAddedId,
     addressId: addressId,
-    total:total,
+    total: total,
     paymentType,
     status,
     totalDiscountG,
     flatDiscount,
     time: now_german,
-    srno:new_srno,
-   
-  } as orderMasterDataT; 
-console.log("order master---------", orderMasterData)
-  
-const orderMasterId = await addOrderToMaster(orderMasterData) as string;
+    srno: new_srno,
+  } as orderMasterDataT;
+  //console.log("order master---------", orderMasterData);
+
+  const orderMasterId = (await addOrderToMaster(orderMasterData)) as string;
 
   // add product to productOrder
 
@@ -209,9 +205,11 @@ const orderMasterId = await addOrderToMaster(orderMasterData) as string;
   const purchaseProducts = purchaseData.cartData as ProductType[];
 
   purchaseProducts.forEach((element) => {
-  //  console.log("order item---------", element,userAddedId, orderMasterId)
-   addProductDraft(element, userAddedId, orderMasterId);
+    //  console.log("order item---------", element,userAddedId, orderMasterId)
+    addProductDraft(element, userAddedId, orderMasterId);
   });
+
+  return orderMasterId;
 
   //  const toBeDeleted = cartData[0].purchaseSession;
   //  console.log(toBeDeleted)
@@ -219,8 +217,27 @@ const orderMasterId = await addOrderToMaster(orderMasterData) as string;
 } //end of cart to orderProduct
 
 
-export async function addProductDraft(element:ProductType, userAddedId:string, orderMasterId:string) {
-   
+
+
+
+export async function updateOrderMaster(id: string, status:string) {
+ 
+  try {
+    const docRef = doc(db, "orderMaster", id);
+    await updateDoc(docRef, {status});
+    console.log("Document updated successfully!");
+    
+  } catch (error) {
+    console.log("error", error);
+    return { errors: "Cannot update" };
+  }
+}
+
+export async function addProductDraft(
+  element: ProductType,
+  userAddedId: string,
+  orderMasterId: string
+) {
   const product = {
     id: element.id,
     name: element.name,
@@ -229,9 +246,9 @@ export async function addProductDraft(element:ProductType, userAddedId:string, o
     orderMasterId,
     //purchaseSession: element.purchaseSession,
     userId: userAddedId,
-  //  status: element.status,
+    //  status: element.status,
   };
- // console.log("UserAddedId in add products ----",  product)
+  // console.log("UserAddedId in add products ----",  product)
   try {
     const docRef = await addDoc(collection(db, "orderProducts"), product);
     console.log("purchased product document written with ID: ", docRef.id);
@@ -241,79 +258,79 @@ export async function addProductDraft(element:ProductType, userAddedId:string, o
   }
 }
 
-
-
-
-export async function addOrderToMaster(element:orderMasterDataT) {
+export async function addOrderToMaster(element: orderMasterDataT) {
   let userDocRef = "" as string;
   let recordId = undefined;
- try {
-      userDocRef = (await addDoc(collection(db, "orderMaster"), element)).id ;
-      recordId = userDocRef;
-      return userDocRef;
-      // Clear the form
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-  
-    // try {
-    //   const docRef = await addDoc(collection(db, "orderMaster"), element1);
-    //   console.log("Document written with ID: ", docRef.id);
-    //   return docRef.id;
-    //   // Clear the form
-    // } catch (e) { 
-    //   console.error("Error adding document: ", e);
-    // }
+  try {
+    userDocRef = (await addDoc(collection(db, "orderMaster"), element)).id;
+    recordId = userDocRef;
+    return userDocRef;
+    // Clear the form
+  } catch (e) {
+    console.error("Error adding document: ", e);
   }
 
+  // try {
+  //   const docRef = await addDoc(collection(db, "orderMaster"), element1);
+  //   console.log("Document written with ID: ", docRef.id);
+  //   return docRef.id;
+  //   // Clear the form
+  // } catch (e) {
+  //   console.error("Error adding document: ", e);
+  // }
+}
 
-  export async function fetchOrdersMaster():Promise<orderMasterDataT[]>{
-
-
-const data = [] as orderMasterDataT[];
+export async function fetchOrdersMaster(): Promise<orderMasterDataT[]> {
+  const data = [] as orderMasterDataT[];
   //  const q = query(collection(db, "orderMaster"));
   //  const querySnapshot = await getDocs(q);
 
-    const collectionRef = collection(db, 'orderMaster')
-    
-    const targetQuery = query(collectionRef, orderBy("srno", "desc"), limit(10));
-    const querySnapshot = await getDocs(targetQuery)
+  const collectionRef = collection(db, "orderMaster");
+
+  const targetQuery = query(collectionRef, orderBy("srno", "desc"), limit(20));
+  const querySnapshot = await getDocs(targetQuery);
+
+  querySnapshot.forEach((doc) => {
+    const pData = { id: doc.id, ...doc.data() } as orderMasterDataT;
+    data.push(pData);
+  });
+  return data;
+}
 
 
-    querySnapshot.forEach((doc) => {
+export async function deleteOrderMasterRec(id: string) {
+  const docRef = doc(db, "orderMaster", id);
+  await deleteDoc(docRef);
+ 
 
-      const pData = { id: doc.id, ...doc.data() } as orderMasterDataT;
-      data.push(pData);
-    });
-    return data;
+  return {
+    message: { sucess: "Order Deleted" },
+  };
+  // }else{
+  //   return {errors:"Somthing went wrong, can not delete product"}
+  // }
+}
 
-   }
+export async function fetchOrdersMasterByUserId(
+  userId: string
+): Promise<Array<TOrderMaster>> {
+  //  const q = query(collection(db, "orderMaster"), where("userId", "==", userId));
+  // const querySnapshot = await getDocs(q);
+  //  let data = [];
+  //  querySnapshot.forEach((doc) => {
+  //    data.push({id:doc.id, ...doc.data()});
+  //  });
+  //  return data;
 
+  let data = [] as orderMasterDataT[];
 
-   
-
-   export async function fetchOrdersMasterByUserId(userId:string):Promise<Array<TOrderMaster>>{
-
-
-    //  const q = query(collection(db, "orderMaster"), where("userId", "==", userId));
-    // const querySnapshot = await getDocs(q);
-    //  let data = [];
-    //  querySnapshot.forEach((doc) => {
-    //    data.push({id:doc.id, ...doc.data()});
-    //  });
-    //  return data;
-
-    let data = [] as orderMasterDataT[];
-    
-      const q = query(collection(db, "orderMaster"), where("userId", "==", userId));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        data = doc.data() as orderMasterDataT[];
-      });
-      return data;
-   
-   }   
-
+  const q = query(collection(db, "orderMaster"), where("userId", "==", userId));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    data = doc.data() as orderMasterDataT[];
+  });
+  return data;
+}
 
 // export async function addOrder(element) {
 //   try {
@@ -325,15 +342,13 @@ const data = [] as orderMasterDataT[];
 //   }
 // }
 
-
-
 // export async function fetchOrders(){
 
 //  // const result = await db.select().from(product);
 //   const result = await getDocs(collection(db, "product"))
 // //  console.log(result.docs)
-   
-// let data; 
+
+// let data;
 // data = [];
 //   result.forEach((doc) => {
 //     data.push({id:doc.id, ...doc.data()});
@@ -342,38 +357,35 @@ const data = [] as orderMasterDataT[];
 //   return data;
 // }
 
-export async function fetchOrderMasterById(id:string){
+export async function fetchOrderMasterById(id: string) {
   console.log("Document data:--------");
-    const docRef = doc(db, "orderMaster", id);
-    const docSnap = await getDoc(docRef);
-    let productData = {} as orderMasterDataT;
-    if (docSnap.exists()) {
-     console.log("Document data:", docSnap.data());
-    } else {
-      //   docSnap.data() //will be undefined in this case
-      console.log("No such document!");
-    }
-    productData = docSnap.data() as orderMasterDataT;
-    return productData;
-  
+  const docRef = doc(db, "orderMaster", id);
+  const docSnap = await getDoc(docRef);
+  let productData = {} as orderMasterDataT;
+  if (docSnap.exists()) {
+    console.log("Document data:", docSnap.data());
+  } else {
+    //   docSnap.data() //will be undefined in this case
+    console.log("No such document!");
+  }
+  productData = docSnap.data() as orderMasterDataT;
+  return productData;
 }
-
 
 /***************** Order detail  **************************/
 
-
-
-export async function fetchOrderProductsByOrderMasterId(OrderMasterId:string){
- 
+export async function fetchOrderProductsByOrderMasterId(OrderMasterId: string) {
   //console.log("---------- inside order -----------", OrderMasterId)
   const data = [] as orderProductsT[];
-  const q = query(collection(db, "orderProducts"), where("orderMasterId", "==", OrderMasterId));
+  const q = query(
+    collection(db, "orderProducts"),
+    where("orderMasterId", "==", OrderMasterId)
+  );
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
-   const orderData = doc.data() as orderProductsT;
-   data.push(orderData)
+    const orderData = doc.data() as orderProductsT;
+    data.push(orderData);
   });
- // console.log(data)
+  // console.log(data)
   return data;
-
-}   
+}

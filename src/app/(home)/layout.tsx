@@ -3,11 +3,11 @@ import "../globals.css";
 
 import { CartProvider } from "@/store/CartProvider";
 import { SiteProvider } from "@/SiteContext/SiteProvider";
-import Header from "@/components/Header";
+import Header from "@/components/Custom/Header";
 
 import { SideCart } from "@/components/MiniCart/SideCart";
 import { BargerMenu } from "@/components/Bargermenu/Menu";
-import Footer from "@/components/Footer";
+import Footer from "@/components/Custom/Footer";
 
 import CartBottom from "@/components/CartBottom/CartBottom"
 import Modal from "./Components/Modal";
@@ -32,7 +32,9 @@ export default function RootLayout({
            <div className="z-50">
             <SideCart />
             </div>
+            <div className="z-50">
             <Header />
+            </div>
             {children}
            
             <Footer />

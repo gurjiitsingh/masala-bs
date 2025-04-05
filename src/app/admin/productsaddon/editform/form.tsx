@@ -2,39 +2,40 @@
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addNewProduct } from "@/app/action/productsaddon/dbOperation";
+import {  editAddOnProduct, fetchProductAddonById } from "@/app/action/productsaddon/dbOperation";
 import { useSearchParams } from "next/navigation";
 import {
   addOnPorductSchema,
+  AddOnProductEditSchemaType,
   AddOnProductSchemaType,
 } from "@/lib/types/productAddOnType";
-//import Input from "./componets/input";
+import Link from "next/link";
+import { useEffect } from "react";
 
-// type Terror = {
-//   name: string | null;
-//   price: string | null;
-//   isFeatured: string | null;
-//  // company: string | null;
-//   productCat: string | null;
-//   productDesc: string | null;
-//   image: string | null;
-// };
-const FormCom = () => {
+const Form = () => {
   const searchParams = useSearchParams();
-  const baseProductId = searchParams.get("id") || "";
- // console.log("addonprodut form  baseproductId============", baseProductId);
-
-  // const [categories, setCategory] = useState<categoryTypeArr>([]);
-
-  // useEffect(() => {
-  //   async function prefetch() {
-  //     const catData = await fetchCategories();
-  //     //   const brandData = await fetchbrands();
-  //     setCategory(catData);
-  //     // setBrand(brandData);
-  //   }
-  //   prefetch();
-  // }, []);
+  const addOnId = searchParams.get("id") || "";
+  const baseProductId = searchParams.get("baseProductId") || "";
+  useEffect(() => {
+      let productData;
+      async function prefetch() {
+        productData = await fetchProductAddonById(addOnId);
+        //console.log("productData ----", productData);
+        const priceS = productData.price.toString().replace(/\./g, ',');
+        setValue("id", productData.id);
+        setValue("name", productData.name);
+        setValue("desc", productData.desc);
+       // setValue("categoryId", "yishiwe");
+       // setValue("oldImgageUrl", productData.image);
+        setValue("price", priceS);
+        setValue("sortOrder", productData.sortOrder!.toString());
+       // setValue("categoryId", productData.categoryId!);
+        setValue("isFeatured", productData.isFeatured);
+      }
+  
+      prefetch();
+    }, []);
+ 
 
   const {
     register,
@@ -51,22 +52,18 @@ const FormCom = () => {
 
   //const images = watch("images");
 
-  async function onsubmit(data: AddOnProductSchemaType) {
-    console.log("data ---", data);
+  async function onsubmit(data: AddOnProductEditSchemaType) {
+   // console.log("data ---", data);
     const formData = new FormData();
-    //console.log("images---------",data)
+    formData.append("id", data.id!);
     formData.append("name", data.name);
     formData.append("price", data.price);
-
-    // formData.append("isFeatured", data.isFeatured);
+     formData.append("isFeatured", 'false');
     formData.append("sortOrder", data.sortOrder);
-    // formData.append("weight", data.weight);
-    // formData.append("dimensions", data.dimensions);
-    //formData.append("productCat", data.productCat);
     formData.append("desc", data.desc);
     //formData.append("image", data.image[0]);
     formData.append("baseProductId", baseProductId);
-    const result = await addNewProduct(formData);
+    const result = await editAddOnProduct(formData);
 
     if (!result?.errors) {
       // router.push('/admin/products')
@@ -132,7 +129,31 @@ const FormCom = () => {
     <>
       <form onSubmit={handleSubmit(onsubmit)}>
         <div className="flexflex flex-col gap-4 p-5">
-          <h1>Create Variant</h1>
+        <div className="flex gap-2 w-fit my-2">
+            <div className="border rounded-xl text-slate-600 px-1 py-1">
+              Edit Variant
+            </div>
+            <div>
+             
+              <Link
+                href={{
+                  //   pathname: `/admin/productsaddon/${product.id}`,
+                  // pathname: `/admin/${product.id}`,
+                  pathname: "/admin/productsaddon",
+                  query: {
+                    id: baseProductId,
+                  },
+                }}
+              >
+                <Button
+                  size="sm"
+                  className="bg-red-600 rounded-xl text-white px-1 py-1"
+                >
+                  All Variants
+                </Button>
+              </Link>
+            </div>
+          </div>
 
           <div className="flex flex-col lg:flex-row gap-5 ">
             {/* left box */}
@@ -143,6 +164,10 @@ const FormCom = () => {
                   <div className="flex flex-col gap-1 w-full">
                     <input
                       {...register("baseProductId", { value: baseProductId })}
+                      type="hidden"
+                    />
+                     <input
+                      {...register("id", { value: addOnId })}
                       type="hidden"
                     />
                     <label className="label-style" htmlFor="product-title">
@@ -283,7 +308,7 @@ const FormCom = () => {
                   </span>
                 </div>
 
-                <Button className="form-btn-color" type="submit">Save </Button>
+                <Button className="form-btn-color" type="submit">Submit </Button>
               </div>
             </div>
           </div>
@@ -293,4 +318,4 @@ const FormCom = () => {
   );
 };
 
-export default FormCom;
+export default Form;

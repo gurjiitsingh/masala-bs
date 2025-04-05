@@ -5,12 +5,17 @@ import {
     usePayPalScriptReducer,
   } from "@paypal/react-paypal-js";
   
-  import { useRouter } from "next/navigation";
+  import { useRouter, useSearchParams } from "next/navigation";
   import { useCartContext } from "@/store/CartContext";
 
 export default function Checkout(){
-    const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
+ const searchParams = useSearchParams();
+   const orderMasterId = searchParams.get("orderMasterId");
+  // console.log("orderMasterId in paypal -------------",orderMasterId)
+
+    const [{ options, isPending,isRejected,isResolved, isInitial  }, dispatch] = usePayPalScriptReducer();
     //const [currency, setCurrency] = useState(options.currency);
+    console.log("isPending,isRejected,isResolved, isInitial ---------", isPending,isRejected,isResolved, isInitial)
     const router = useRouter();
     const {   endTotalG } = useCartContext();
    
@@ -82,9 +87,15 @@ export default function Checkout(){
       return actions.order.capture().then((details) => {
         const name = details.payer.name.given_name;
        // alert(`Transaction completed by ${name}`);
-       router.push(`/complete?paymentType=paypal`)
+      
+      // console.log("isPending,isRejected,isResolved, isInitial ---------", isPending,isRejected,isResolved, isInitial)
+       router.push(`/complete?paymentType=paypal&status=success&orderMasterId=${orderMasterId}`)
        });
     };
+
+    const onError = (err) => {
+      router.push(`/complete?paymentType=paypal&status=fail&orderMasterId=${orderMasterId}`)
+  }
   
     return (<div className="flex container mx-auto px-[30%] items-center justify-center my-[20%] ">
       <div className="checkout">
@@ -103,6 +114,8 @@ export default function Checkout(){
               style={{ layout: "vertical" }}
               createOrder={(data, actions) => onCreateOrder(data, actions)}
               onApprove={(data, actions) => onApproveOrder(data, actions)}
+              onError={ (err)=> onError(err)}
+              
             />
            
           </>

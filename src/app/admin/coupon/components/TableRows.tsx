@@ -24,17 +24,13 @@ function TableRows({ coupon }:{coupon:couponType}){
 //const router = useRouter();
 console.log("copoun data------------",coupon)
  async function handleDelete(coupon:couponType) {
-   // confirm("Do you want to delete Coupon!\n If yes click OK \n If not click Cancel.");
-   confirm("Möchten Sie den Gutschein löschen?\n Falls ja, klicken Sie auf OK. \n Falls nicht, klicken Sie auf Cancel.");
-   
-   const result = await deletecoupon(coupon.id!)
-// if(result.errors){
-//   alert(result.errors)
-// }else{
-  // router.push('/admin/coupons')
-   //   router.refresh()
-      location.reload()
-//}
+
+   if (confirm("Möchten Sie den Gutschein löschen?\n Falls ja, klicken Sie auf OK. \n Falls nicht, klicken Sie auf Cancel.")) {
+    const result = await deletecoupon(coupon.id!)
+    location.reload()
+   } else {
+     return false;
+   }
 
   }
 

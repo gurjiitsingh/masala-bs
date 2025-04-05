@@ -14,6 +14,8 @@ const price = (product.price.toString()).replace(/\./g, ',')
 ## product description on click show notification
 ## use react notification insted of js aleart
 ## pagination
+## product search
+## andon product type 1. variant 2. offers 3. flavours 4.souses
 
 const collectionRef = collection(db, 'orderMaster')
     

@@ -15,11 +15,14 @@
 .input-image-style{
 @apply text-sm border border-slate-300 rounded
 }
+.seach-form{
+  @apply text-sm border border-slate-300 rounded-full p-1
+}
 .mp{
   @apply px-32 py-32;
 }
 .primary{
-  @apply bg-[#7b6f19];
+  @apply bg-[#FADB5E];
 }
 .dim{
   @apply bg-blue-400;
@@ -30,7 +33,7 @@
 /* #F2F0EC; */
 /* bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1]  */
 :root {
-  --background: #fff1d7;
+  --background: #fff;
   --foreground: #171717;
 }
 

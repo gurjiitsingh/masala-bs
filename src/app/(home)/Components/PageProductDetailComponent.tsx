@@ -49,8 +49,8 @@ export default function PageProductDetailComponent({
         <div className="w-full flex-col gap-4 justify-between ">
           <div className="w-full flex gap-1 mb-2 justify-between ">
             {/* <div className="flex justify-between items-center"> */}
-            <div className="flex items-center justify-center text-nowrap text-center px-2 py-1 bg-[#bb3e00] min-w-[180px]  rounded-3xl  text-white">
-              {/* bg-[#f7ad45] */}
+            <div className="flex  text-nowrap    min-w-[180px]  rounded-3xl  text-[#bb3e00]">
+              {/* bg-[#f7ad45] bg-[#bb3e00] */}
               {productCategoryIdG !== "" && <>{product.sortOrder}.&nbsp;</>}
               {product.name}
             </div>

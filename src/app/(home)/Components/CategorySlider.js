@@ -97,7 +97,7 @@ export default function CategorySlider() {
   }, []);
 
   return (
-    <div className="m-2 h-full w-[98%] px-2 gap-1 ">
+    <div className="-mt-20 h-full w-[98%] px-2 gap-1 ">
       <Slider {...settings}>
         {categoryData?.map((category, i) => {
           return (

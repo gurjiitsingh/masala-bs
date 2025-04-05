@@ -24,17 +24,31 @@ function TableRows({ product }:{product:AddOnProductSchemaType}){
 
 //const router = useRouter();
 
+
  async function handleDelete(product:AddOnProductSchemaType) {
    const idS = product.id as string;
   //const result =
-   await deleteProduct(idS)
-// if(result.errors){
-//   alert(result.errors)
-// }else{
-//   // router.push('/admin/products')
-//    //   router.refresh()
-//       location.reload()
-// }
+
+
+if (confirm("Möchten Sie löschen? \n Falls ja, klicken Sie auf OK. \n Falls nein, klicken Sie auf Abbrechen.")) {
+ 
+  const result =  await deleteProduct(idS)
+console.log(result.message)
+if(result.message !== 'success'){
+  alert("Something went wrong")
+}else{
+  // router.push('/admin/products')
+   //   router.refresh()
+      location.reload()
+}
+  
+} else {
+ return false;
+}
+
+
+
+
 
   }
 
@@ -67,18 +81,19 @@ function TableRows({ product }:{product:AddOnProductSchemaType}){
 
       <TableCell>
         <p className="flex gap-3">
+         
           <Link
             href={{
-             // pathname: `/admin/products/${product.id!}`,
+             // pathname: `/admin/productsaddon/editform?id=${product.id!}`,
              pathname: "/admin/productsaddon/editform",
               query: {
                 id: product.id,
+                baseProductId: product.baseProductId,
                },
             }
           }
           >
             <Button size="sm" className="bg-red-500 px-1 py-0">
-              {" "}
               <CiEdit size={20} className="text-white" />
             </Button>
           </Link>

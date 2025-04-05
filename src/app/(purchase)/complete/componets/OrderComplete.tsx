@@ -3,18 +3,48 @@ import { createNewOrderFile } from "@/app/action/newOrderFile/newfile";
 import { useContext, useEffect } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { updateOrderMaster } from "@/app/action/orders/dbOperations";
 //import OrderList from './OrderList'
 export default function OrderComplete() {
   const searchParams = useSearchParams();
   const PaymentType = searchParams.get("paymentType");
-  console.log("paymentType---------",PaymentType)
+  const Paymentstatus = searchParams.get("status");
+  const orderId = searchParams.get("orderMasterId");
+  console.log(
+    "paymentType, Paymentstatus, orderId ---------",
+    PaymentType,
+    Paymentstatus,
+    orderId
+  );
   const router = useRouter();
   // const { data: session } = useSession();
 
   const { cartData, endTotalG, totalDiscountG, productTotalCost, emptyCart } =
     useContext(CartContext);
+    const id = orderId as string;
+    //const status = Paymentstatus as string;
+
+    async function updateOrderStatus(status:string) {
+      await updateOrderMaster(id, status);
+    }
   useEffect(() => {
-    createOrder();
+    if (
+      PaymentType === "Barzahlung") {
+      console.log("cod or paypal payment completed");
+      createOrder();
+    }
+    if (PaymentType === "paypal" && Paymentstatus === "success") {
+      // console.log(
+      //   "paypal payment completed ----------------",
+      //   PaymentType,
+      //   Paymentstatus
+      // );
+      createOrder();
+      updateOrderStatus("Completed");
+    }
+    if (PaymentType === "paypal" && Paymentstatus === "fail") {
+      updateOrderStatus("Payment failed");
+    }
   }, []);
 
   async function createOrder() {
@@ -50,12 +80,13 @@ export default function OrderComplete() {
         </div>
 
         <div className="text-lg text-center text-slate-500">
-        Zubereitungszeit: 20–30 Minuten</div>
-        <div/>
+          Zubereitungszeit: 20–30 Minuten
+        </div>
+        <div />
         <div className="text-lg text-center text-slate-500">
-        Lieferzeit: 40–65 Minuten</div>
-        <div/>
-
+          Lieferzeit: 40–65 Minuten
+        </div>
+        <div />
 
         <div>
           <button

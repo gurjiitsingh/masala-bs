@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { fetchProductByBaseProductId } from "@/app/action/productsaddon/dbOperation";
+import { fetchProductAddOnByBaseProductId } from "@/app/action/productsaddon/dbOperation";
 import { ProductType } from "@/lib/types/productType";
 import Productvariant from "./components/productvariant";
 import { fetchProductById } from "@/app/action/productsbase/dbOperation";
@@ -17,7 +17,7 @@ import { fetchflavorsProductG } from "@/app/action/flavorsProductG/dbOperation";
 import { flavorsProductGType } from "@/lib/types/flavorsProductGType";
 import { sauceProductType } from "@/lib/types/productSaucesType";
 import { AddOnProductSchemaType } from "@/lib/types/productAddOnType";
-import { cartProductType } from "@/lib/types/cartDataType";
+
 //import FeaturProductUpdate from "./FeaturProductUpdate";
 type TVariantType = { name: string; price: number };
 
@@ -35,7 +35,7 @@ const ChooseProduct = () => {
   //const [ productVariat, setProductVariant ] = useState<string>();
    const { setShowProductDetailM,  baseProductId } =
     UseSiteContext();
-    const { addProductToCart } = useCartContext();
+    
  
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const ChooseProduct = () => {
         setProductBase(baseProduct);
         setCartItem(baseProduct);
         //console.log("addon product ---------", baseProduct.flavors);
-        const productAddon = await fetchProductByBaseProductId(baseProductId);
+        const productAddon = await fetchProductAddOnByBaseProductId(baseProductId);
         setProductAddon(productAddon);
         const sauces = await fetchProductSauces();
         setProductSaces(sauces);

@@ -11,26 +11,30 @@ import {
 } from "@/components/ui/table";
 //import { deleteProduct } from "@/app/action/products/dbOperation";
 import { userType } from "@/lib/types/userType";
-import Link from "next/link";
-import { CiEdit } from "react-icons/ci";
+
 import { MdDeleteForever } from "react-icons/md";
 //import { useRouter  } from "next/navigation";
 function TableRows({ user }: { user: userType }) {
   async function handleDelete(user: userType) {
     // confirm("Do you want to delete user!\n If yes click OK \n If not click Cancel.");
-    confirm(
+   if(confirm(
       "Möchten Sie den Benutzer löschen?\n Falls ja, klicken Sie auf OK. \n Falls nicht, klicken Sie auf Cancel."
-    );
+    )){
 
-    console.log(user);
     const result = await deleteUser(user.id, "user.image");
-
-    console.log("this re-------", result.message.success);
     if (result.message.success === "ok") {
       location.reload();
     } else {
       alert("Failed");
     }
+
+  }else{
+    return false;
+  }
+
+
+
+    
   }
 
   return (

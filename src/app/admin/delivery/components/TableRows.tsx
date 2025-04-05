@@ -26,15 +26,21 @@ function TableRows({ delivery }:{delivery:deliveryType}){
 
  async function handleDelete(delivery:deliveryType) {
     // confirm("Do you want to delete Delivery!\n If yes click OK \n If not click Cancel.");
-  confirm("Möchten Sie die Lieferung löschen?\n Falls ja, klicken Sie auf OK. \n Falls nicht, klicken Sie auf Cancel.");
-  await deletedelivery(delivery.id!)
-// if(result.errors){
+ 
+ 
+    if (confirm("Möchten Sie die Lieferung löschen?\n Falls ja, klicken Sie auf OK. \n Falls nicht, klicken Sie auf Cancel.")) {
+      await deletedelivery(delivery.id!)
+      // if(result.errors){
 //   alert(result.errors)
 // }else{
   // router.push('/admin/deliverys')
    //   router.refresh()
-      location.reload()
-//}
+   location.reload()
+   //}
+     } else {
+       return false;
+     }
+
 
   }
 
