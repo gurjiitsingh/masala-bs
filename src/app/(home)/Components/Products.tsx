@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import PageProductDetailComponent from "./PageProductDetailComponent";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 import { fetchAddOnProducts } from "@/app/action/productsaddon/dbOperation";
+import SearchForm from "./SearchForm";
 
 export default function Products() {
   const { productCategoryIdG } = UseSiteContext();
@@ -43,8 +44,17 @@ export default function Products() {
       fetchproductData();
     }
   }, [productCategoryIdG]);
+  function handleSearchForm(e:string){
+    
+    //console.log("search text-----------", e)
+    const searchedProduct = allProducts.filter(item =>
+    item.name.toLowerCase().includes(e.toLowerCase())
+  );
+  setProduct(searchedProduct);
+  }
   return (
     <div className="flex flex-col gap-1 w-full">
+         <div className="flex items-center gap-2"><SearchForm handleSearchForm={handleSearchForm} /><div className="flex items-center bg-slate-100 rounded-full py-1 px-2 text-sm font-light md:font-normal">Gericht suchen oder Kategorie auswählen</div></div>  
       {products.map((product, i) => {
         return <PageProductDetailComponent key={i} allAddOns={allAddOns} product={product} />;
       })}
