@@ -10,7 +10,7 @@ import { UseSiteContext } from "@/SiteContext/SiteContext";
 import DeliveryCost from "./DeliveryCost";
 import Pickup from "./Pickup";
 import CouponDisc from "./CouponDisc";
-import { cartProductType, orderDataType  } from "@/lib/types/cartDataType";
+import { cartProductType, orderDataType } from "@/lib/types/cartDataType";
 import { createNewOrder } from "@/app/action/orders/dbOperations";
 import { useRouter } from "next/navigation";
 //import { FaCheckCircle } from 'react-icons/fa';
@@ -27,13 +27,19 @@ export default function CartLeft() {
   } = UseSiteContext();
 
   //console.log("newOrderCondition-------------", newOrderCondition)
-  
- const router = useRouter();
+
+  const router = useRouter();
 
   const [addCoupon, setAddCoupon] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  
-  const { cartData, setEndTotalG, setTotalDiscountG, endTotalG,  totalDiscountG } = useCartContext();
+
+  const {
+    cartData,
+    setEndTotalG,
+    setTotalDiscountG,
+    endTotalG,
+    totalDiscountG,
+  } = useCartContext();
   let total = 0;
   cartData.forEach((item: cartProductType) => {
     total += item.quantity! * +item.price;
@@ -50,9 +56,7 @@ export default function CartLeft() {
     TotalDiscount = 20;
   }
 
-
   if (deliveryType === "delivery") {
-   
     if (deliveryDis?.price !== undefined) {
       endPrice = endPrice + +deliveryDis?.price;
     }
@@ -60,18 +64,20 @@ export default function CartLeft() {
   }
 
   if (couponDisc?.price) {
-     //console.log("----coupon disc",couponDisc);
-     if(couponDisc.discountType === "flat"){
-      endPrice = endPrice - (+couponDisc?.price);
+    //console.log("----coupon disc",couponDisc);
+    if (couponDisc.discountType === "flat") {
+      const priceBeforeFlatDiscount = +total;
+      endPrice = endPrice - +couponDisc?.price;
+      const percentDiscont = (
+        (+couponDisc?.price / priceBeforeFlatDiscount) *
+        100
+      ).toFixed(2);
+      TotalDiscount = TotalDiscount + +percentDiscont;
+    } else {
+      endPrice = endPrice - (+total * +couponDisc?.price) / 100;
       // endPrice = +endPrice.toFixed(2);
-     // TotalDiscount = TotalDiscount + +couponDisc?.price;
-    
-    // setFlatDiscount(+couponDisc?.price)
-     }else{
-    endPrice = endPrice - (+total * +couponDisc?.price) / 100;
-    // endPrice = +endPrice.toFixed(2);
-    TotalDiscount = TotalDiscount + +couponDisc?.price;
-     }
+      TotalDiscount = TotalDiscount + +couponDisc?.price;
+    }
   }
   //  console.log("total discount ------",TotalDiscount)
   //  console.log("end price -------", total- total*(+TotalDiscount)/100)
@@ -81,123 +87,113 @@ export default function CartLeft() {
   useEffect(() => {
     endPrice = +endPrice.toFixed(2);
     setEndTotalG(endPrice);
-    
   }, [endPrice]);
 
   useEffect(() => {
-   // console.log("type, endprice, minspend--------", deliveryType,endPrice,deliveryDis?.minSpend);
-     if (deliveryType === "delivery") {
+    // console.log("type, endprice, minspend--------", deliveryType,endPrice,deliveryDis?.minSpend);
+    if (deliveryType === "delivery") {
       if (deliveryDis?.minSpend !== undefined) {
         if (deliveryDis?.minSpend >= endPrice) {
           // newOrderCondition
-        //  console.log("order amount is low-----------",deliveryDis?.minSpend > endPrice)
-         // const message = `Minimum amout for order is `
-          setNewOrderCondition(false)
-         
-        }else{
-          setNewOrderCondition(true)
+          //  console.log("order amount is low-----------",deliveryDis?.minSpend > endPrice)
+          // const message = `Minimum amout for order is `
+          setNewOrderCondition(false);
+        } else {
+          setNewOrderCondition(true);
         }
       }
-     // console.log("deliveryDis minspend--------", deliveryDis?.minSpend);
+      // console.log("deliveryDis minspend--------", deliveryDis?.minSpend);
     }
-
-  }, [deliveryType,endPrice,deliveryDis?.minSpend]);
- 
+  }, [deliveryType, endPrice, deliveryDis?.minSpend]);
 
   useEffect(() => {
-   // console.log("type, endprice, minspend--------", deliveryType,endPrice,deliveryDis?.minSpend);
-     if (deliveryType === "delivery") {
+    // console.log("type, endprice, minspend--------", deliveryType,endPrice,deliveryDis?.minSpend);
+    if (deliveryType === "delivery") {
       if (deliveryDis?.minSpend !== undefined) {
         if (deliveryDis?.minSpend >= endPrice) {
-          setNewOrderCondition(false)
-         }else{
-          setNewOrderCondition(true)
+          setNewOrderCondition(false);
+        } else {
+          setNewOrderCondition(true);
         }
       }
-    
     }
-
   }, []);
 
   useEffect(() => {
     setTotalDiscountG(TotalDiscount);
   }, [TotalDiscount]);
 
+  async function proceedToOrder() {
+    setIsDisabled(true);
+    let canCompleteOrder = true;
+    let allReadyAlerted = false;
 
-async function proceedToOrder(){
-  setIsDisabled(true)
-  let canCompleteOrder = true;
-  let allReadyAlerted = false;
+    // console.log("paymentType------------", paymentType)
+    // console.log("deliveryType------------", deliveryType)
+    // console.log("deliveryDis minSpend------------", deliveryDis)
+    // console.log("newOrderCondition ------------", newOrderCondition)
 
-  // console.log("paymentType------------", paymentType)
-  // console.log("deliveryType------------", deliveryType)
-  // console.log("deliveryDis minSpend------------", deliveryDis)
-  // console.log("newOrderCondition ------------", newOrderCondition)
+    if (paymentType === "" || paymentType === undefined) {
+      canCompleteOrder = false;
 
-  
-  if(paymentType === "" || paymentType === undefined){
-    canCompleteOrder = false;
-   
-    setIsDisabled(false)
-    alert(
-      "Select Payment type"
-    );
-    allReadyAlerted = true;
-  }
+      setIsDisabled(false);
+      alert("Select Payment type");
+      allReadyAlerted = true;
+    }
 
- 
+    if (deliveryType === "delivery" && deliveryDis === undefined) {
+      console.log(
+        "deliveryType----",
+        deliveryType,
+        "deliveryDis-----",
+        deliveryDis,
+        "allReadyAlerted---",
+        allReadyAlerted
+      );
+      setIsDisabled(false);
+      canCompleteOrder = false;
 
-  if (deliveryType === "delivery" && deliveryDis === undefined) {
-    console.log("deliveryType----",deliveryType,"deliveryDis-----", deliveryDis,"allReadyAlerted---",allReadyAlerted)
-    setIsDisabled(false)
-       canCompleteOrder = false;
-      
- if(!allReadyAlerted){
-       alert(
-         "Wir können an diese Adresse nicht liefern. Bitte wählen Sie Abholung und erhalten Sie 10 % Rabatt"
-       );
-       allReadyAlerted = true;
+      if (!allReadyAlerted) {
+        alert(
+          "Wir können an diese Adresse nicht liefern. Bitte wählen Sie Abholung und erhalten Sie 10 % Rabatt"
+        );
+        allReadyAlerted = true;
       }
-     }
+    }
 
+    let AddressId = "";
+    let order_user_Id = "";
+    let customer_name = "";
 
-  let AddressId =  "";
-  let order_user_Id = "";
-  let customer_name = "";
+    if (typeof window !== "undefined") {
+      AddressId = JSON.parse(localStorage.getItem("customer_address_Id") || "");
+      order_user_Id = JSON.parse(localStorage.getItem("order_user_Id") || "");
+      customer_name = JSON.parse(localStorage.getItem("customer_name") || "");
 
- if (typeof window !== "undefined") {
+      // console.log("address id, useraddress id,  customer name ",AddressId,order_user_Id, customer_name)
+    }
 
-   AddressId = JSON.parse(localStorage.getItem("customer_address_Id") || "");
-  order_user_Id = JSON.parse(localStorage.getItem("order_user_Id") || "");
-   customer_name = JSON.parse(localStorage.getItem("customer_name") || "");
-
-  // console.log("address id, useraddress id,  customer name ",AddressId,order_user_Id, customer_name)
-
-}
-
- //console.log("userdata-----------",AddressId,order_user_Id,customer_name)
-
+    //console.log("userdata-----------",AddressId,order_user_Id,customer_name)
 
     if (!newOrderCondition && deliveryType !== "pickup") {
-      setIsDisabled(false)
+      setIsDisabled(false);
       canCompleteOrder = false;
-      if(!allReadyAlerted){
-      const minSpendMessage = `Minimum order amount for delivery is €${deliveryDis?.minSpend}`;
-      alert(minSpendMessage);
+      if (!allReadyAlerted) {
+        const minSpendMessage = `Minimum order amount for delivery is €${deliveryDis?.minSpend}`;
+        alert(minSpendMessage);
       }
     }
 
     // if (deliveryType === "pickup" || deliveryDis !== undefined) {
     if (canCompleteOrder) {
-     let flatDiscount = 0;
-      if(couponDisc?.discountType === "flat" && couponDisc?.price ){
+      let flatDiscount = 0;
+      if (couponDisc?.discountType === "flat" && couponDisc?.price) {
         flatDiscount = couponDisc?.price as number;
       }
-      
-     
-        const purchaseData = {
-        userId: order_user_Id,//order_user_Id, //session?.user?.id,
-        customerName:customer_name,
+
+      const purchaseData = {
+        userId: order_user_Id, //order_user_Id, //session?.user?.id,
+        customerName: customer_name,
         cartData,
         total: endTotalG,
         totalDiscountG,
@@ -207,52 +203,45 @@ async function proceedToOrder(){
       } as orderDataType;
       let orderMasterId = "";
       if (cartData.length !== 0) {
-       orderMasterId =  await createNewOrder(purchaseData);
-     // console.log("master id----------",  orderMasterId)
+        orderMasterId = await createNewOrder(purchaseData);
+        // console.log("master id----------",  orderMasterId)
       }
-      setIsDisabled(false)
-     
+      setIsDisabled(false);
+
       if (paymentType === "paypal") {
         router.push(`/pay?orderMasterId=${orderMasterId}`);
       }
       //console.log("going to complete--------")
       if (paymentType === "cod") {
         // console.log("going to complete")
-        router.push(`/complete?paymentType=Barzahlung&orderMasterId=${orderMasterId}`);
+        router.push(
+          `/complete?paymentType=Barzahlung&orderMasterId=${orderMasterId}`
+        );
         //  router.push(`/checkout?email=${data.email}&deliverytype=${deliveryType}`)
       }
     }
+  }
 
-}
-
-
-const [disablePickUpBtn, setDisablePickUpBtn] = useState(false);
+  const [disablePickUpBtn, setDisablePickUpBtn] = useState(false);
   const [disableDeliveryBtn, setDisableDeliveryBtn] = useState(false);
 
-useEffect(()=>{
-  if(deliveryType==='pickup'){
-    setDisablePickUpBtn(true)
-    setDisableDeliveryBtn(false);
-   // console.log("deliveryType---------",deliveryType)
-  }
-  if(deliveryType==='delivery'){
-   
-    setDisablePickUpBtn(false)
-    setDisableDeliveryBtn(true);
-   // console.log("deliveryType---------",deliveryType)
-  }
-  if(deliveryType===""){
-  
-    setDisablePickUpBtn(false)
-    setDisableDeliveryBtn(false);
-   // console.log("deliveryType---------",deliveryType)
-  }
-  },[deliveryType])
-  
-  
-  
-  
-
+  useEffect(() => {
+    if (deliveryType === "pickup") {
+      setDisablePickUpBtn(true);
+      setDisableDeliveryBtn(false);
+      // console.log("deliveryType---------",deliveryType)
+    }
+    if (deliveryType === "delivery") {
+      setDisablePickUpBtn(false);
+      setDisableDeliveryBtn(true);
+      // console.log("deliveryType---------",deliveryType)
+    }
+    if (deliveryType === "") {
+      setDisablePickUpBtn(false);
+      setDisableDeliveryBtn(false);
+      // console.log("deliveryType---------",deliveryType)
+    }
+  }, [deliveryType]);
 
   return (
     <div className="flex flex-col gap-4 w-full ">
@@ -296,31 +285,29 @@ useEffect(()=>{
 
           <div className="font-semibold border-b border-slate-200 py-3 w-full flex  justify-start gap-4">
             <div className="w-fit">
-             
-                <button disabled={disablePickUpBtn} 
-                  onClick={() => chageDeliveryType("pickup")}
-                  className="flex gap-2  items-center text-sm text-slate-600 bg-green-200 border border-slate-200 rounded-2xl px-3 font-semibold py-1 w-full text-left "
-                >
-                  <span>Abholen </span>
-                  {/* <span>
+              <button
+                disabled={disablePickUpBtn}
+                onClick={() => chageDeliveryType("pickup")}
+                className="flex gap-2  items-center text-sm text-slate-600 bg-green-200 border border-slate-200 rounded-2xl px-3 font-semibold py-1 w-full text-left "
+              >
+                <span>Abholen </span>
+                {/* <span>
                   <FaChevronDown />
                 </span> */}
-                </button>
-            
+              </button>
             </div>
 
             <div className="w-fit">
-             
-                <button disabled={disableDeliveryBtn}
-                  onClick={() => chageDeliveryType("delivery")}
-                  className="flex gap-2 items-center text-sm text-slate-600 bg-green-200 border border-slate-50 rounded-2xl px-3 font-semibold py-1 w-full text-left "
-                >
-                  <span>Lieferung </span>
-                  {/* <span>
+              <button
+                disabled={disableDeliveryBtn}
+                onClick={() => chageDeliveryType("delivery")}
+                className="flex gap-2 items-center text-sm text-slate-600 bg-green-200 border border-slate-50 rounded-2xl px-3 font-semibold py-1 w-full text-left "
+              >
+                <span>Lieferung </span>
+                {/* <span>
                   <FaChevronDown />
                 </span> */}
-                </button>
-            
+              </button>
             </div>
           </div>
 
@@ -377,16 +364,16 @@ useEffect(()=>{
           </Link>
         </div> */}
         {/* disabled={true} */}
-        <button  disabled={ isDisabled }
-              className="w-[200px] py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem]"
-              onClick={() => {
-                proceedToOrder()
-              }}
-            
-            >
-              <span className=" text-blue-900">Submit</span>
-              <span className=" text-sky-500">Order</span>
-            </button>
+        <button
+          disabled={isDisabled}
+          className="w-[200px] py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem]"
+          onClick={() => {
+            proceedToOrder();
+          }}
+        >
+          <span className=" text-blue-900">Submit</span>
+          <span className=" text-sky-500">Order</span>
+        </button>
       </div>
     </div>
   );
