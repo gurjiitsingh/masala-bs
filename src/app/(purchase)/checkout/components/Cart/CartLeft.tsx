@@ -24,6 +24,8 @@ export default function CartLeft() {
     paymentType,
     newOrderCondition,
     setNewOrderCondition,
+    deliveryCost,
+    setDeliveryCost,
   } = UseSiteContext();
 
   //console.log("newOrderCondition-------------", newOrderCondition)
@@ -59,6 +61,7 @@ export default function CartLeft() {
   if (deliveryType === "delivery") {
     if (deliveryDis?.price !== undefined) {
       endPrice = endPrice + +deliveryDis?.price;
+      //  setDeliveryCost(+deliveryDis?.price)
     }
     //deliveryDis, chageDeliveryType, deliveryType, newOrderCondition, setNewOrderCondition
   }
@@ -72,7 +75,9 @@ export default function CartLeft() {
         (+couponDisc?.price / priceBeforeFlatDiscount) *
         100
       ).toFixed(2);
-      TotalDiscount = TotalDiscount + +percentDiscont;
+     // console.log("percentage discount--------",percentDiscont)
+      TotalDiscount = TotalDiscount + parseFloat(percentDiscont);
+     // console.log("total discount--------",TotalDiscount)
     } else {
       endPrice = endPrice - (+total * +couponDisc?.price) / 100;
       // endPrice = +endPrice.toFixed(2);
@@ -85,12 +90,22 @@ export default function CartLeft() {
   const endPriceS = endPrice.toFixed(2).toString();
   const endPriceComma = endPriceS.split(".").join(",");
   useEffect(() => {
+    console.log("dilevery cost -------------", deliveryCost);
     endPrice = +endPrice.toFixed(2);
     setEndTotalG(endPrice);
+    if(deliveryType !== "delivery") {
+     // console.log("dilevery type ---",deliveryType,deliveryDis?.price)
+      setDeliveryCost(0);
+    }
   }, [endPrice]);
 
   useEffect(() => {
-    // console.log("type, endprice, minspend--------", deliveryType,endPrice,deliveryDis?.minSpend);
+    // console.log(
+    //   "type, endprice, minspend--------",
+    //   deliveryType,
+    //   endPrice,
+    //   deliveryDis?.minSpend
+    // );
     if (deliveryType === "delivery") {
       if (deliveryDis?.minSpend !== undefined) {
         if (deliveryDis?.minSpend >= endPrice) {
@@ -102,7 +117,11 @@ export default function CartLeft() {
           setNewOrderCondition(true);
         }
       }
-      // console.log("deliveryDis minspend--------", deliveryDis?.minSpend);
+      if (deliveryDis !== undefined && deliveryType === "delivery") {
+     //   console.log("dilevery type ---",deliveryType,deliveryDis?.price)
+        setDeliveryCost(+deliveryDis?.price);
+      }
+     
     }
   }, [deliveryType, endPrice, deliveryDis?.minSpend]);
 
@@ -117,6 +136,7 @@ export default function CartLeft() {
         }
       }
     }
+   
   }, []);
 
   useEffect(() => {
@@ -142,14 +162,14 @@ export default function CartLeft() {
     }
 
     if (deliveryType === "delivery" && deliveryDis === undefined) {
-      console.log(
-        "deliveryType----",
-        deliveryType,
-        "deliveryDis-----",
-        deliveryDis,
-        "allReadyAlerted---",
-        allReadyAlerted
-      );
+      // console.log(
+      //   "deliveryType----",
+      //   deliveryType,
+      //   "deliveryDis-----",
+      //   deliveryDis,
+      //   "allReadyAlerted---",
+      //   allReadyAlerted
+      // );
       setIsDisabled(false);
       canCompleteOrder = false;
 

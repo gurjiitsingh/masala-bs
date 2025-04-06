@@ -11,6 +11,8 @@ type SiteContextType = {
   setNewOrderCondition: (e: boolean) => void;
   open: boolean;
   deliveryType: string;
+  deliveryCost: number;
+  setDeliveryCost: (e:number) => void;
   sideBarToggle: (e: boolean) => void;
   openBargerMenu: boolean;
   bargerMenuToggle: (e: boolean) => void;
@@ -42,6 +44,8 @@ const SiteContext = createContext<SiteContextType>({
   setNewOrderCondition: (e: boolean) => {
     return e;
   },
+  deliveryCost: 0,
+  setDeliveryCost: (e) => {return e;},
   open: false,
   deliveryType: "pickup",
   sideBarToggle: () => {},

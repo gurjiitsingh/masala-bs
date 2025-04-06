@@ -4,23 +4,25 @@ import { useContext, useEffect } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { updateOrderMaster } from "@/app/action/orders/dbOperations";
+import { UseSiteContext } from "@/SiteContext/SiteContext";
 //import OrderList from './OrderList'
 export default function OrderComplete() {
   const searchParams = useSearchParams();
   const PaymentType = searchParams.get("paymentType");
   const Paymentstatus = searchParams.get("status");
   const orderId = searchParams.get("orderMasterId");
-  console.log(
-    "paymentType, Paymentstatus, orderId ---------",
-    PaymentType,
-    Paymentstatus,
-    orderId
-  );
+  // console.log(
+  //   "paymentType, Paymentstatus, orderId ---------",
+  //   PaymentType,
+  //   Paymentstatus,
+  //   orderId
+  // );
   const router = useRouter();
   // const { data: session } = useSession();
-
+  const { deliveryCost } = UseSiteContext();
   const { cartData, endTotalG, totalDiscountG, productTotalCost, emptyCart } =
     useContext(CartContext);
+    console.log("total discount--------", totalDiscountG)
     const id = orderId as string;
     //const status = Paymentstatus as string;
 
@@ -59,7 +61,8 @@ export default function OrderComplete() {
         endTotalG,
         productTotalCost,
         totalDiscountG,
-        PaymentType
+        PaymentType,
+        deliveryCost
       );
 
       if (result === "success") {

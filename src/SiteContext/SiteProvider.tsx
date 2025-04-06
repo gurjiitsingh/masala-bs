@@ -40,6 +40,7 @@ export const SiteProvider: React.FC<Props> = ({
   const [productCategoryIdG, setProductCategoryIdL] = useState<string>("");
  const [newOrderCondition, setNewOrderConditionL  ] = useState<boolean>(false);
  const [paymentType, setPaymentTypeL ] = useState<string>("");
+ const [ deliveryCost, setDeliveryCostL ] = useState<number>(0);
  
   useEffect(() => {
     const deliveryType = window.localStorage.getItem("delivery_type") as string;
@@ -108,6 +109,10 @@ function setPaymentType(s:string){
   setPaymentTypeL(s)
   }
 
+  function setDeliveryCost(e:number){
+    setDeliveryCostL(e)
+  }
+
   return (
     <SiteContext.Provider
       value={{
@@ -123,6 +128,8 @@ function setPaymentType(s:string){
         emailFormToggle,
         deliveryType,
         chageDeliveryType,
+        deliveryCost,
+  setDeliveryCost,
         couponDisc,
         setCouponDisc,
         deliveryDis,
