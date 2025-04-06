@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className=" dark:bg-gray-100 dark:text-blue-800 bg-[#FADB5E] pt-12 mt-12 -mb-20">
+    <footer className=" dark:bg-gray-100 dark:text-blue-800 primary pt-12 mt-12 -mb-20">
       <div className="container mx-auto  ">
         <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-1">
           <div className="flex items-center gap-1 w-full h-fit border border-amber-50 p-1 mx-1 rounded-2xl bg-amber-200">
@@ -141,7 +141,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="bg-[#64870d] mt-12 pt-3 pb-6">
+      <div className="primary-1 mt-12 pt-3 pb-6">
         <div className="container mx-auto flex flex-col  items-center">
           <p className="text-md text-slate-100">
             Powered by <a href="http://www.gstadeveloper.com">GstaDeveloper.com</a>

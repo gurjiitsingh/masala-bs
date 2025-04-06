@@ -5,27 +5,27 @@ import AddOn from "./AddOn";
 import CartButton from "@/components/Custom/AddToCart/CartButton";
 import { cartProductType } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
+import { addOnType } from "@/lib/types/addOnType";
 
 export default function PageProductDetailComponent({
   product,
   allAddOns,
 }: {
   product: ProductType;
-  allAddOns: ProductType[];
+  allAddOns: addOnType[];
 }) {
-  const [addOnData, setAddOnData] = useState<ProductType[]>([]);
+  const [addOnData, setAddOnData] = useState<addOnType[]>([]);
   const { productCategoryIdG } = UseSiteContext();
   useEffect(() => {
     if (allAddOns.length !== 0 && product.flavors) {
       const AddOnData = allAddOns.filter(
-        (item: ProductType) => product.id === item.baseProductId
+        (item: addOnType) => product.id === item.baseProductId
       );
       AddOnData.sort(
-        (a: ProductType, b: ProductType) => a.sortOrder! - b.sortOrder!
+        (a: addOnType, b: addOnType) => a.sortOrder! - b.sortOrder!
       );
       setAddOnData(AddOnData);
     }
-
   }, [product.id]);
 
   // console.log("this is price ---------", addOnData)
@@ -54,13 +54,12 @@ export default function PageProductDetailComponent({
               {productCategoryIdG !== "" && <>{product.sortOrder}.&nbsp;</>}
               {product.name}
             </div>
+            {!product.flavors && (
             <div className="min-w-[100px] flex text-slate-500 items-center bg-[#f7ad45] justify-between   rounded-3xl">
-                <div>
-                  <CartButton cartProduct={cartProduct} />
-                 
-                </div>
+              <div>
+                <CartButton cartProduct={cartProduct} />
               </div>
-
+            </div>)}
 
           </div>
           <button onClick={() => alert(product.productDesc)}>
@@ -71,7 +70,6 @@ export default function PageProductDetailComponent({
           {!product.flavors && (
             <div className="w-full flex justify-between items-center">
               <div className="text-white">Pack</div> <div>&euro;{price}</div>
-             
             </div>
           )}
         </div>

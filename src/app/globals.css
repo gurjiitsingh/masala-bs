@@ -19,6 +19,9 @@
   @apply px-32 py-32;
 }
 .primary{
+  @apply bg-[#f7ad45];
+}
+.primary-1{
   @apply bg-[#7b6f19];
 }
 .dim{

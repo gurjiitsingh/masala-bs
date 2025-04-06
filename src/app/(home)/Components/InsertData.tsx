@@ -1,9 +1,9 @@
 import CartButton from '@/components/Custom/AddToCart/CartButton'
 import { cartProductType } from '@/lib/types/cartDataType'
-import { ProductType } from '@/lib/types/productType'
+import { addOnType } from '@/lib/types/addOnType';
 import React from 'react'
 
-export default function InsertData({baseProductName,addOnData}:{baseProductName:string,addOnData:ProductType}) {
+export default function InsertData({baseProductName,addOnData}:{baseProductName:string,addOnData:addOnType}) {
    const ProductName = baseProductName +" "+ addOnData.name;
     const cartProduct:cartProductType ={
           id:addOnData.id,
@@ -13,7 +13,9 @@ export default function InsertData({baseProductName,addOnData}:{baseProductName:
           image:addOnData.image,
         } 
   return (
+    <div className="min-w-[100px] flex text-slate-500 items-center bg-[#f7ad45] justify-between   rounded-3xl">
     <CartButton cartProduct={cartProduct} />
+    </div>
   )
 }
 
