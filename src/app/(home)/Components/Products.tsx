@@ -8,12 +8,13 @@ import PageProductDetailComponent from "./PageProductDetailComponent";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 import { fetchAddOnProducts } from "@/app/action/productsaddon/dbOperation";
 import SearchForm from "./SearchForm";
+import { addOnType } from "@/lib/types/addOnType";
 
 export default function Products() {
   const { productCategoryIdG } = UseSiteContext();
   const [products, setProduct] = useState<ProductType[]>([]);
   const [allProducts, setAllProduct] = useState<ProductType[]>([]);
-  const [allAddOns, setAllAddOns] = useState<ProductType[]>([]);
+  const [allAddOns, setAllAddOns] = useState<addOnType[]>([]);
   useEffect(() => {
     async function fetchAddOn() {
       const result = await fetchAddOnProducts();
