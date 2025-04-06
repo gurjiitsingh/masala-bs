@@ -30,15 +30,15 @@ const CartButton = ({ cartProduct }: {cartProduct:cartProductType}) => {
 
   return (
     <>
-      <div className="w-full flex flex-row ">
-        <div className="flex items-center p-1 justify-center  rounded-lg gap-2 fit">
+     
+        <div className="w-[100px] flex items-center  justify-end  rounded-3xl gap-3 fit ">
           <div>
             {quantity > 0 ? (
               <button
                 onClick={() => {
                   removeFromCartL();
                 }}
-                className="px-1 py-1 rounded-full bg-slate-400"
+                className="px-2 py-2 rounded-full bg-slate-400"
               >
                 <IoMdRemove size={20} className="text-white " />
               </button>
@@ -55,14 +55,14 @@ const CartButton = ({ cartProduct }: {cartProduct:cartProductType}) => {
               onClick={() => {
                 addToCartL();
               }}
-              className=" px-1 py-1 rounded-full bg-slate-500"
+              className=" px-2 py-2  rounded-full bg-slate-500"
             >
               <IoMdAdd size={20} className="text-white " />
             </button>
             {/* } */}
           </div>
         </div>
-      </div>
+     
     </>
   );
 
