@@ -11,7 +11,7 @@ export default function Login() {
         <div className="flex flex-row gap-5 py-5 justify-end">
           {!session && <Link href="/auth/login">Login</Link>}
           {/* {session&& <button onClick={()=>{signOut()}}>Logout</button>  } */}
-          {session && (
+          {/* {session && (
             <button
               onClick={() => {
                 signOut();
@@ -19,7 +19,7 @@ export default function Login() {
             >
               Logout
             </button>
-          )}
+          )} */}
           {/* {session&&  <Link href="/user">My Account</Link> } */}
           {!session && <Link href="/auth/register">Register</Link>}
           {session && <LinkDropdown session={session} />}

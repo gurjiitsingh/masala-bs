@@ -34,7 +34,7 @@ const Header = () => {
   //  },[width])
 
   return (
-    <header className="bg-white shadow-md  py-1  px-4  mx-auto w-full md:w-full ">
+    <header className="  py-1  px-4  mx-auto w-full md:w-full ">
       <div className="container mx-auto flex items-center justify-between gap-3">
       <div className="flex gap-2 items-center"><Link href="/">
         <img className="h-12 md:h-12" src="/logo.webp" alt="Logo" />

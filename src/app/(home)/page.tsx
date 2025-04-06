@@ -13,10 +13,10 @@ export default function Page() {
     <div className="overflow-hidden min-h-screen">
       <div className="container mx-auto pt-7 p-1">
         <div className="w-full px-2 flex flex-col md:flex-row flex-wrap gap-3">
-          <div className="bg-[#64870D] flex flex-nowrap md:justify-center   pb-24 px-3 gap-2  rounded-[30%] justify-between  w-full ">
+          <div className=" flex flex-nowrap md:justify-center   pb-24 px-3 gap-2   justify-between  w-full ">
             <Hero />
             <div className="flex flex-col">
-              <h1 className="flex items-center text-4xl sm:5xl md:text-6xl  text-white">
+              <h1 className="flex items-center text-4xl sm:5xl md:text-6xl  text-slate-400">
                 Abhol Rabatt 20%{" "}
               </h1>
               <div className="text-sm text-slate-500">
