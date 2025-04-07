@@ -14,14 +14,12 @@ import { getFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-     apiKey: "AIzaSyDaqxwPb9-rBzUKlTHtg_jzDgfvEq8TShw",
-     authDomain: "next-js-course-9dd89.firebaseapp.com",
-     databaseURL: "https://next-js-course-9dd89-default-rtdb.firebaseio.com",
-     projectId: "next-js-course-9dd89",
-     storageBucket: "next-js-course-9dd89.firebasestorage.app",
-     messagingSenderId: "448503250755",
-     appId: "1:448503250755:web:6dca62d578b710bce979f6",
-     measurementId: "G-RPKLNLDNDQ"
+     apiKey: "AIzaSyDSclhhaokNKKe3yMwHLDQvYeqOwb3HpU8",
+     authDomain: "food-app-88776.firebaseapp.com",
+     projectId: "food-app-88776",
+     storageBucket: "food-app-88776.firebasestorage.app",
+     messagingSenderId: "989447682967",
+     appId: "1:989447682967:web:b8f9c099c2d4063b52e2d2"
 };
 
 
