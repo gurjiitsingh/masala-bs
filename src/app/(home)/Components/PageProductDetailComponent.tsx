@@ -29,13 +29,21 @@ export default function PageProductDetailComponent({
   }, [product.id]);
 
   // console.log("this is price ---------", addOnData)
-  const price = product.price.toString().replace(/\./g, ",");
+  
+  const priceRegular = product.price.toString().replace(/\./g, ",");
   //bg-[#D3E671]
+
+  let priceDiscounted;
+  let priceTarget = product.price;
+  if(product.discountPrice !== undefined){
+    priceTarget = product.discountPrice;
+    priceDiscounted = product.discountPrice.toString().replace(/\./g, ",");
+  }
 
   const cartProduct: cartProductType = {
     id: product.id,
     quantity: 1,
-    price: product.price,
+    price: priceTarget,
     name: product.name,
     image: product.image,
   };
@@ -69,7 +77,17 @@ export default function PageProductDetailComponent({
           </button>
           {!product.flavors && (
             <div className="w-full flex justify-between items-center">
-              <div className="text-white">Pack</div> <div>&euro;{price}</div>
+             
+              <div className="text-white">Pack</div> <div>
+              {product.discountPrice !== undefined 
+              ?<div className="flex justify-between gap-3 items-center"> <div className="line-through">&euro;{priceRegular}</div> <div>&euro;{priceDiscounted}</div></div>
+              :<div>&euro;{priceRegular}</div>
+              
+              }
+                
+                
+                </div>
+
             </div>
           )}
         </div>
