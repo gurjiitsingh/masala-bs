@@ -41,6 +41,7 @@ export async function addNewProduct(formData: FormData) {
   //console.log("isFeatured ", typeof formData.get("isFeatured"));
   const name = formData.get("name");
   const price = formData.get("price");
+  const discountPrice = formData.get("discountPrice");
   const sortOrder = formData.get("sortOrder") as string;
   const categoryId = formData.get("categoryId");
   const productDesc = formData.get("productDesc");
@@ -50,6 +51,7 @@ export async function addNewProduct(formData: FormData) {
   const receivedData = {
     name,
     price,
+    discountPrice,
     sortOrder,
     categoryId,
     productDesc,
@@ -88,6 +90,10 @@ export async function addNewProduct(formData: FormData) {
   const priceValue = formData.get("price") as string;
   const priceV = parseFloat(priceValue.replace(/,/g, ".")).toFixed(2); // toFixed convert it to string
   const priceF = new Number(parseFloat(priceV)).toFixed(2);
+
+  const discountPriceValue = formData.get("discountPrice") as string;
+  const discountPriceValueV = parseFloat(discountPriceValue.replace(/,/g, ".")).toFixed(2); // toFixed convert it to string
+  const discountPriceValueF = new Number(parseFloat(discountPriceValueV)).toFixed(2);
   //const priceF = parseFloat(priceV);
   // console.log("typeof price-------",priceValue)
  //  console.log("typeof price-------",typeof(priceF),priceF)
@@ -95,6 +101,7 @@ export async function addNewProduct(formData: FormData) {
   const data = {
     name,
     price: priceF,
+    discountPrice:discountPriceValueF,
     flavors: false,
     sortOrder: sortOrderN,
     categoryId,
@@ -150,6 +157,7 @@ export async function editProduct(formData: FormData) {
   const id = formData.get("id") as string;
   const name = formData.get("name");
   const price = formData.get("price");
+  const discountPrice = formData.get("discountPrice") as string ;
   const sortOrder = formData.get("sortOrder") as string;
   const categoryId = formData.get("categoryId");
   const productDesc = formData.get("productDesc");
@@ -161,6 +169,7 @@ export async function editProduct(formData: FormData) {
   const receivedData = {
     name,
     price,
+    discountPrice,
     sortOrder,
     categoryId,
     productDesc,
@@ -219,10 +228,15 @@ export async function editProduct(formData: FormData) {
   const priceV = parseFloat(priceValue.replace(/,/g, ".")).toFixed(2); // toFixed convert it to string
   const priceF = new Number(parseFloat(priceV)).toFixed(2);
 
+  
+  const discountPriceV = parseFloat(discountPrice.replace(/,/g, ".")).toFixed(2); // toFixed convert it to string
+  const discountPriceF = new Number(parseFloat(discountPriceV)).toFixed(2);
+console.log("discountPrice --------", discountPrice, discountPriceF)
   const sortOrderN = parseInt(sortOrder) as number;
   const productUpdtedData = {
     name,
     price: priceF,
+    discountPrice:discountPriceF,
     flavors: false,
     sortOrder: sortOrderN,
     categoryId,

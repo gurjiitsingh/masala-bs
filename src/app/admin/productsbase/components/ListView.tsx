@@ -97,7 +97,9 @@ const ListView = ({ title }: productTableProps) => {
                 <TableHead className="hidden md:table-cell">
                    Price
                 </TableHead>
-               
+                <TableHead className="hidden md:table-cell">
+                   Discount Price
+                </TableHead>
 
                 {/* <TableHead>Category</TableHead> */}
                 {/* <TableHead>Status</TableHead> */}

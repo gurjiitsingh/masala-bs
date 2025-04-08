@@ -50,13 +50,14 @@ const Page = () => {
      }
     formData.append("name", data.name);
     formData.append("price", data.price);
+    formData.append("discountPrice", data.discountPrice!);
     // formData.append("isFeatured", data.isFeatured);
     // formData.append("isFeatured", true);
     formData.append("sortOrder", data.sortOrder);
     formData.append("categoryId", data.categoryId!);
     formData.append("productDesc", data.productDesc);
    
-
+    
     const result = await addNewProduct(formData);
 
     if (!result?.errors) {
@@ -179,12 +180,12 @@ const Page = () => {
                 <div className="flex w-full flex-col gap-2   ">
                   <div className="flex flex-col gap-1 w-full">
                     <label className="label-style" htmlFor="product-title">
-                      Price<span className="text-red-500">*</span>{" "}
+                      Regular Price<span className="text-red-500">*</span>{" "}
                     </label>
                     <input
                       {...register("price")}
                       className="input-style"
-                      placeholder="Enter Title"
+                      placeholder="Enter Price"
                     />
                     <span className="text-[0.8rem] font-medium text-destructive">
                       {errors.price?.message && (
@@ -192,6 +193,23 @@ const Page = () => {
                       )}
                     </span>
                   </div>
+
+                  <div className="flex flex-col gap-1 w-full">
+                    <label className="label-style" htmlFor="product-title">
+                      Discount Price<span className="text-red-500">*</span>{" "}
+                    </label>
+                    <input
+                      {...register("discountPrice")}
+                      className="input-style"
+                      placeholder="Enter Price"
+                    />
+                    <span className="text-[0.8rem] font-medium text-destructive">
+                      {errors.discountPrice?.message && (
+                        <span>{errors.discountPrice?.message}</span>
+                      )}
+                    </span>
+                  </div>
+
                 </div>
               </div>
             </div>

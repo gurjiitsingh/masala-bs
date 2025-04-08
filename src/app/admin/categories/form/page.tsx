@@ -51,7 +51,7 @@ const Form = () => {
       <>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flexflex flex-col gap-4 p-5">
-            <h1>Edit Category</h1>
+            <h1>Add Category</h1>
   
             <div className="flex flex-col lg:flex-row gap-5 ">
               {/* left box */}
@@ -146,7 +146,7 @@ const Form = () => {
                     className="bg-amber-500 text-amber-900 font-bold"
                     type="submit"
                   >
-                    Edit Category{" "}
+                    Save{" "}
                   </Button>
                 </div>
               </div>

@@ -48,6 +48,10 @@ function TableRows({ product }:{product:ProductType}){
   }
   
   const price = (product.price.toString()).replace(/\./g, ',') 
+  let  discountedPrice = '';
+  if(product.discountPrice !== undefined){
+   discountedPrice = (product.discountPrice!.toString()).replace(/\./g, ',')
+  }
   return (
     <TableRow key={product.id} className="whitespace-nowrap bg-slate-50 rounded-lg p-1 my-1">
        <TableCell>
@@ -64,6 +68,7 @@ function TableRows({ product }:{product:ProductType}){
       </TableCell>
       <TableCell>{product.sortOrder}.&nbsp;{product.name}</TableCell>
       <TableCell>{price}</TableCell>
+      <TableCell>{discountedPrice}</TableCell>
        {/* <TableCell>{product.productCat}</TableCell> */}
       {/* <TableCell></TableCell> */}
       <TableCell>{product.productDesc}</TableCell>

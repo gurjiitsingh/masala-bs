@@ -24,6 +24,7 @@ export type ProductType = {
   id: string | undefined;
   name: string;
   price: number;
+  discountPrice: number | undefined;
   categoryId:string;
      productCat:string | undefined;
   baseProductId: string;
@@ -87,6 +88,7 @@ export const newPorductSchema = z.object({
     .string()
     // .refine((value) => /^\d+$/.test(value), "Invalid product price"), // Refinement
     .refine((value) => /[.,\d]+/.test(value), "Invalid product price"),
+    discountPrice:z.string().optional(),  
   //categoryId: z.string().min(1, { message: "Please select category" }),
   categoryId:z.string().optional(),
   sortOrder: z.string().min(1, { message: "Please add sort order" }),
@@ -128,6 +130,7 @@ export const editPorductSchema = z.object({
     .string()
     //.refine((value) => /^\d+$/.test(value), "Invalid product price"), // Refinement
     .refine((value) => /^\d*[.,]?\d*$/.test(value), "Invalid product price"), // Refinement
+    discountPrice:z.string().optional(),
   //  ^\d*[.,]?\d*$
   // price: z
   //   .string()
