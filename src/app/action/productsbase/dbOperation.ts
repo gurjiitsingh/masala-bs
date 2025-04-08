@@ -231,7 +231,7 @@ export async function editProduct(formData: FormData) {
   
   const discountPriceV = parseFloat(discountPrice.replace(/,/g, ".")).toFixed(2); // toFixed convert it to string
   const discountPriceF = new Number(parseFloat(discountPriceV)).toFixed(2);
-console.log("discountPrice --------", discountPrice, discountPriceF)
+//console.log("discountPrice --------", discountPrice, discountPriceF)
   const sortOrderN = parseInt(sortOrder) as number;
   const productUpdtedData = {
     name,
