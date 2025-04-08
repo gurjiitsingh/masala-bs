@@ -27,9 +27,24 @@ export default function Products() {
         const productData = await fetchProducts();
         productData.sort((a, b) => a.sortOrder - b.sortOrder);
         setAllProduct(productData);
-        setProduct(productData);
+       // setProduct(productData);
+
+
+        const filtertedProduct = productData.filter(
+          (item) => item.categoryId === 'cyswMDLgMXJ1sLj9ukzU'
+        );
+        filtertedProduct.sort(
+          (a: ProductType, b: ProductType) => a.sortOrder! - b.sortOrder!
+        );
+
+        setProduct(filtertedProduct);
+
       }
       fetchproductData();
+
+
+
+
     } else {
       async function fetchproductData() {
         // const productData = await fetchProductByCategoryId(productCategoryIdG);
@@ -44,6 +59,8 @@ export default function Products() {
       }
       fetchproductData();
     }
+//console.log("productCategoryIdG-------------",productCategoryIdG)
+
   }, [productCategoryIdG]);
   function handleSearchForm(e:string){
     

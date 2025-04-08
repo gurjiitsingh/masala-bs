@@ -79,7 +79,7 @@ export default function CategorySlider() {
 
   <style></style>;
 
-  const { setProductCategoryIdG } = UseSiteContext();
+  const { productCategoryIdG, setProductCategoryIdG } = UseSiteContext();
 
   const [categoryData, setCategoryData] = useState([]);
   useEffect(() => {
@@ -95,6 +95,18 @@ export default function CategorySlider() {
     }
     fetchcate();
   }, []);
+
+//   useEffect(()=>{
+// if(categoryData.length>0){
+    
+
+//  // if(productCategoryIdG === '' || productCategoryIdG === undefined){
+//     let targetCategory = categoryData.find(item => item.sortOrder === "0");
+//     setProductCategoryIdG(targetCategory.id)
+//  // }
+//   //  console.log(targetCategory);
+// }
+//   },[categoryData])
 
   return (
     <div className="-mt-20 h-full w-[98%] px-2 gap-1 ">
