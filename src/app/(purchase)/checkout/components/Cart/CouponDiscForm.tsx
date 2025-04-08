@@ -32,7 +32,7 @@ export default function CouponDiscount() {
     const couponCode = data.coupon.toUpperCase();
 
     const result = await fetchcouponByCode(couponCode);
-    console.log("Discolount coupon data----------", result[0]);
+    //console.log("Discolount coupon data----------", result[0]);
     if (result.length !== 0) {
       setCouponSuccess("");
     } else {

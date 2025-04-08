@@ -35,6 +35,20 @@ export default function CartLeft() {
   const [addCoupon, setAddCoupon] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
+  const [calculatedTotal, setCalculatedTotal] = useState(0);
+  const [calculatedTotalComa, setCalculatedTotalComa] = useState("");
+  const [payableTotal, setPayableTotal] = useState(0);
+  const [totalDiscountL, setTotalDiscountL] = useState(0);
+
+  const [discountPercentL, setDeliveryDiscountPercentLess] = useState(0);
+  const [disablePickUpBtn, setDisablePickUpBtn] = useState(false);
+  const [endTotalComma, setEndTotalComma] = useState("");
+  const [disableDeliveryBtn, setDisableDeliveryBtn] = useState(false);
+
+  const [calculatedDeliveryCost, setCalculatedDeliveryCost] = useState(0);
+  const [calCouponDiscount, setCalCouponDisscount] = useState(0);
+  const [couponDiscountPercentL, setCouponDiscountPercentL] = useState(0);
+
   const {
     cartData,
     setEndTotalG,
@@ -42,106 +56,140 @@ export default function CartLeft() {
     endTotalG,
     totalDiscountG,
   } = useCartContext();
-  let total = 0;
-  cartData.forEach((item: cartProductType) => {
-    total += item.quantity! * +item.price;
-    // total += parseInt(item.quantity) * +parseFloat(item.price);
-  });
-
-  total = +total.toFixed(2);
-  let endPrice = +total;
-  let TotalDiscount = 0;
-  if (deliveryType === "pickup") {
-    let pickupDiscount = +total * 0.2;
-    pickupDiscount = +pickupDiscount.toFixed(2);
-    endPrice = endPrice - pickupDiscount;
-    TotalDiscount = 20;
-  }
-
-  if (deliveryType === "delivery") {
-    if (deliveryDis?.price !== undefined) {
-      endPrice = endPrice + +deliveryDis?.price;
-      //  setDeliveryCost(+deliveryDis?.price)
-    }
-    //deliveryDis, chageDeliveryType, deliveryType, newOrderCondition, setNewOrderCondition
-  }
-
-  if (couponDisc?.price) {
-    //console.log("----coupon disc",couponDisc);
-    if (couponDisc.discountType === "flat") {
-      const priceBeforeFlatDiscount = +total;
-      endPrice = endPrice - +couponDisc?.price;
-      const percentDiscont = (
-        (+couponDisc?.price / priceBeforeFlatDiscount) *
-        100
-      ).toFixed(2);
-     // console.log("percentage discount--------",percentDiscont)
-      TotalDiscount = TotalDiscount + parseFloat(percentDiscont);
-     // console.log("total discount--------",TotalDiscount)
-    } else {
-      endPrice = endPrice - (+total * +couponDisc?.price) / 100;
-      // endPrice = +endPrice.toFixed(2);
-      TotalDiscount = TotalDiscount + +couponDisc?.price;
-    }
-  }
-  //  console.log("total discount ------",TotalDiscount)
-  //  console.log("end price -------", total- total*(+TotalDiscount)/100)
-
-  const endPriceS = endPrice.toFixed(2).toString();
-  const endPriceComma = endPriceS.split(".").join(",");
-  useEffect(() => {
-    console.log("dilevery cost -------------", deliveryCost);
-    endPrice = +endPrice.toFixed(2);
-    setEndTotalG(endPrice);
-    if(deliveryType !== "delivery") {
-     // console.log("dilevery type ---",deliveryType,deliveryDis?.price)
-      setDeliveryCost(0);
-    }
-  }, [endPrice]);
 
   useEffect(() => {
-    // console.log(
-    //   "type, endprice, minspend--------",
-    //   deliveryType,
-    //   endPrice,
-    //   deliveryDis?.minSpend
-    // );
+    if (cartData && cartData.length > 0) {
+      let total = 0;
+      cartData.forEach((item: cartProductType) => {
+        return (total += item.quantity! * +item.price);
+      });
+      setCalculatedTotal(parseFloat(total.toFixed(2)));
+
+      const calculatedTotalS = total.toFixed(2).toString();
+      const calculatedComma = calculatedTotalS.split(".").join(",");
+      setCalculatedTotalComa(calculatedComma);
+    }
+  }, [cartData]);
+
+  //console.log("cal total------", calculatedTotal);
+
+  useEffect(() => {
+    if (calculatedTotal > 0) {
+      const total = calculatedTotal;
+      if (deliveryType === "pickup") {
+        let pickupDiscount = +total * 0.2;
+        pickupDiscount = +pickupDiscount.toFixed(2);
+        setCalculatedDeliveryCost(+-pickupDiscount);
+        setDeliveryDiscountPercentLess(20);
+        //  TotalDiscount = 20;
+      }
+
+      if (deliveryType === "delivery") {
+        if (deliveryDis?.price !== undefined) {
+          setCalculatedDeliveryCost(+deliveryDis?.price);
+          setDeliveryDiscountPercentLess(0);
+        }
+      }
+    }
+  }, [deliveryType, calculatedTotal, deliveryDis]);
+
+  useEffect(() => {
+    if (calculatedTotal > 0) {
+      if (couponDisc?.price) {
+        // console.log("coupondisc, minspend, calculatedTotal-----------",couponDisc.price,couponDisc.minSpend, calculatedTotal);
+        if (couponDisc.minSpend! <= calculatedTotal) {
+          if (couponDisc.discountType === "flat") {
+            setCalCouponDisscount(-+couponDisc?.price);
+
+            const percentDiscont = (
+              (+couponDisc?.price / calculatedTotal) *
+              100
+            ).toFixed(2);
+
+            setCouponDiscountPercentL(parseFloat(percentDiscont));
+          } else {
+            const totalDis = parseFloat(
+              ((+calculatedTotal * +couponDisc?.price) / 100).toFixed(2)
+            );
+
+            setCalCouponDisscount(-totalDis);
+            setCouponDiscountPercentL(+couponDisc?.price);
+          }
+        } else {
+          alert(
+            `Minmun purchase amount to get discount is € ${couponDisc?.minSpend} , Remove coupon or add more item to cart`
+          );
+        }
+      } else {
+        setCalCouponDisscount(0);
+        setCouponDiscountPercentL(0)
+      }
+    }
+  }, [couponDisc, calculatedTotal]);
+
+  useEffect(() => {
+    const netPay = (calculatedTotal + calculatedDeliveryCost + calCouponDiscount).toFixed(2);
+    const netDiscount = (couponDiscountPercentL + discountPercentL).toFixed(2);
+
+    const payableTotalS = netPay;
+    const payableTotalSComma = payableTotalS.split(".").join(",");
+    setEndTotalComma(payableTotalSComma);
+    
+    setEndTotalG(parseFloat(netPay));
+    setTotalDiscountG(parseFloat(netDiscount));
+   // console.log("end values--------------",netPay,netDiscount )
+        //setPayableTotal(netPay)
+    //setTotalDiscountL(netDiscount)
+  }, [calculatedDeliveryCost, calCouponDiscount, calculatedTotal]);
+
+  //console.log("deliveryDis----------------",deliveryDis)
+
+  useEffect(() => {
+    if (deliveryType === "pickup") {
+      setDisablePickUpBtn(true);
+      setDisableDeliveryBtn(false);
+      // console.log("deliveryType---------",deliveryType)
+    }
+    if (deliveryType === "delivery") {
+      setDisablePickUpBtn(false);
+      setDisableDeliveryBtn(true);
+      // console.log("deliveryType---------",deliveryType)
+    }
+    if (deliveryType === "") {
+      setDisablePickUpBtn(false);
+      setDisableDeliveryBtn(false);
+      // console.log("deliveryType---------",deliveryType)
+    }
+
     if (deliveryType === "delivery") {
       if (deliveryDis?.minSpend !== undefined) {
-        if (deliveryDis?.minSpend >= endPrice) {
-          // newOrderCondition
-          //  console.log("order amount is low-----------",deliveryDis?.minSpend > endPrice)
-          // const message = `Minimum amout for order is `
+        if (deliveryDis?.minSpend >= calculatedTotal) {
           setNewOrderCondition(false);
         } else {
           setNewOrderCondition(true);
         }
       }
+    }
+  }, [deliveryType]);
+
+  useEffect(() => {
+    if (deliveryType === "delivery") {
+      if (deliveryDis?.minSpend !== undefined) {
+        if (deliveryDis?.minSpend >= calculatedTotal) {
+          setNewOrderCondition(false);
+        } else {
+          setNewOrderCondition(true);
+        }
+      } else {
+        setDeliveryCost(0);
+      }
+
       if (deliveryDis !== undefined && deliveryType === "delivery") {
-     //   console.log("dilevery type ---",deliveryType,deliveryDis?.price)
+        //   console.log("dilevery type ---",deliveryType,deliveryDis?.price)
         setDeliveryCost(+deliveryDis?.price);
       }
-     
     }
-  }, [deliveryType, endPrice, deliveryDis?.minSpend]);
-
-  useEffect(() => {
-    // console.log("type, endprice, minspend--------", deliveryType,endPrice,deliveryDis?.minSpend);
-    if (deliveryType === "delivery") {
-      if (deliveryDis?.minSpend !== undefined) {
-        if (deliveryDis?.minSpend >= endPrice) {
-          setNewOrderCondition(false);
-        } else {
-          setNewOrderCondition(true);
-        }
-      }
-    }
-   
-  }, []);
-
-  useEffect(() => {
-    setTotalDiscountG(TotalDiscount);
-  }, [TotalDiscount]);
+  }, [deliveryType, deliveryDis?.minSpend]);
 
   async function proceedToOrder() {
     setIsDisabled(true);
@@ -178,6 +226,23 @@ export default function CartLeft() {
           "Wir können an diese Adresse nicht liefern. Bitte wählen Sie Abholung und erhalten Sie 10 % Rabatt"
         );
         allReadyAlerted = true;
+      }
+    }
+
+
+console.log("couponDisc?.minSpend-------------",couponDisc?.minSpend)
+    if (couponDisc?.minSpend) {
+      if (couponDisc.minSpend! >= calculatedTotal) {
+        console.log("amount is minimum-------------",couponDisc?.minSpend)
+
+        setIsDisabled(false);
+        canCompleteOrder = false;
+        if (!allReadyAlerted) {
+          alert(
+            `Minmun purchase amount to get discount is € ${couponDisc?.minSpend} , Remove coupon or add more item to cart`
+          );
+          allReadyAlerted = true;
+        }
       }
     }
 
@@ -242,27 +307,6 @@ export default function CartLeft() {
     }
   }
 
-  const [disablePickUpBtn, setDisablePickUpBtn] = useState(false);
-  const [disableDeliveryBtn, setDisableDeliveryBtn] = useState(false);
-
-  useEffect(() => {
-    if (deliveryType === "pickup") {
-      setDisablePickUpBtn(true);
-      setDisableDeliveryBtn(false);
-      // console.log("deliveryType---------",deliveryType)
-    }
-    if (deliveryType === "delivery") {
-      setDisablePickUpBtn(false);
-      setDisableDeliveryBtn(true);
-      // console.log("deliveryType---------",deliveryType)
-    }
-    if (deliveryType === "") {
-      setDisablePickUpBtn(false);
-      setDisableDeliveryBtn(false);
-      // console.log("deliveryType---------",deliveryType)
-    }
-  }, [deliveryType]);
-
   return (
     <div className="flex flex-col gap-4 w-full ">
       <div className="flex flex-col bg-slate-50 p-5 h-full w-full gap-7 rounded-2xl">
@@ -298,8 +342,7 @@ export default function CartLeft() {
               Zwischensumme
             </div>
             <div className="flex gap-1">
-              <span>&#8364;</span>{" "}
-              <span>{total.toString().replace(/\./g, ",")}</span>
+              <span>&#8364;</span> <span>{calculatedTotalComa}</span>
             </div>
           </div>
 
@@ -333,9 +376,12 @@ export default function CartLeft() {
 
           <DeliveryCost />
 
-          <Pickup total={total} />
+          <Pickup
+            total={calculatedTotal}
+            deliveryDiscountPercentL={discountPercentL}
+          />
 
-          <CouponDisc total={total} />
+          <CouponDisc total={calculatedTotal} />
 
           {/* <div className="font-semibold border-b border-slate-200 py-3 w-full ">
             <h3 className="text-sm font-semibold py-3 w-full text-left">
@@ -357,7 +403,7 @@ export default function CartLeft() {
               Gesamt
             </div>
             <div className="flex gap-1">
-              <span>&#8364;</span> <span> {endPriceComma} </span>
+              <span>&#8364;</span> <span>{endTotalComma}</span>
             </div>
           </div>
 
@@ -397,4 +443,14 @@ export default function CartLeft() {
       </div>
     </div>
   );
+
+  // useEffect(()=>{
+  //   setEndTotalG(percentDiscountL)
+  // },[percentDiscountL])
+
+  // useEffect(() => { console.log("empty dependeny array--------")},[])
+
+  // useEffect(() => { console.log("dependeny -------- deliveryType")},[deliveryType])
+  // useEffect(() => { console.log("dependeny -------- paymentType")},[paymentType])
+  // useEffect(() => { console.log("dependeny -------- paymentType,deliveryType")},[paymentType,deliveryType])
 }
