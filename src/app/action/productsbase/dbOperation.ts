@@ -158,6 +158,7 @@ export async function editProduct(formData: FormData) {
   const name = formData.get("name");
   const price = formData.get("price");
   const discountPrice = formData.get("discountPrice") as string ;
+  console.log("discountPrice type---------",discountPrice, typeof(discountPrice))
   const sortOrder = formData.get("sortOrder") as string;
   const categoryId = formData.get("categoryId");
   const productDesc = formData.get("productDesc");
@@ -227,11 +228,17 @@ export async function editProduct(formData: FormData) {
   const priceValue = formData.get("price") as string;
   const priceV = parseFloat(priceValue.replace(/,/g, ".")).toFixed(2); // toFixed convert it to string
   const priceF = new Number(parseFloat(priceV)).toFixed(2);
-
+  let discountPriceF = "0";
   
+  if(discountPrice === "" || discountPrice === "" || discountPrice === 'NaN'){
+
+  }else{
   const discountPriceV = parseFloat(discountPrice.replace(/,/g, ".")).toFixed(2); // toFixed convert it to string
-  const discountPriceF = new Number(parseFloat(discountPriceV)).toFixed(2);
+   discountPriceF = new Number(parseFloat(discountPriceV)).toFixed(2);
+  }
 //console.log("discountPrice --------", discountPrice, discountPriceF)
+
+
   const sortOrderN = parseInt(sortOrder) as number;
   const productUpdtedData = {
     name,

@@ -36,12 +36,16 @@ const PageComp = () => {
     let productData;
     async function prefetch() {
       productData = await fetchProductById(id);
-      //console.log("productData ----", productData);
-      const priceS = productData.price.toString().replace(/\./g, ',');
+      console.log("productData ----", productData);
+      let priceS = "";
+      if(productData.price! !== undefined){
+       priceS = productData.price.toString().replace(/\./g, ',');
+      }
       let discountPriceS = "";
       if(productData.discountPrice! !== undefined){
        discountPriceS = productData.discountPrice!.toString().replace(/\./g, ',');
     }
+   
       setValue("id", id);
       setValue("name", productData.name);
       setValue("productDesc", productData.productDesc);
@@ -50,8 +54,9 @@ const PageComp = () => {
       setValue("price", priceS);
      
       setValue("discountPrice", discountPriceS);
-     
+     if(productData.sortOrder! !== undefined){
       setValue("sortOrder", productData.sortOrder!.toString());
+     }
       setValue("categoryId", productData.categoryId!);
       setValue("isFeatured", productData.isFeatured);
     }
