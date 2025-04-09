@@ -6,7 +6,7 @@ export default function DeliveryCost() {
   return (
     <>
       {deliveryType === "delivery" && (
-        <div className="font-semibold border-b py-3 w-full flex justify-between">
+        <div className="font-semibold border-b py-3 w-full flex justify-between items-center">
           <button className="text-sm font-semibold py-3 w-full text-left">
             {/* Versandkosten */}
             Lieferpauschale

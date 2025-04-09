@@ -8,7 +8,7 @@ export default function Pickup({total, pickupDiscountPersent}:{total:number, pic
   return (
     <>{deliveryType === "pickup" && pickupDiscountPersent !== 0 &&
        
-                <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between">
+                <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between items-center">
                   <button className="text-sm font-semibold py-3 w-full text-left">
                   Abholrabatt {pickupDiscountPersent} %
                   </button>

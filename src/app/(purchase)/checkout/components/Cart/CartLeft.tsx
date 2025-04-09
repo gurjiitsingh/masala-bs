@@ -346,7 +346,7 @@ console.log("couponDisc?.minSpend-------------",couponDisc?.minSpend)
               Zwischensumme
             </div>
             <div className="flex gap-1">
-              <span>&#8364;</span> <span>{calculatedTotalComa}</span>
+             {calculatedTotalComa && <span>&#8364;</span>} <span>{calculatedTotalComa}</span>
             </div>
           </div>
 
@@ -403,12 +403,12 @@ console.log("couponDisc?.minSpend-------------",couponDisc?.minSpend)
             <p className="text-sm  pb-3 w-full text-left"> $4</p>
           </div> */}
 
-          <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between">
+          <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between items-center">
             <div className="text-md font-semibold py-3 w-full text-left">
               Gesamt
             </div>
             <div className="flex gap-1">
-              <span>&#8364;</span> <span>{endTotalComma}</span>
+             {endTotalComma && <span>&#8364;</span>}  <span>{endTotalComma}</span>
             </div>
           </div>
 
