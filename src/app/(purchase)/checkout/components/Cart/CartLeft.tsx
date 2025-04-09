@@ -24,7 +24,7 @@ export default function CartLeft() {
     paymentType,
     newOrderCondition,
     setNewOrderCondition,
-    deliveryCost,
+    //deliveryCost,
     setDeliveryCost,
   } = UseSiteContext();
 
@@ -37,8 +37,8 @@ export default function CartLeft() {
 
   const [calculatedTotal, setCalculatedTotal] = useState(0);
   const [calculatedTotalComa, setCalculatedTotalComa] = useState("");
-  const [payableTotal, setPayableTotal] = useState(0);
-  const [totalDiscountL, setTotalDiscountL] = useState(0);
+  // const [payableTotal, setPayableTotal] = useState(0);
+  // const [totalDiscountL, setTotalDiscountL] = useState(0);
 
   const [discountPercentL, setDeliveryDiscountPercentLess] = useState(0);
   const [disablePickUpBtn, setDisablePickUpBtn] = useState(false);
@@ -152,7 +152,7 @@ export default function CartLeft() {
     //setTotalDiscountL(netDiscount)
   }, [calculatedDeliveryCost, calCouponDiscount, calculatedTotal]);
 
-  console.log("render count----------------")
+ 
 
   useEffect(() => {
     if (deliveryType === "pickup") {
@@ -449,9 +449,7 @@ console.log("couponDisc?.minSpend-------------",couponDisc?.minSpend)
     </div>
   );
 
-  // useEffect(()=>{
-  //   setEndTotalG(percentDiscountL)
-  // },[percentDiscountL])
+
 
   // useEffect(() => { console.log("empty dependeny array--------")},[])
 
