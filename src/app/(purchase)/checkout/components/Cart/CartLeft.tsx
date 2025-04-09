@@ -127,7 +127,7 @@ export default function CartLeft() {
           }
         } else {
           alert(
-            `Minmun purchase amount to get discount is € ${couponDisc?.minSpend} , Remove coupon or add more item to cart`
+            `Minmun purchase amount for discount is € ${couponDisc?.minSpend} , Remove coupon or add more item to cart`
           );
         }
       } else {
@@ -152,7 +152,7 @@ export default function CartLeft() {
     //setTotalDiscountL(netDiscount)
   }, [calculatedDeliveryCost, calCouponDiscount, calculatedTotal]);
 
-  //console.log("deliveryDis----------------",deliveryDis)
+  console.log("render count----------------")
 
   useEffect(() => {
     if (deliveryType === "pickup") {
