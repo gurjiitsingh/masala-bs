@@ -172,7 +172,7 @@ const PageComp = () => {
                   className="bg-amber-500 text-amber-900 font-bold"
                   type="submit"
                 >
-                  Edit Category{" "}
+                  Save
                 </Button>
               </div>
             </div>
