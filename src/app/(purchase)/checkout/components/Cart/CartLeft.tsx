@@ -56,6 +56,7 @@ export default function CartLeft() {
     endTotalG,
     totalDiscountG,
   } = useCartContext();
+  const pickupDiscountPersent = 0;
 
   useEffect(() => {
     if (cartData && cartData.length > 0) {
@@ -77,17 +78,26 @@ export default function CartLeft() {
     if (calculatedTotal > 0) {
       const total = calculatedTotal;
       if (deliveryType === "pickup") {
-        let pickupDiscount = +total * 0.2;
+        let pickupDiscount = +total * pickupDiscountPersent/100;
         pickupDiscount = +pickupDiscount.toFixed(2);
         setCalculatedDeliveryCost(+-pickupDiscount);
-        setDeliveryDiscountPercentLess(20);
-        //  TotalDiscount = 20;
+        setDeliveryDiscountPercentLess(pickupDiscountPersent);
+       
       }
 
       if (deliveryType === "delivery") {
         if (deliveryDis?.price !== undefined) {
           setCalculatedDeliveryCost(+deliveryDis?.price);
           setDeliveryDiscountPercentLess(0);
+        }
+      }
+    }
+    if (deliveryType === "delivery") {
+      if (deliveryDis?.minSpend !== undefined) {
+         if (deliveryDis?.minSpend >= calculatedTotal) {
+          setNewOrderCondition(false);
+        } else {
+          setNewOrderCondition(true);
         }
       }
     }
@@ -161,15 +171,7 @@ export default function CartLeft() {
       // console.log("deliveryType---------",deliveryType)
     }
 
-    if (deliveryType === "delivery") {
-      if (deliveryDis?.minSpend !== undefined) {
-        if (deliveryDis?.minSpend >= calculatedTotal) {
-          setNewOrderCondition(false);
-        } else {
-          setNewOrderCondition(true);
-        }
-      }
-    }
+   
   }, [deliveryType]);
 
   useEffect(() => {
@@ -188,6 +190,8 @@ export default function CartLeft() {
         //   console.log("dilevery type ---",deliveryType,deliveryDis?.price)
         setDeliveryCost(+deliveryDis?.price);
       }
+    }else{
+      setDeliveryCost(0);  
     }
   }, [deliveryType, deliveryDis?.minSpend]);
 
@@ -259,7 +263,7 @@ console.log("couponDisc?.minSpend-------------",couponDisc?.minSpend)
     }
 
     //console.log("userdata-----------",AddressId,order_user_Id,customer_name)
-
+    console.log("newOrderCondition-----------",newOrderCondition)
     if (!newOrderCondition && deliveryType !== "pickup") {
       setIsDisabled(false);
       canCompleteOrder = false;
@@ -378,7 +382,8 @@ console.log("couponDisc?.minSpend-------------",couponDisc?.minSpend)
 
           <Pickup
             total={calculatedTotal}
-            deliveryDiscountPercentL={discountPercentL}
+            pickupDiscountPersent = {discountPercentL}
+           
           />
 
           <CouponDisc total={calculatedTotal} />
