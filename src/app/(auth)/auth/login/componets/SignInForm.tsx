@@ -83,7 +83,7 @@ console.log("in form ",response)
 
       
        
-        <Button className="primary" type="submit">Login </Button>
+        <Button className="form-btn-color" type="submit">Login </Button>
       </div>
     </form>
 <div className="w-full text-center mt-5">

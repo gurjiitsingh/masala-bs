@@ -28,7 +28,7 @@
   @apply bg-blue-400;
 }
 .form-btn-color{
-  @apply bg-amber-400
+  @apply bg-[#f7ad45];
 }
 /* #F2F0EC; */
 /* bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1]  */
