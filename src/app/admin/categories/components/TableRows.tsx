@@ -59,7 +59,7 @@ function TableRows({ category }: { category: categoryType }) {
       </TableCell>
       <TableCell>{category.sortOrder}.&nbsp;{category.name}</TableCell>
 
-      {/* <TableCell>{category.categoryCat}</TableCell> */}
+      <TableCell>{category.isFeatured}</TableCell>
       {/* <TableCell></TableCell> */}
       <TableCell>{category.desc}</TableCell>
       {/* <TableCell>

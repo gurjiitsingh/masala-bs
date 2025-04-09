@@ -33,7 +33,7 @@ export const categorySchema = z.object({
     oldImgageUrl: z.any().optional(),
   slug: z.string().optional(),
   image: z.any().optional(),
-  isFeatured: z.boolean().optional(),
+  isFeatured: z.string().optional(),
 });
 
 export type TcategorySchema = z.infer<typeof categorySchema>;
@@ -57,7 +57,7 @@ export const editCategorySchema = z.object({
   // image: z.any().refine((file: File) => file?.length !== 0, "File is required"),
   image: z.any().optional(),
   oldImgageUrl: z.any().optional(),
-  isFeatured: z.boolean().optional(),
+  isFeatured: z.string().optional(),
 });
 
 export type TeditCategorySchema = z.infer<typeof editCategorySchema>;

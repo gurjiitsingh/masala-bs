@@ -66,7 +66,7 @@ export async function addNewCategory(formData: FormData) {
   const desc = formData.get("desc");
   const sortOrder = formData.get("sortOrder");
   const image = formData.get("image");
-  const isFeatured: boolean = false;
+  const isFeatured = formData.get("isFeatured");
   const recievedData = {
     name,
     desc,
@@ -74,10 +74,10 @@ export async function addNewCategory(formData: FormData) {
     image,
     isFeatured,
   };
-  //console.log("recieved data----------------", recievedData);
+  
 
   const result = categorySchema.safeParse(recievedData);
-  //console.log(result);
+  console.log(result);
   let zodErrors = {};
   if (!result.success) {
     result.error.issues.forEach((issue) => {
@@ -104,7 +104,7 @@ export async function addNewCategory(formData: FormData) {
     // slug,
     sortOrder,
     image: imageUrl,
-    isFeatured: false,
+    isFeatured,
   };
 
   try {
@@ -126,8 +126,11 @@ export async function editCategory(formData: FormData) {
   const name = formData.get("name");
   const desc = formData.get("desc");
   const oldImgageUrl = formData.get("oldImgageUrl") as string;
-  const featured_img: boolean = false;
+  const isFeatured = formData.get("isFeatured");
   const sortOrder = formData.get("sortOrder");
+
+  //console.log("is featured----------------", isFeatured)
+
 
   const receivedData = {
     id,
@@ -136,12 +139,12 @@ export async function editCategory(formData: FormData) {
     desc,
     sortOrder,
     image,
-    isFeatured: false,
+    isFeatured,
   };
 
   const result = editCategorySchema.safeParse(receivedData);
 
-  //console.log("result --------", result)
+ 
   let zodErrors = {};
   if (!result.success) {
     result.error.issues.forEach((issue) => {
@@ -192,9 +195,9 @@ export async function editCategory(formData: FormData) {
     desc,
     sortOrder,
     image: imageUrl,
-    isFeatured: featured_img,
+    isFeatured,
   };
- //  console.log("update data ------------", categoryUpdateData)
+  
   // update database
   try {
     const docRef = doc(db,"category", id);

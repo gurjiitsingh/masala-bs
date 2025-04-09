@@ -58,8 +58,10 @@ const ListView = () => {
                 <TableHead className="hidden md:table-cell">
                    Name
                 </TableHead>
-                             
-
+                <TableHead className="hidden md:table-cell">
+                   Active
+                </TableHead>         
+               
                 {/* <TableHead>Category</TableHead> */}
                 {/* <TableHead>Status</TableHead> */}
                 <TableHead>Desc</TableHead>

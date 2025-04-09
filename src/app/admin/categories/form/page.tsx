@@ -29,6 +29,7 @@ const Form = () => {
       formData.append("name", data.name);
       formData.append("sortOrder", data.sortOrder!);
       formData.append("desc", data.desc);
+      formData.append("isFeatured", data.isFeatured!);
     //  formData.append("slug", data.slug!);
       formData.append("image", data.image[0]);
    //const result = 
@@ -132,14 +133,24 @@ const Form = () => {
                     </p>
                   </div>
   
-                  <div className="flex    items-center gap-4">
-                    <label className="label-style">Featured Category</label>
-                    <input {...register("isFeatured")} type="checkbox" />
-                    <p className="text-[0.8rem] font-medium text-destructive">
+                  <div className="flex flex-col gap-1 w-full">
+                    <label className="label-style" htmlFor="product-title">
+                      Active<span className="text-red-500">*</span>{" "}
+                    </label>
+                    <select {...register("isFeatured")} className="input-style">
+                      <option key="key1" value="yes">
+                        Yes
+                      </option>
+                      <option key="key2" value="no">
+                        No
+                      </option>
+                     
+                    </select>
+                    <span className="text-[0.8rem] font-medium text-destructive">
                       {errors.isFeatured?.message && (
                         <p>{errors.isFeatured?.message}</p>
                       )}
-                    </p>
+                    </span>
                   </div>
   
                   <Button

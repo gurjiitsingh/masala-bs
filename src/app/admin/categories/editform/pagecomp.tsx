@@ -45,6 +45,8 @@ const PageComp = () => {
       setValue("oldImgageUrl", categoryData.image);
       setValue("sortOrder",categoryData.sortOrder!.toString())
       setValue("desc",categoryData.desc!)
+      setValue("isFeatured",categoryData.isFeatured!.toString())
+
       
     }
 
@@ -53,18 +55,17 @@ const PageComp = () => {
 
   async function onsubmit(data: TeditCategorySchema) {
     const formData = new FormData();
-    console.log("---------", data);
+   
     formData.append("name", data.name);
     formData.append("oldImgageUrl", data.oldImgageUrl);
-
     formData.append("desc", data.desc);
     formData.append("image", data.image[0]);
-    formData.append("oldImgageUrl", data.oldImgageUrl!);
-    formData.append("isFeatured", "");
+    formData.append("isFeatured", data.isFeatured!);
     formData.append("id", data.id!);
     formData.append("sortOrder",data.sortOrder!)
+   
 
-    const result = await editCategory(formData);
+   const result = await editCategory(formData);
 
     if (!result?.errors) {
       router.push("/admin/categories");
@@ -128,9 +129,9 @@ const PageComp = () => {
                     className="input-image-style"
                   />
 
-                  <p className="text-[0.8rem] font-medium text-destructive">
+                  <div className="text-[0.8rem] font-medium text-destructive">
                     {errors.image && <span>Select category image</span>}
-                  </p>
+                  </div>
                 </div>
               </div>
 
@@ -151,22 +152,38 @@ const PageComp = () => {
                     )}
                     className="textarea-style"
                   />
-                  <p className="text-[0.8rem] font-medium text-destructive">
+                  <div className="text-[0.8rem] font-medium text-destructive">
                     {errors.desc && (
                       <span>Category description is required</span>
                     )}
-                  </p>
+                  </div>
                 </div>
 
-                <div className="flex    items-center gap-4">
-                  <label className="label-style">Featured Category</label>
-                  <input {...register("isFeatured")} type="checkbox" />
-                  <p className="text-[0.8rem] font-medium text-destructive">
-                    {errors.isFeatured?.message && (
-                      <p>{errors.isFeatured?.message}</p>
-                    )}
-                  </p>
-                </div>
+                
+
+
+
+                <div className="flex flex-col gap-1 w-full">
+                    <label className="label-style" htmlFor="product-title">
+                      Active<span className="text-red-500">*</span>{" "}
+                    </label>
+                    <select {...register("isFeatured")} className="input-style">
+                      <option key="key1" value="yes">
+                        Yes
+                      </option>
+                      <option key="key2" value="no">
+                        No
+                      </option>
+                     
+                    </select>
+                    <span className="text-[0.8rem] font-medium text-destructive">
+                      {errors.isFeatured?.message && (
+                        <p>{errors.isFeatured?.message}</p>
+                      )}
+                    </span>
+                  </div>
+
+
 
                 <Button
                   className="bg-amber-500 text-amber-900 font-bold"
