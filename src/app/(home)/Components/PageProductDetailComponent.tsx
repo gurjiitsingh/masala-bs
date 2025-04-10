@@ -30,10 +30,9 @@ export default function PageProductDetailComponent({
 
   // console.log("this is price ---------", addOnData)
   
+  //common code start
   const priceRegular = product.price.toString().replace(/\./g, ",");
-  //bg-[#D3E671]
-
-  let priceDiscounted;
+    let priceDiscounted;
   let priceTarget = product.price;
   if(product.discountPrice !== undefined && product.discountPrice > 0){
     priceTarget = product.discountPrice;
@@ -47,6 +46,7 @@ export default function PageProductDetailComponent({
     name: product.name,
     image: product.image,
   };
+//common code end
   return (
     <div className="w-full  lg:w-[48%]   bg-zinc-50 shadow-lg flex flex-row   rounded-2xl items-center">
       <div className="rounded-full flex items-center justify-center w-[70px] h-[65px]  md:w-[90px]  md:h-[80px]  overflow-hidden">

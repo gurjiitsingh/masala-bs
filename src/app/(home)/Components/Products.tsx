@@ -1,3 +1,5 @@
+// genaric component
+
 import {
  // fetchProductByCategoryId,
   fetchProducts,
@@ -72,7 +74,7 @@ export default function Products() {
   }
   return (
     <div className="flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full">
-      <div className="flex items-center gap-2"><SearchForm handleSearchForm={handleSearchForm} /><div className="flex items-center bg-slate-100 rounded-full py-1 px-2 text-sm font-light md:font-normal">Gericht suchen oder Kategorie auswählen</div></div>  
+      <div className="flex items-center gap-2"><SearchForm handleSearchForm={handleSearchForm} /><div className="flex items-center light-bg rounded-full py-1 px-2 text-sm font-light md:font-normal">Gericht suchen oder Kategorie auswählen</div></div>  
       <div className="flex flex-col md:flex-row md:flex-wrap md:mt-3 gap-1 md:gap-5 w-full">
       {products.map((product, i) => {
         return <PageProductDetailComponent key={i} allAddOns={allAddOns} product={product} />;

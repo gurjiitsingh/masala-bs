@@ -27,6 +27,9 @@
 .dim{
   @apply bg-blue-400;
 }
+.light-bg{
+  @apply bg-slate-100;
+}
 .form-btn-color{
   @apply bg-[#f7ad45];
 }
