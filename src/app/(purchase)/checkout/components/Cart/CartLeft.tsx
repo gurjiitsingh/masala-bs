@@ -72,7 +72,7 @@ export default function CartLeft() {
     endTotalG,
     totalDiscountG,
   } = useCartContext();
-  const pickupDiscountPersent = 20;
+  const pickupDiscountPersent = 0;
 
   useEffect(() => {
     if (cartData && cartData.length > 0) {
