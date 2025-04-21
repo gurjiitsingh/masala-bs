@@ -104,10 +104,17 @@ export type cartDataT = {
         userId: string | undefined;
         customerName: string;
         cartData: ProductType[];
-        total:number;
+        endTotalG:number;
         totalDiscountG:number;
         flatDiscount:number;
         addressId: string;
         paymentType:string;
+        itemTotal:number;
+        deliveryCost:number;
+        calCouponDiscount:number;
+        flatCouponDiscount:number;
+        couponDiscountPercentL:number;
+        pickUpDiscountPercentL:number;
+        calculatedPickUpDiscountL:number;
         
       }

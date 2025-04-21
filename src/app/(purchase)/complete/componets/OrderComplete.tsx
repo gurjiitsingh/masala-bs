@@ -22,7 +22,7 @@ export default function OrderComplete() {
   const { deliveryCost } = UseSiteContext();
   const { cartData, endTotalG, totalDiscountG, productTotalCost, emptyCart } =
     useContext(CartContext);
-    console.log("total discount--------", totalDiscountG)
+    // console.log("total discount--------", totalDiscountG)
     const id = orderId as string;
     //const status = Paymentstatus as string;
 
@@ -32,7 +32,7 @@ export default function OrderComplete() {
   useEffect(() => {
     if (
       PaymentType === "Barzahlung") {
-      console.log("cod or paypal payment completed");
+      // console.log("cod or paypal payment completed");
       createOrder();
     }
     if (PaymentType === "paypal" && Paymentstatus === "success") {

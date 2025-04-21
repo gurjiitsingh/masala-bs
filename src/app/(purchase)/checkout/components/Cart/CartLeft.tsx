@@ -5,6 +5,7 @@ import { useCartContext } from "@/store/CartContext";
 
 //import { useSearchParams } from "next/navigation";
 import { FaChevronDown } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 import CouponDiscForm from "./CouponDiscForm";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 import DeliveryCost from "./DeliveryCost";
@@ -14,6 +15,18 @@ import { cartProductType, orderDataType } from "@/lib/types/cartDataType";
 import { createNewOrder } from "@/app/action/orders/dbOperations";
 import { useRouter } from "next/navigation";
 //import { FaCheckCircle } from 'react-icons/fa';
+
+
+// function calculateNetPayable(
+//   total: number,
+//   delivery: number,
+//   pickup: number,
+//   coupon: number,
+//   flat: number
+// ): number {
+//   return +(total + delivery - pickup - coupon - flat).toFixed(2);
+// }
+
 
 export default function CartLeft() {
   const {
@@ -35,19 +48,22 @@ export default function CartLeft() {
   const [addCoupon, setAddCoupon] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const [calculatedTotal, setCalculatedTotal] = useState(0);
-  const [calculatedTotalComa, setCalculatedTotalComa] = useState("");
+  const [itemTotal, setitemTotal] = useState(0);
+  const [itemTotalComa, setitemTotalComa] = useState("");
   // const [payableTotal, setPayableTotal] = useState(0);
   // const [totalDiscountL, setTotalDiscountL] = useState(0);
 
-  const [discountPercentL, setDeliveryDiscountPercentLess] = useState(0);
-  const [disablePickUpBtn, setDisablePickUpBtn] = useState(false);
+  const [pickUpDiscountPercentL, setPickUpDiscountPercent] = useState(0);
+  const [calculatedPickUpDiscountL, setCalculatedPickUpDiscount] = useState(0);
   const [endTotalComma, setEndTotalComma] = useState("");
-  const [disableDeliveryBtn, setDisableDeliveryBtn] = useState(false);
-
-  const [calculatedDeliveryCost, setCalculatedDeliveryCost] = useState(0);
+  const [deliveryCost, setdeliveryCostL] = useState(0);
   const [calCouponDiscount, setCalCouponDisscount] = useState(0);
-  const [couponDiscountPercentL, setCouponDiscountPercentL] = useState(0);
+  const [flatCouponDiscount, setFlatCouponDisscount] = useState(0);
+  const [couponDiscountPercentL, setcouponDiscountPercentL] = useState(0);
+
+
+  const [disableDeliveryBtn, setDisableDeliveryBtn] = useState(false);
+  const [disablePickUpBtn, setDisablePickUpBtn] = useState(false);
 
   const {
     cartData,
@@ -56,74 +72,78 @@ export default function CartLeft() {
     endTotalG,
     totalDiscountG,
   } = useCartContext();
-  const pickupDiscountPersent = 0;
+  const pickupDiscountPersent = 20;
 
   useEffect(() => {
     if (cartData && cartData.length > 0) {
-      let total = 0;
+
+       let total = 0;
       cartData.forEach((item: cartProductType) => {
         return (total += item.quantity! * +item.price);
       });
-      setCalculatedTotal(parseFloat(total.toFixed(2)));
+      setitemTotal(parseFloat(total.toFixed(2)));
 
-      const calculatedTotalS = total.toFixed(2).toString();
-      const calculatedComma = calculatedTotalS.split(".").join(",");
-      setCalculatedTotalComa(calculatedComma);
+      const itemTotalS = total.toFixed(2).toString();
+      const calculatedComma = itemTotalS.split(".").join(",");
+      setitemTotalComa(calculatedComma);
     }
   }, [cartData]);
 
-  //console.log("cal total------", calculatedTotal);
+  //console.log("cal total------", itemTotal);
 
   useEffect(() => {
-    if (calculatedTotal > 0) {
-      const total = calculatedTotal;
+   
+    if (itemTotal > 0) {
+      const total = itemTotal;
       if (deliveryType === "pickup") {
         let pickupDiscount = +total * pickupDiscountPersent/100;
         pickupDiscount = +pickupDiscount.toFixed(2);
-        setCalculatedDeliveryCost(+-pickupDiscount);
-        setDeliveryDiscountPercentLess(pickupDiscountPersent);
+      
+      setCalculatedPickUpDiscount(+pickupDiscount)
+      setdeliveryCostL(0);
+        setPickUpDiscountPercent(pickupDiscountPersent);
        
       }
 
       if (deliveryType === "delivery") {
         if (deliveryDis?.price !== undefined) {
-          setCalculatedDeliveryCost(+deliveryDis?.price);
-          setDeliveryDiscountPercentLess(0);
+          setdeliveryCostL(+deliveryDis?.price);
+          setPickUpDiscountPercent(0);
+          setCalculatedPickUpDiscount(0)
         }
       }
     }
     if (deliveryType === "delivery") {
       if (deliveryDis?.minSpend !== undefined) {
-         if (deliveryDis?.minSpend >= calculatedTotal) {
+         if (deliveryDis?.minSpend >= itemTotal) {
           setNewOrderCondition(false);
         } else {
           setNewOrderCondition(true);
         }
       }
     }
-  }, [deliveryType, calculatedTotal, deliveryDis]);
+  }, [deliveryType, itemTotal, deliveryDis]);
 
   useEffect(() => {
-    if (calculatedTotal > 0) {
+    if (itemTotal > 0) {
       if (couponDisc?.price) {
-        // console.log("coupondisc, minspend, calculatedTotal-----------",couponDisc.price,couponDisc.minSpend, calculatedTotal);
-        if (couponDisc.minSpend! <= calculatedTotal) {
+        // console.log("coupondisc, minspend, itemTotal-----------",couponDisc.price,couponDisc.minSpend, itemTotal);
+        if (couponDisc.minSpend! <= itemTotal) {
           if (couponDisc.discountType === "flat") {
-            setCalCouponDisscount(-+couponDisc?.price);
-
-            const percentDiscont = (
-              (+couponDisc?.price / calculatedTotal) *
-              100
-            ).toFixed(2);
-
-            setCouponDiscountPercentL(parseFloat(percentDiscont));
+         
+            const price = +couponDisc?.price;
+            setCalCouponDisscount(0);
+            setFlatCouponDisscount(price);
+            setcouponDiscountPercentL(parseFloat(((price / itemTotal) * 100).toFixed(2)));
+            
           } else {
-            const totalDis = parseFloat(
-              ((+calculatedTotal * +couponDisc?.price) / 100).toFixed(2)
-            );
 
-            setCalCouponDisscount(-totalDis);
-            setCouponDiscountPercentL(+couponDisc?.price);
+            const percent = +couponDisc?.price;
+            const totalDis = parseFloat(((itemTotal * percent) / 100).toFixed(2));
+            setCalCouponDisscount(totalDis);
+            setFlatCouponDisscount(0);
+            setcouponDiscountPercentL(percent);
+
           }
         } else {
           alert(
@@ -132,25 +152,33 @@ export default function CartLeft() {
         }
       } else {
         setCalCouponDisscount(0);
-        setCouponDiscountPercentL(0)
+        setcouponDiscountPercentL(0)
       }
     }
-  }, [couponDisc, calculatedTotal]);
+  }, [couponDisc, itemTotal]);
 
   useEffect(() => {
-    const netPay = (calculatedTotal + calculatedDeliveryCost + calCouponDiscount).toFixed(2);
-    const netDiscount = (couponDiscountPercentL + discountPercentL).toFixed(2);
+    const itemTotalSafe = Number(itemTotal) || 0;
+    const deliveryCostSafe = Number(deliveryCost) || 0;
+    const couponDiscountCalSafe = Number(calCouponDiscount) || 0;
+    const flatCouponDiscountSafe = Number(flatCouponDiscount) || 0;
+    const couponDiscountPercentSafe = Number(couponDiscountPercentL) || 0;
+    const pickUpDiscountPercentSafe = Number(pickUpDiscountPercentL) || 0;
+   const calculatedPickUpDiscount = Number(calculatedPickUpDiscountL) || 0;
 
-    const payableTotalS = netPay;
-    const payableTotalSComma = payableTotalS.split(".").join(",");
-    setEndTotalComma(payableTotalSComma);
+ 
+    const netPay = (itemTotalSafe + deliveryCostSafe - calculatedPickUpDiscount - couponDiscountCalSafe - flatCouponDiscountSafe  ).toFixed(2);
+    const netDiscount = (couponDiscountPercentSafe + pickUpDiscountPercentSafe).toFixed(2);
+  
+    const payableTotalSComma = netPay.toString().replace(".", ",");
+
+
     
+    setDeliveryCost(deliveryCostSafe);
+    setEndTotalComma(payableTotalSComma);
     setEndTotalG(parseFloat(netPay));
     setTotalDiscountG(parseFloat(netDiscount));
-   // console.log("end values--------------",netPay,netDiscount )
-        //setPayableTotal(netPay)
-    //setTotalDiscountL(netDiscount)
-  }, [calculatedDeliveryCost, calCouponDiscount, calculatedTotal]);
+  }, [deliveryCost, calCouponDiscount, itemTotal, flatCouponDiscount, couponDiscountPercentL, pickUpDiscountPercentL, calculatedPickUpDiscountL]);
 
  
 
@@ -177,21 +205,21 @@ export default function CartLeft() {
   useEffect(() => {
     if (deliveryType === "delivery") {
       if (deliveryDis?.minSpend !== undefined) {
-        if (deliveryDis?.minSpend >= calculatedTotal) {
+        if (deliveryDis?.minSpend >= itemTotal) {
           setNewOrderCondition(false);
         } else {
           setNewOrderCondition(true);
         }
       } else {
-        setDeliveryCost(0);
+        setdeliveryCostL(0);
       }
 
       if (deliveryDis !== undefined && deliveryType === "delivery") {
         //   console.log("dilevery type ---",deliveryType,deliveryDis?.price)
-        setDeliveryCost(+deliveryDis?.price);
+        setdeliveryCostL(+deliveryDis?.price);
       }
     }else{
-      setDeliveryCost(0);  
+      setdeliveryCostL(0);  
     }
   }, [deliveryType, deliveryDis?.minSpend]);
 
@@ -214,14 +242,6 @@ export default function CartLeft() {
     }
 
     if (deliveryType === "delivery" && deliveryDis === undefined) {
-      // console.log(
-      //   "deliveryType----",
-      //   deliveryType,
-      //   "deliveryDis-----",
-      //   deliveryDis,
-      //   "allReadyAlerted---",
-      //   allReadyAlerted
-      // );
       setIsDisabled(false);
       canCompleteOrder = false;
 
@@ -234,16 +254,15 @@ export default function CartLeft() {
     }
 
 
-console.log("couponDisc?.minSpend-------------",couponDisc?.minSpend)
     if (couponDisc?.minSpend) {
-      if (couponDisc.minSpend! >= calculatedTotal) {
-        console.log("amount is minimum-------------",couponDisc?.minSpend)
+      if (itemTotal < couponDisc.minSpend!){
+       
 
         setIsDisabled(false);
         canCompleteOrder = false;
         if (!allReadyAlerted) {
           alert(
-            `Minmun purchase amount to get discount is € ${couponDisc?.minSpend} , Remove coupon or add more item to cart`
+            `Minimun purchase amount to get discount is € ${couponDisc?.minSpend} , Remove coupon or add more item to cart`
           );
           allReadyAlerted = true;
         }
@@ -255,15 +274,21 @@ console.log("couponDisc?.minSpend-------------",couponDisc?.minSpend)
     let customer_name = "";
 
     if (typeof window !== "undefined") {
-      AddressId = JSON.parse(localStorage.getItem("customer_address_Id") || "");
+     
+      try {
+        AddressId = JSON.parse(localStorage.getItem("customer_address_Id") || "null") || "";
+      } catch (e) {
+        console.log(e);
+        AddressId = "";
+      }
+
       order_user_Id = JSON.parse(localStorage.getItem("order_user_Id") || "");
       customer_name = JSON.parse(localStorage.getItem("customer_name") || "");
 
       // console.log("address id, useraddress id,  customer name ",AddressId,order_user_Id, customer_name)
     }
 
-    //console.log("userdata-----------",AddressId,order_user_Id,customer_name)
-    console.log("newOrderCondition-----------",newOrderCondition)
+  
     if (!newOrderCondition && deliveryType !== "pickup") {
       setIsDisabled(false);
       canCompleteOrder = false;
@@ -275,20 +300,41 @@ console.log("couponDisc?.minSpend-------------",couponDisc?.minSpend)
 
     // if (deliveryType === "pickup" || deliveryDis !== undefined) {
     if (canCompleteOrder) {
-      let flatDiscount = 0;
-      if (couponDisc?.discountType === "flat" && couponDisc?.price) {
-        flatDiscount = couponDisc?.price as number;
-      }
+      // let flatDiscount = 0;
+      // if (couponDisc?.discountType === "flat" && couponDisc?.price) {
+      //   flatDiscount = couponDisc?.price as number;
+      // }
+
+    //   const itemTotalSafe = Number(itemTotal) || 0;
+    //   const deliveryCostSafe = Number(deliveryCost) || 0;
+    //   const couponDiscountCalSafe = Number(calCouponDiscount) || 0;
+    //   const flatCouponDiscountSafe = Number(flatCouponDiscount) || 0;
+    //   const couponDiscountPercentSafe = Number(couponDiscountPercentL) || 0;
+    //   const pickUpDiscountPercentSafe = Number(pickUpDiscountPercentL) || 0;
+    //  const calculatedPickUpDiscount = Number(calculatedPickUpDiscountL) || 0;
+
+   
 
       const purchaseData = {
         userId: order_user_Id, //order_user_Id, //session?.user?.id,
         customerName: customer_name,
         cartData,
-        total: endTotalG,
+        endTotalG: endTotalG,
         totalDiscountG,
-        flatDiscount,
+        
         addressId: AddressId,
         paymentType,
+
+        itemTotal:itemTotal,
+        deliveryCost,
+        calculatedPickUpDiscountL,
+
+        flatDiscount:flatCouponDiscount,
+        calCouponDiscount,
+
+        couponDiscountPercentL,
+        pickUpDiscountPercentL,
+        
       } as orderDataType;
       let orderMasterId = "";
       if (cartData.length !== 0) {
@@ -297,6 +343,9 @@ console.log("couponDisc?.minSpend-------------",couponDisc?.minSpend)
       }
       setIsDisabled(false);
 
+      if (paymentType === "stripe") {
+        router.push(`/stripe?orderMasterId=${orderMasterId}`);
+      }
       if (paymentType === "paypal") {
         router.push(`/pay?orderMasterId=${orderMasterId}`);
       }
@@ -346,11 +395,17 @@ console.log("couponDisc?.minSpend-------------",couponDisc?.minSpend)
               Zwischensumme
             </div>
             <div className="flex gap-1">
-             {calculatedTotalComa && <span>&#8364;</span>} <span>{calculatedTotalComa}</span>
+             {itemTotalComa && <span>&#8364;</span>} <span>{itemTotalComa}</span>
             </div>
           </div>
 
           <div className="font-semibold border-b border-slate-200 py-3 w-full flex  justify-start gap-4">
+           <div className="flex flex-col gap-2">
+            <div className="h-5 flex justify-center">
+                {deliveryType === "pickup" && (
+                              <FaCheck className="text-green-300 " size={24} />
+                            )}
+            </div>
             <div className="w-fit">
               <button
                 disabled={disablePickUpBtn}
@@ -362,6 +417,13 @@ console.log("couponDisc?.minSpend-------------",couponDisc?.minSpend)
                   <FaChevronDown />
                 </span> */}
               </button>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+            <div className="h-5 flex justify-center">
+                {deliveryType === "delivery" && (
+                              <FaCheck className="text-green-300 " size={24} />
+                            )}
             </div>
 
             <div className="w-fit">
@@ -376,17 +438,18 @@ console.log("couponDisc?.minSpend-------------",couponDisc?.minSpend)
                 </span> */}
               </button>
             </div>
+            </div>
           </div>
 
           <DeliveryCost />
 
           <Pickup
-            total={calculatedTotal}
-            pickupDiscountPersent = {discountPercentL}
+            total={itemTotal}
+            pickupDiscountPersent = {pickUpDiscountPercentL}
            
           />
 
-          <CouponDisc total={calculatedTotal} />
+          <CouponDisc total={itemTotal} />
 
           {/* <div className="font-semibold border-b border-slate-200 py-3 w-full ">
             <h3 className="text-sm font-semibold py-3 w-full text-left">

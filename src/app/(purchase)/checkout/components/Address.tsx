@@ -20,7 +20,6 @@ import { purchaseDataT } from "@/lib/types/cartDataType";
 import { fetchdeliveryByZip } from "@/app/action/delivery/dbOperation";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 
-
 const Address = () => {
   // const { endTotalG, cartData, totalDiscountG } = useCartContext();
 
@@ -32,10 +31,8 @@ const Address = () => {
     deliveryType,
     customerEmail,
     setPaymentType,
-    emailFormToggle
+    emailFormToggle,
   } = UseSiteContext();
-
- 
 
   const { data: session } = useSession();
   //const [paymentType, setPaymentType] = useState<string>();
@@ -51,36 +48,48 @@ const Address = () => {
     // if (session?.user?.id !== undefined) {
     //   getAddressByID();
     // }
-   // setValue("email", customerEmail);
+    // setValue("email", customerEmail);
     // console.log("this is befor email set---------------4",customerEmail)
   }, [session, customerEmail]);
 
-const [disablePaypalBtn, setDisablePaypalBtn] = useState(false);
-const [disableCodBtn, setDisableCodBtn] = useState(false);
+  const [disablePaypalBtn, setDisablePaypalBtn] = useState(false);
+  const [disableCodBtn, setDisableCodBtn] = useState(false);
+  const [disableStripeBtn, setDisableStripeBtn] = useState(false);
+
   useEffect(() => {
     //console.log("payment Type ------------", paymentType);
     // setPaymentType("")
+    setDisableStripeBtn(false);
+    setDisablePaypalBtn(false);
+    setDisableCodBtn(false);
     setValue("password", "123456");
     setValue("city", "Lower Saxony");
   }, []);
 
-useEffect(()=>{
-if(paymentType==='paypal'){
-  setDisablePaypalBtn(true)
-  setDisableCodBtn(false);
-}
-if(paymentType==='cod'){
-  setDisableCodBtn(true);
-  setDisablePaypalBtn(false)
-}
-if(paymentType===""){
-  setDisableCodBtn(false);
-  setDisablePaypalBtn(false)
-}
-},[paymentType])
+  useEffect(() => {
+    if (paymentType === "stripe") {
+      setDisableStripeBtn(true);
+      setDisableCodBtn(false);
+      setDisablePaypalBtn(false);
+    }
+    if (paymentType === "paypal") {
+      setDisableStripeBtn(false);
+      setDisablePaypalBtn(true);
+      setDisableCodBtn(false);
+    }
+    if (paymentType === "cod") {
+      setDisableStripeBtn(false);
+      setDisablePaypalBtn(false);
+      setDisableCodBtn(true);
+    }
+    if (paymentType === "") {
+      setDisableStripeBtn(false);
+      setDisableCodBtn(false);
+      setDisablePaypalBtn(false);
+    }
+  }, [paymentType]);
 
-
-   async function handleZipcodeChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleZipcodeChange(e: React.ChangeEvent<HTMLInputElement>) {
     const zipname: string = e.target.value;
     setPaymentType("");
     if (zipname.length > 4) {
@@ -134,7 +143,6 @@ if(paymentType===""){
       );
     }
 
-    
     if (canCompleteOrder) {
       const customAddress = {
         firstName: data.firstName,
@@ -158,13 +166,12 @@ if(paymentType===""){
         address: customAddress,
       } as purchaseDataT;
 
-      
       const result = await createNewOrderCustomerAddress(purchaseData);
 
       const addressAddedIdS = result.addressAddedId;
       const userAddedIdS = result.UserAddedId;
       const customerNameS = result.customerName;
-     
+
       if (typeof window !== "undefined") {
         localStorage.setItem(
           "customer_address_Id",
@@ -178,8 +185,6 @@ if(paymentType===""){
     }
     // end of ok order condition
   }
-
-
 
   return (
     <div className="w-full lg:w-[70%] md:border border-slate-400 md:rounded-2xl md:p-5">
@@ -398,53 +403,69 @@ if(paymentType===""){
               <div>Cash on delivery</div>
             </div> */}
 
-
             <h3 className=" text-xl font-semibold text-slate-600  pt-3 pb-1 uppercase">
               {/* Select payment type */}
               Zahlungsart auswählen
             </h3>
-            <div className="flex gap-2 items-center">
-            <button disabled={ disablePaypalBtn }
-              className="w-[200px] py-1 text-center bg-amber-400 italic font-bold rounded-xl text-[1.2rem]"
-              onClick={() => {
-                   setPaymentType("paypal");
-              }}
-              value="paypal"
-              name="button_1"
-            >
-              <span className=" text-blue-900">Pay</span>
-              <span className=" text-sky-500">Pal</span>
-            </button>
-{paymentType==='paypal' && <FaCheck className="text-green-300" size={24} />}
-            </div>
-            <div className="flex gap-2 items-center">
-            <button disabled={ disableCodBtn }
-              className="w-[200px] py-1 text-center bg-amber-500 text-white font-bold rounded-xl text-[1.2rem]"
-              onClick={() => {
-                  setPaymentType("cod");
-              }}
-              value="cod"
-              name="button_1"
-            >
-              Cash on Delivery
-            </button>
-            {paymentType==='cod' && <FaCheck className="text-green-300 " size={24} />}
-            </div>
+
+            <div className="flex flex-col gap-2">
+ 
+
+            <label className="flex items-center gap-3 cursor-pointer">
+      <input
+        type="radio"
+        value="stripe"
+        {...register("payment")}
+        className="accent-amber-400"
+        onChange={(e) => {
+          setPaymentType(e.target.value);
+          handleSubmit(onSubmit)(); 
+
+          // const submitHandler = handleSubmit(onSubmit); // returns a function
+          // submitHandler(); // now we call it
+
+        }}
+      />
+      <span className="text-blue-900 font-semibold">Stripe</span>
+    </label>
+
+    <label className="flex items-center gap-3 cursor-pointer">
+      <input
+        type="radio"
+        value="paypal"
+        {...register("payment")}
+        className="accent-amber-400"
+        onChange={(e) => {
+          setPaymentType(e.target.value);
+          handleSubmit(onSubmit)();  
+        }}
+      />
+      <span>
+        <span className="text-blue-900 font-semibold">Pay</span>
+        <span className="text-sky-500 font-semibold">Pal</span>
+      </span>
+    </label>
+
+    <label className="flex items-center gap-3 cursor-pointer">
+      <input
+        type="radio"
+        value="cod"
+        {...register("payment")}
+        className="accent-amber-400"
+        onChange={(e) => {
+          setPaymentType(e.target.value);
+          handleSubmit(onSubmit)();  
+        }}
+      />
+      <span className="text-slate-700 font-semibold">Cash on Delivery</span>
+    </label>
+</div>
+
+{/* <button className="px-2 py-1 bg-amber-300 rounded-2xl">Proceed</button> */}
+            
           </div>
 
-          {/* <div className="flex flex-col gap-6">
-            <div className="w-[300px] flex   justify-start items-center gap-3 italic font-bold  text-[1.2rem]">
-              <SlideButton paytypeL={"paypal"} />
-              <div className="">
-                <span className=" text-blue-900">Pay</span>
-                <span className=" text-sky-500">Pal</span> <span className="text-sm font-normal">& Credit Cards</span>
-              </div>
-            </div>
-            <div className="w-[300px] flex justify-start items-center gap-3  font-bold  text-[1.2rem]">
-              <SlideButton paytypeL={"cod"} />
-              <div className="text-slate-500"> Cash on delivery</div>
-            </div>
-          </div> */}
+     
         </form>
       </div>
     </div>
@@ -457,7 +478,7 @@ if(paymentType===""){
       const zipInfo = await fetchdeliveryByZip(addressRes.zipCode);
       setdeliveryDis(zipInfo);
     }
-  //  setValue("email", inputEmail);
+    //  setValue("email", inputEmail);
   }
 
   async function getAddressByID() {

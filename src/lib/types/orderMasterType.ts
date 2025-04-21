@@ -4,13 +4,20 @@ export type orderMasterDataT = {
       userId: string;
       addressId: string;
       time: string;
-      total:number;
+      endTotalG:number;
+      itemTotal:number;
       paymentType:string;
       totalDiscountG:number;
       flatDiscount:number;
       status:string;
       srno:number;
       timeId:string;
+
+      deliveryCost: number;
+      calculatedPickUpDiscountL: number;
+      calCouponDiscount: number;
+      couponDiscountPercentL:number;
+      pickUpDiscountPercentL:number;
   }
 
 

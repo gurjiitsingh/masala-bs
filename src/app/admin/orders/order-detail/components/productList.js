@@ -16,8 +16,8 @@ const ProductList = ({ item }) => {
   const total = (parseInt(item.quantity) * parseFloat(item.price)).toFixed(2);
 
   
-  const itemPrice = (parseInt(item.price)).toFixed(2).replace(/\./g, ',');
-  console.log(typeof(itemPrice))
+  const itemPrice = (parseFloat(item.price)).toFixed(2).replace(/\./g, ',');
+ 
 //   const itemPriceS = itemPrice?.toFixed(2).toString().replace(/\./g, ',');;
 
   const ToatlPrice = (total.toString()).replace(/\./g, ',')

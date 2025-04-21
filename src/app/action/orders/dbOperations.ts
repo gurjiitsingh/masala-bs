@@ -20,6 +20,7 @@ import { TOrderMaster, orderMasterDataT } from "@/lib/types/orderMasterType";
 import { orderProductsT } from "@/lib/types/orderType";
 import { orderDataType, purchaseDataT } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
+import { number } from "zod";
 
 export async function createNewOrderCustomerAddress(
   purchaseData: purchaseDataT
@@ -170,13 +171,24 @@ export async function createNewOrder(purchaseData: orderDataType) {
   }
   //  console.log("sr No ----------", new_srno)
   // const timeId = new Date().toISOString();
-  const total = purchaseData.total;
+  const total = purchaseData.endTotalG;
   const totalDiscountG = purchaseData.totalDiscountG;
   const addressId = purchaseData.addressId;
   const userAddedId = purchaseData.addressId;
   const customerName = purchaseData.customerName;
   const paymentType = purchaseData.paymentType;
+
+  const itemTotal = purchaseData.itemTotal;
+
+  const deliveryCost = purchaseData.deliveryCost;
+  const calculatedPickUpDiscountL = purchaseData.calculatedPickUpDiscountL;
+
   const flatDiscount = purchaseData.flatDiscount;
+  const calCouponDiscount = purchaseData.calCouponDiscount;
+
+  const couponDiscountPercentL = purchaseData.couponDiscountPercentL;
+  const pickUpDiscountPercentL = purchaseData.pickUpDiscountPercentL;
+
   let status = "Payment Pending";
   if (paymentType === "cod") {
     status = "Completed";
@@ -187,11 +199,21 @@ export async function createNewOrder(purchaseData: orderDataType) {
     customerName: customerName,
     userId: userAddedId,
     addressId: addressId,
-    total: total,
+    itemTotal,
+    endTotalG: total,
+
+    deliveryCost,
+    calculatedPickUpDiscountL,
+    flatDiscount,
+    calCouponDiscount,
+
+    couponDiscountPercentL,
+    pickUpDiscountPercentL,
+
     paymentType,
     status,
     totalDiscountG,
-    flatDiscount,
+
     time: now_german,
     srno: new_srno,
   } as orderMasterDataT;
@@ -216,17 +238,11 @@ export async function createNewOrder(purchaseData: orderDataType) {
   //  await deleteDoc(doc(db, "orderProducts", toBeDeleted));
 } //end of cart to orderProduct
 
-
-
-
-
-export async function updateOrderMaster(id: string, status:string) {
- 
+export async function updateOrderMaster(id: string, status: string) {
   try {
     const docRef = doc(db, "orderMaster", id);
-    await updateDoc(docRef, {status});
+    await updateDoc(docRef, { status });
     console.log("Document updated successfully!");
-    
   } catch (error) {
     console.log("error", error);
     return { errors: "Cannot update" };
@@ -297,11 +313,9 @@ export async function fetchOrdersMaster(): Promise<orderMasterDataT[]> {
   return data;
 }
 
-
 export async function deleteOrderMasterRec(id: string) {
   const docRef = doc(db, "orderMaster", id);
   await deleteDoc(docRef);
- 
 
   return {
     message: { sucess: "Order Deleted" },

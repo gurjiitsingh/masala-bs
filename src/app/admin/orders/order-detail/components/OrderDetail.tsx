@@ -47,8 +47,11 @@ const OrderDetail = () => {
   useEffect(() => {
     // console.log("addre ins use efferxt-----", customerAddress);
   }, [customerAddress]);
-   const orderTotal = orderMasterData?.total;
-   const orderTotalS = orderTotal?.toFixed(2).toString().replace(/\./g, ',');
+  const endTotalG = orderMasterData?.endTotalG;
+  const endTotalGS = endTotalG?.toFixed(2).toString().replace(/\./g, ",");
+
+  const itemTotal = orderMasterData?.itemTotal;
+  const itemTotalS = itemTotal?.toFixed(2).toString().replace(/\./g, ",");
 
   return (
     <div className="flex flex-col gap-4 bg-white px-3 flex-1 mb-12">
@@ -56,11 +59,10 @@ const OrderDetail = () => {
         <h1 className=" text-[1.7rem]">Order Detail</h1>
       </div>
       <div className="w-full flex flex-col md:flex-row gap-3 justify-between">
-     
-        <div className="flex flex-col gap-2 w-full md:w-[48%] rounded-xl border p-4">
-        <h2 className="text-2xl "> Order</h2>
+        <div className="flex flex-col gap-2 w-full md:w-[33%] rounded-xl border p-4">
+          <h2 className="text-2xl "> Order</h2>
 
-        <div className="flex gap-2">
+          <div className="flex gap-2">
             <div className="font-semibold">Sr. No:</div>{" "}
             <div className="">{orderMasterData?.srno}</div>
           </div>
@@ -73,24 +75,61 @@ const OrderDetail = () => {
             <div className="">{orderMasterData?.status}</div>
           </div>
 
-          <div className="flex gap-2">
-            <div className="font-semibold">Subtotal:</div>{" "}
-            <div className="">&euro;{orderTotalS}</div>
-          </div>
 
           <div className="flex gap-2">
-            <div className="font-semibold">Discount:</div>{" "}
+            <div className="font-semibold">Discount total:</div>{" "}
             <div className="">%{orderMasterData?.totalDiscountG}</div>
           </div>
 
-
-          
-
-
-          
+         
         </div>
 
-        <div className="w-full md:w-[50%] flex flex-col gap-2 rounded-xl border p-4">
+
+        <div className="flex flex-col gap-2 w-full md:w-[33%] rounded-xl border p-4">
+          <h2 className="text-2xl "> Calculations</h2>
+
+        
+
+          <div className="flex gap-2">
+            <div className="font-semibold">Item total:</div>{" "}
+            <div className="">&euro;{itemTotalS}</div>
+          </div>
+
+          
+          <div className="flex gap-2">
+            <div className="font-semibold">Dilevery cost:</div>{" "}
+            <div className="">&euro;{orderMasterData?.deliveryCost}</div>
+          </div>
+
+          <div className="flex gap-2">
+            <div className="font-semibold">Pickup discount:</div>{" "}
+            <div className="">
+           - &euro;{orderMasterData?.calculatedPickUpDiscountL}
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <div className="font-semibold">Coupon Discount Flat:</div>{" "}
+            <div className="">- &euro;{orderMasterData?.flatDiscount}</div>
+          </div>
+
+          <div className="flex gap-2">
+            <div className="font-semibold">Coupon Discount percent:</div>{" "}
+            <div className="">- &euro;{orderMasterData?.calCouponDiscount}</div>
+          </div>
+          <div className="flex gap-2">
+            <div className="font-semibold">Subtotal:</div>{" "}
+            <div className="">&euro;{endTotalGS}</div>
+          </div>
+
+
+
+        </div>
+
+
+
+
+        <div className="w-full md:w-[33%] flex flex-col gap-2 rounded-xl border p-4">
           <h2 className="text-2xl "> Address</h2>
           <div className="flex gap-2">
             <div className="font-semibold">Name</div>
@@ -116,7 +155,12 @@ const OrderDetail = () => {
           <div className="">
             <div className=""></div>
             <div className="">
-              {customerAddress?.city} {customerAddress?.state !== undefined ?customerAddress?.state:<></>}
+              {customerAddress?.city}{" "}
+              {customerAddress?.state !== undefined ? (
+                customerAddress?.state
+              ) : (
+                <></>
+              )}
             </div>
           </div>
 
