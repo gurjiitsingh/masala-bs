@@ -12,6 +12,7 @@ export async function POST(request: Request) {
       time,
       createdAt: new Date(),
     };
+    
 
     const docRef = await addDoc(collection(db, "paypalerror"), data);
     console.log("Document written with ID: ", docRef.id);
