@@ -85,8 +85,23 @@ export default function Checkout(){
        });
     };
 
-    const onError = (err) => {
+    const onError = async (err) => {
       //console.log("paypal errot-------------",err)
+      try {
+        await fetch('/api/paypal-error', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            error: err,
+            time: new Date().toISOString(),
+          }),
+        });
+      } catch (e) {
+        console.error('Failed to send PayPal error to server:', e);
+      }
+    
      router.push(`/order-fail?paymentType=paypal&status=fail&orderMasterId=${orderMasterId}&error=${encodeURIComponent(err)}`)
   }
 
