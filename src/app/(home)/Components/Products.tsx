@@ -17,54 +17,110 @@ export default function Products() {
   const [products, setProduct] = useState<ProductType[]>([]);
   const [allProducts, setAllProduct] = useState<ProductType[]>([]);
   const [allAddOns, setAllAddOns] = useState<addOnType[]>([]);
+//   useEffect(() => {
+//     async function fetchAddOn() {
+//       const result = await fetchAddOnProducts();
+//     setAllAddOns(result);
+//     }
+//     fetchAddOn();
+//     // console.log("productCategoryIdG -------------", productCategoryIdG)
+//     if (productCategoryIdG === "") {
+//       async function fetchproductData() {
+//         const productData = await fetchProducts();
+//         productData.sort((a, b) => a.sortOrder - b.sortOrder);
+//         setAllProduct(productData);
+//        // setProduct(productData);
+
+
+//         const filtertedProduct = productData.filter(
+//           (item) => item.categoryId === 'cyswMDLgMXJ1sLj9ukzU'
+//         );
+//         filtertedProduct.sort(
+//           (a: ProductType, b: ProductType) => a.sortOrder! - b.sortOrder!
+//         );
+
+//         setProduct(filtertedProduct);
+
+//       }
+//       fetchproductData();
+
+
+
+
+//     } else {
+//       async function fetchproductData() {
+//         // const productData = await fetchProductByCategoryId(productCategoryIdG);
+//         const filtertedProduct = allProducts.filter(
+//           (item) => item.categoryId === productCategoryIdG
+//         );
+//         filtertedProduct.sort(
+//           (a: ProductType, b: ProductType) => a.sortOrder! - b.sortOrder!
+//         );
+
+//         setProduct(filtertedProduct);
+//       }
+//       fetchproductData();
+//     }
+// //console.log("productCategoryIdG-------------",productCategoryIdG)
+
+//   }, [productCategoryIdG]);
+
+
+
+
+
   useEffect(() => {
-    async function fetchAddOn() {
-      const result = await fetchAddOnProducts();
-    setAllAddOns(result);
-    }
-    fetchAddOn();
-    // console.log("productCategoryIdG -------------", productCategoryIdG)
-    if (productCategoryIdG === "") {
-      async function fetchproductData() {
-        const productData = await fetchProducts();
-        productData.sort((a, b) => a.sortOrder - b.sortOrder);
-        setAllProduct(productData);
-       // setProduct(productData);
-
-
-        const filtertedProduct = productData.filter(
-          (item) => item.categoryId === 'cyswMDLgMXJ1sLj9ukzU'
+    async function fetchInitialData() {
+      // Fetch all add-ons
+      const addOns = await fetchAddOnProducts();
+      setAllAddOns(addOns);
+  
+      // Fetch all products
+      const productData = await fetchProducts();
+      productData.sort((a: ProductType, b: ProductType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+      
+      setAllProduct(productData);
+  
+      // Default filter if no category selected
+      if (productCategoryIdG === "") {
+        const filtered = productData.filter(
+          (item) => item.categoryId === "cyswMDLgMXJ1sLj9ukzU"
         );
-        filtertedProduct.sort(
-          (a: ProductType, b: ProductType) => a.sortOrder! - b.sortOrder!
-        );
-
-        setProduct(filtertedProduct);
-
+        filtered.sort((a: ProductType, b: ProductType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+        setProduct(filtered);
       }
-      fetchproductData();
-
-
-
-
-    } else {
-      async function fetchproductData() {
-        // const productData = await fetchProductByCategoryId(productCategoryIdG);
-        const filtertedProduct = allProducts.filter(
-          (item) => item.categoryId === productCategoryIdG
-        );
-        filtertedProduct.sort(
-          (a: ProductType, b: ProductType) => a.sortOrder! - b.sortOrder!
-        );
-
-        setProduct(filtertedProduct);
-      }
-      fetchproductData();
     }
-//console.log("productCategoryIdG-------------",productCategoryIdG)
+  
+    fetchInitialData();
+  }, []); // runs once on mount
+  
+  // Runs every time category changes or products are available
+  useEffect(() => {
+    if (productCategoryIdG !== "" && allProducts.length > 0) {
+      const filtered = allProducts.filter(
+        (item) => item.categoryId === productCategoryIdG
+      );
+      filtered.sort((a: ProductType, b: ProductType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+      setProduct(filtered);
+    }
+  }, [productCategoryIdG, allProducts]); // depends on both
 
-  }, [productCategoryIdG]);
-  function handleSearchForm(e:string){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  function handleSearchForm(e:string){ 
     
     //console.log("search text-----------", e)
     const searchedProduct = allProducts.filter(item =>
@@ -77,7 +133,9 @@ export default function Products() {
       <div className="flex items-center gap-2"><SearchForm handleSearchForm={handleSearchForm} /><div className="flex items-center light-bg rounded-full py-1 px-2 text-sm font-light md:font-normal">Gericht suchen oder Kategorie auswählen</div></div>  
       <div className="flex flex-col md:flex-row md:flex-wrap md:mt-3 gap-1 md:gap-5 w-full">
       {products.map((product, i) => {
-        return <PageProductDetailComponent key={i} allAddOns={allAddOns} product={product} />;
+        return <PageProductDetailComponent 
+        key={product.id ?? `${product.name}-${i}`} 
+        allAddOns={allAddOns} product={product} />;
       })}
       </div>
     </div>
