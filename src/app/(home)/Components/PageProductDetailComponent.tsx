@@ -21,12 +21,11 @@ export default function PageProductDetailComponent({
       const AddOnData = allAddOns.filter(
         (item: addOnType) => product.id === item.baseProductId
       );
-      AddOnData.sort(
-        (a: addOnType, b: addOnType) => a.sortOrder! - b.sortOrder!
-      );
+    
+      AddOnData.sort((a: addOnType, b: addOnType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
       setAddOnData(AddOnData);
     }
-  }, [product.id]);
+  }, [product.id, product.flavors, allAddOns]);
 
   // console.log("this is price ---------", addOnData)
   
@@ -39,6 +38,15 @@ export default function PageProductDetailComponent({
     priceDiscounted = product.discountPrice.toString().replace(/\./g, ",");
   }
 
+
+  // const formatPrice = (price: number) =>
+  //   new Intl.NumberFormat("de-DE", {
+  //     style: "currency",
+  //     currency: "EUR",
+  //     minimumFractionDigits: 2,
+  //   }).format(price);
+
+
   const cartProduct: cartProductType = {
     id: product.id,
     quantity: 1,
@@ -50,7 +58,7 @@ export default function PageProductDetailComponent({
   return (
     <div className="w-full  lg:w-[48%]   bg-zinc-50 shadow-lg flex flex-row   rounded-2xl items-center">
       <div className="rounded-full flex items-center justify-center w-[70px] h-[65px]  md:w-[90px]  md:h-[80px]  overflow-hidden">
-        <img src={product.image} className="h-[65px]  md:h-[85px]" />
+         <img src={product.image} alt={product.name} className="h-[65px]  md:h-[85px]" />
       </div>
 
       <div className="w-full flex flex-col p-3 justify-between ">
@@ -70,10 +78,9 @@ export default function PageProductDetailComponent({
             </div>)}
 
           </div>
-          <button onClick={() => alert(product.productDesc)}>
-            <div className="text-sm text-slate-500 font-extralight text-left max-w-fit md:max-w-[400px] max-h-[22px] overflow-hidden">
+          <button onClick={() => alert(product.productDesc)} className="text-sm text-slate-500 font-extralight text-left max-w-fit md:max-w-[400px] max-h-[22px] overflow-hidden">
               {product.productDesc}
-            </div>
+           
           </button>
           {!product.flavors && (
             <div className="w-full flex justify-between items-center">
