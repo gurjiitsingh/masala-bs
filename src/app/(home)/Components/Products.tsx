@@ -17,82 +17,29 @@ export default function Products() {
   const [products, setProduct] = useState<ProductType[]>([]);
   const [allProducts, setAllProduct] = useState<ProductType[]>([]);
   const [allAddOns, setAllAddOns] = useState<addOnType[]>([]);
-//   useEffect(() => {
-//     async function fetchAddOn() {
-//       const result = await fetchAddOnProducts();
-//     setAllAddOns(result);
-//     }
-//     fetchAddOn();
-//     // console.log("productCategoryIdG -------------", productCategoryIdG)
-//     if (productCategoryIdG === "") {
-//       async function fetchproductData() {
-//         const productData = await fetchProducts();
-//         productData.sort((a, b) => a.sortOrder - b.sortOrder);
-//         setAllProduct(productData);
-//        // setProduct(productData);
-
-
-//         const filtertedProduct = productData.filter(
-//           (item) => item.categoryId === 'cyswMDLgMXJ1sLj9ukzU'
-//         );
-//         filtertedProduct.sort(
-//           (a: ProductType, b: ProductType) => a.sortOrder! - b.sortOrder!
-//         );
-
-//         setProduct(filtertedProduct);
-
-//       }
-//       fetchproductData();
-
-
-
-
-//     } else {
-//       async function fetchproductData() {
-//         // const productData = await fetchProductByCategoryId(productCategoryIdG);
-//         const filtertedProduct = allProducts.filter(
-//           (item) => item.categoryId === productCategoryIdG
-//         );
-//         filtertedProduct.sort(
-//           (a: ProductType, b: ProductType) => a.sortOrder! - b.sortOrder!
-//         );
-
-//         setProduct(filtertedProduct);
-//       }
-//       fetchproductData();
-//     }
-// //console.log("productCategoryIdG-------------",productCategoryIdG)
-
-//   }, [productCategoryIdG]);
-
-
-
-
 
   useEffect(() => {
     async function fetchInitialData() {
-      // Fetch all add-ons
-      const addOns = await fetchAddOnProducts();
-      setAllAddOns(addOns);
+      try {
+        const addOns = await fetchAddOnProducts();
+        setAllAddOns(addOns);
   
-      // Fetch all products
-      const productData = await fetchProducts();
-      productData.sort((a: ProductType, b: ProductType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
-      
-      setAllProduct(productData);
+        const productData = await fetchProducts();
+        productData.sort((a: ProductType, b: ProductType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+        setAllProduct(productData);
   
-      // Default filter if no category selected
-      if (productCategoryIdG === "") {
-        const filtered = productData.filter(
-          (item) => item.categoryId === "cyswMDLgMXJ1sLj9ukzU"
-        );
-        filtered.sort((a: ProductType, b: ProductType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
-        setProduct(filtered);
+        if (!productCategoryIdG) {
+          const filtered = productData.filter(
+            (item) => item.categoryId === "cyswMDLgMXJ1sLj9ukzU"
+          );
+          setProduct(filtered);
+        }
+      } catch (err) {
+        console.error("Error fetching product data:", err);
       }
     }
-  
     fetchInitialData();
-  }, []); // runs once on mount
+  }, []);
   
   // Runs every time category changes or products are available
   useEffect(() => {
@@ -106,20 +53,6 @@ export default function Products() {
   }, [productCategoryIdG, allProducts]); // depends on both
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   function handleSearchForm(e:string){ 
     
     //console.log("search text-----------", e)
@@ -127,6 +60,7 @@ export default function Products() {
     item.name.toLowerCase().includes(e.toLowerCase())
   );
   setProduct(searchedProduct);
+  
   }
   return (
     <div className="flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full">
