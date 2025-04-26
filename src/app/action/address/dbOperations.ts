@@ -252,7 +252,7 @@ export async function addCustomerAddressDirect(formData: FormData) {
   let recordId = null;
   querySnapshot.forEach((doc) => {
     recordId = doc.id;
-    //console.log("address allredy exist ------", doc.id);
+    console.log("address allredy exist ------", doc.id);
     return recordId;
     // doc.data() is never undefined for query doc snapshots
     //console.log(doc.data());
@@ -277,7 +277,7 @@ export async function addCustomerAddressDirect(formData: FormData) {
 
     try {
       const aadDocRef = await addDoc(collection(db, "address"), addressData);
-      console.log("new address added ------", aadDocRef.id);
+      console.log("new address added address id------2", aadDocRef.id);
       recordId = aadDocRef.id;
       return recordId;
       // Clear the form

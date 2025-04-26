@@ -266,8 +266,9 @@ export default function CartLeft() {
         canCompleteOrder = true;
         if (!allReadyAlerted) {
           alert(
-            "Wir können an diese Adresse nicht liefern. Bitte wählen Sie Abholung und erhalten Sie 10 % Rabatt"
+            "Wir können nicht an diese Adresse liefern. Bitte wählen Sie Abholung."
           );
+          // We cannot deliver to this address. Please select pickup
           allReadyAlerted = true;
         }
         return;
@@ -492,7 +493,7 @@ export default function CartLeft() {
         {/* disabled={true} */}
         <button
           disabled={isDisabled}
-          className="w-[200px] py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem] z-50"
+          className="w-[200px] py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem] z-30"
           onClick={() => {
             proceedToOrder();
           }}
