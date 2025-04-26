@@ -187,10 +187,10 @@ const Address = () => {
   }
 
   return (
-    <div className="w-full lg:w-[70%] md:border border-slate-400 md:rounded-2xl md:p-5">
-      <div className="flex flex-col">
-        <div className="flex flex-col gap-2 mb-4">
-          <h2 className="text-xl font-semibold text-slate-600  py-3 uppercase">
+    <div className="w-full  md:border border-slate-400 md:rounded-2xl md:p-5">
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-xl font-semibold text-slate-600  uppercase">
             {/* Shipping address */}
             Adresse
             {/* -- {session?.user?.id} --- {session?.user?.name} */}
@@ -202,7 +202,7 @@ const Address = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <input {...register("userId")} hidden />
           {/* <input {...register("orderDetail")} hidden /> */}
-          <div className="flex w-full flex-col gap-2  my-15 ">
+          <div className="flex w-full flex-col gap-2  ">
             <div className="flex flex-col gap-1">
               <label className="label-style">
                 Email<span className="text-red-500">*</span>{" "}
@@ -403,69 +403,10 @@ const Address = () => {
               <div>Cash on delivery</div>
             </div> */}
 
-            <h3 className=" text-xl font-semibold text-slate-600  pt-3 pb-1 uppercase">
-              {/* Select payment type */}
-              Zahlungsart auswählen
-            </h3>
 
-            <div className="flex flex-col gap-2">
- 
 
-            <label className="flex items-center gap-3 cursor-pointer">
-      <input
-        type="radio"
-        value="stripe"
-        {...register("payment")}
-        className="accent-amber-400"
-        onChange={(e) => {
-          setPaymentType(e.target.value);
-          handleSubmit(onSubmit)(); 
-
-          // const submitHandler = handleSubmit(onSubmit); // returns a function
-          // submitHandler(); // now we call it
-
-        }}
-      />
-      <span className="text-blue-900 font-semibold">Stripe</span>
-    </label>
-
-    <label className="flex items-center gap-3 cursor-pointer">
-      <input
-        type="radio"
-        value="paypal"
-        {...register("payment")}
-        className="accent-amber-400"
-        onChange={(e) => {
-          setPaymentType(e.target.value);
-          handleSubmit(onSubmit)();  
-        }}
-      />
-      <span>
-        <span className="text-blue-900 font-semibold">Pay</span>
-        <span className="text-sky-500 font-semibold">Pal</span>
-      </span>
-    </label>
-
-    <label className="flex items-center gap-3 cursor-pointer">
-      <input
-        type="radio"
-        value="cod"
-        {...register("payment")}
-        className="accent-amber-400"
-        onChange={(e) => {
-          setPaymentType(e.target.value);
-          handleSubmit(onSubmit)();  
-        }}
-      />
-      <span className="text-slate-700 font-semibold">Cash on Delivery</span>
-    </label>
-</div>
-
-{/* <button className="px-2 py-1 bg-amber-300 rounded-2xl">Proceed</button> */}
-            
+            <button className="w-fit px-2 py-1 text-center bg-amber-400 text-blue-900 font-bold rounded-xl text-[1.2rem] z-50">Use This Address For dilevery</button>
           </div>
-
-     
         </form>
       </div>
     </div>
