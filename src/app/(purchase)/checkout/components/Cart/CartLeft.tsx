@@ -225,7 +225,7 @@ export default function CartLeft() {
 
    
   }, [deliveryType]);
-  console.log("isDisabled---------------", isDisabled);
+  // console.log("isDisabled---------------", isDisabled);
  
 
   useEffect(() => {
@@ -250,13 +250,17 @@ export default function CartLeft() {
   }, [deliveryType, deliveryDis?.minSpend]);
 
   async function proceedToOrder() {
+   
+
     setIsDisabled(true);
       try {
       let canCompleteOrder = true;
       let allReadyAlerted = false;
-  
+      alert(`Hello, ${deliveryType}`)
+
+
       if (paymentType === "" || paymentType === undefined) {
-        canCompleteOrder = false;
+   //     canCompleteOrder = false;
         alert("Select Payment type");
         allReadyAlerted = true;
         return;
@@ -292,8 +296,12 @@ export default function CartLeft() {
         }
         return;
       }
-  
-      if (!canCompleteOrder) return;
+     
+      if (!canCompleteOrder) {
+        alert(`cancelorder, is canceling order because ${canCompleteOrder}`)
+        return}else{
+          alert(`cancelorder ${canCompleteOrder} , so it not cancle order`)
+        };
   
       const AddressId = JSON.parse(localStorage.getItem("customer_address_Id") || "null") || "";
       const order_user_Id = JSON.parse(localStorage.getItem("order_user_Id") || "");
@@ -315,8 +323,10 @@ export default function CartLeft() {
         couponDiscountPercentL,
         pickUpDiscountPercentL,
       } as orderDataType;
-  
+      
       if (cartData.length !== 0) {
+
+        alert(`cart length is more than 0,order started, ${cartData.length}`)
         const orderMasterId = await createNewOrder(purchaseData);
   
         if (paymentType === "stripe") {
@@ -326,6 +336,8 @@ export default function CartLeft() {
         } else if (paymentType === "cod") {
           router.push(`/complete?paymentType=Barzahlung&orderMasterId=${orderMasterId}`);
         }
+      }else{
+        alert(`cart is empty, ${cartData.length}`)
       }
     } catch (error) {
       
@@ -480,7 +492,7 @@ export default function CartLeft() {
           disabled={isDisabled}
           className="w-[200px] py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem] z-50"
           onClick={() => {
-            alert("submit button clicked")
+          
             proceedToOrder();
           }}
         >
