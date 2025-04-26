@@ -478,7 +478,7 @@ export default function CartLeft() {
         {/* disabled={true} */}
         <button
           disabled={isDisabled}
-          className="w-[200px] py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem]"
+          className="w-[200px] py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem] z-50"
           onClick={() => {
             proceedToOrder();
           }}
