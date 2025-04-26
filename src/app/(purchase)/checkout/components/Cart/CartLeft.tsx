@@ -348,17 +348,6 @@ export default function CartLeft() {
             Warenkorb-Summe
           </h2>
 
-          <button
-       
-          className="w-full py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem] z-50"
-          onClick={() => {
-            proceedToOrder();
-          }}
-        >
-          <span className=" text-blue-900">Submit</span>
-          <span className=" text-sky-500">Order</span>
-        </button>
-
           <div className="font-semibold border-b border-slate-200 py-3 w-full flex flex-col justify-between gap-4">
             <div className="w-fit">
               <button
@@ -491,6 +480,7 @@ export default function CartLeft() {
           disabled={isDisabled}
           className="w-[200px] py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem] z-50"
           onClick={() => {
+            alert("submit button clicked")
             proceedToOrder();
           }}
         >
