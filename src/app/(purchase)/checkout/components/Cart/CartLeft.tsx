@@ -65,6 +65,8 @@ export default function CartLeft() {
   const [disableDeliveryBtn, setDisableDeliveryBtn] = useState(false);
   const [disablePickUpBtn, setDisablePickUpBtn] = useState(false);
 
+  const [orderAmountIsLowForDelivery, seOrderAmountIsLowForDelivery] = useState(false)
+
   const {
     cartData,
     setEndTotalG,
@@ -137,15 +139,7 @@ export default function CartLeft() {
         }
       }
     }
-    if (deliveryType === "delivery") {
-      if (deliveryDis?.minSpend !== undefined) {
-         if (deliveryDis?.minSpend >= itemTotal) {
-          setNewOrderCondition(false);
-        } else {
-          setNewOrderCondition(true);
-        }
-      }
-    }
+ 
   }, [deliveryType, itemTotal, deliveryDis]);
 
   useEffect(() => {
@@ -232,9 +226,10 @@ export default function CartLeft() {
     if (deliveryType === "delivery") {
       if (deliveryDis?.minSpend !== undefined) {
         if (deliveryDis?.minSpend >= itemTotal) {
-          setNewOrderCondition(false);
+         
+          seOrderAmountIsLowForDelivery(true)
         } else {
-          setNewOrderCondition(true);
+          seOrderAmountIsLowForDelivery(false);
         }
       } else {
         setdeliveryCostL(0);
@@ -254,20 +249,20 @@ export default function CartLeft() {
 
     setIsDisabled(true);
       try {
-      let canCompleteOrder = true;
+      let canCompleteOrder = false;
       let allReadyAlerted = false;
       alert(`Hello, ${deliveryType}`)
 
 
       if (paymentType === "" || paymentType === undefined) {
-   //     canCompleteOrder = false;
+        canCompleteOrder = true;
         alert("Select Payment type");
         allReadyAlerted = true;
         return;
       }
   
       if (deliveryType === "delivery" && deliveryDis === undefined) {
-        canCompleteOrder = false;
+        canCompleteOrder = true;
         if (!allReadyAlerted) {
           alert(
             "Wir können an diese Adresse nicht liefern. Bitte wählen Sie Abholung und erhalten Sie 10 % Rabatt"
@@ -278,7 +273,7 @@ export default function CartLeft() {
       }
   
       if (couponDisc?.minSpend && itemTotal < couponDisc.minSpend) {
-        canCompleteOrder = false;
+        canCompleteOrder = true;
         if (!allReadyAlerted) {
           alert(
             `Minimun purchase amount to get discount is € ${couponDisc?.minSpend} , Remove coupon or add more item to cart`
@@ -288,19 +283,19 @@ export default function CartLeft() {
         return;
       }
   
-      if (!newOrderCondition && deliveryType !== "pickup") {
-        canCompleteOrder = false;
+      if (orderAmountIsLowForDelivery && deliveryType !== "pickup") {
+        canCompleteOrder = true;
         if (!allReadyAlerted) {
-          alert(`Minimum order amount for delivery is €${deliveryDis?.minSpend}`);
+          alert(`Minimum order amount for delivery is € ${deliveryDis?.minSpend}`);
           allReadyAlerted = true;
         }
         return;
       }
      
-      if (!canCompleteOrder) {
-        alert(`cancelorder, is canceling order because ${canCompleteOrder}`)
+      if (canCompleteOrder) {
+      //  alert(`cancelorder, is canceling order because ${canCompleteOrder}`)
         return}else{
-          alert(`cancelorder ${canCompleteOrder} , so it not cancle order`)
+        //  alert(`cancelorder ${canCompleteOrder} , so it not cancle order`)
         };
   
       const AddressId = JSON.parse(localStorage.getItem("customer_address_Id") || "null") || "";
@@ -326,7 +321,7 @@ export default function CartLeft() {
       
       if (cartData.length !== 0) {
 
-        alert(`cart length is more than 0,order started, ${cartData.length}`)
+      //  alert(`cart length is more than 0,order started, ${cartData.length}`)
         const orderMasterId = await createNewOrder(purchaseData);
   
         if (paymentType === "stripe") {
@@ -337,7 +332,7 @@ export default function CartLeft() {
           router.push(`/complete?paymentType=Barzahlung&orderMasterId=${orderMasterId}`);
         }
       }else{
-        alert(`cart is empty, ${cartData.length}`)
+        alert(`Cart is empty, add some foods`)
       }
     } catch (error) {
       
