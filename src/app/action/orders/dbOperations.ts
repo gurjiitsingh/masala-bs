@@ -47,7 +47,8 @@ export async function createNewOrderCustomerAddress(
   formData.append("confirmPassword", password);
   // const result = await addUser(formData);
   const UserAddedId = (await addUserDirect(formData)) as string;
-
+  console.log("UserAdded by id------------", UserAddedId)
+  
   // Now check address or add new address
   const formDataAdd = new FormData();
   formDataAdd.append("firstName", purchaseData.address.firstName);
@@ -68,7 +69,7 @@ export async function createNewOrderCustomerAddress(
   const customerName = firstName + " " + lastName;
 
   return { addressAddedId, UserAddedId, customerName };
- 
+  
 }
 
 export async function createNewOrder(purchaseData: orderDataType) {

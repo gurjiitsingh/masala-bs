@@ -342,6 +342,23 @@ const Address = () => {
                 )}
               </span>
             </div>
+            {/* <div className="flex  justify-start gap-8 border rounded-full w-full py-2 px-2 items-center">
+              <div className="px-2 py-2 bg-slate-700 rounded-full flex justify-center items-center">
+                <input
+                  {...register("payment")}
+                  type="radio"
+                  value="paypal"
+                  //  checked
+                />{" "}
+              </div>
+              <div>Paypal</div>
+            </div>
+            <div className="flex  justify-start gap-8 border rounded-full w-full py-2 px-2 items-center">
+              <div className="px-2 py-2 bg-slate-700 rounded-full flex justify-center items-center">
+                <input {...register("payment")} type="radio" value="cod" />{" "}
+              </div>
+              <div>Cash on delivery</div>
+            </div> */}
             <div className="flex justify-start items-center gap-2">
               
               <div className="w-fit">

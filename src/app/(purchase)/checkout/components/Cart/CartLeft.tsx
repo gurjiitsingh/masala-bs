@@ -38,6 +38,8 @@ export default function CartLeft() {
     setDeliveryCost,
   } = UseSiteContext();
 
+  
+
   const router = useRouter();
 
   const [addCoupon, setAddCoupon] = useState<boolean>(false);
@@ -69,7 +71,8 @@ export default function CartLeft() {
     endTotalG,
     totalDiscountG,
   } = useCartContext();
-  const pickupDiscountPersent = 0;
+  const pickupDiscountPersentS = process.env.NEXT_PUBLIC_PICKUP_DISCOUNT as string;
+  const pickupDiscountPersent = parseInt(pickupDiscountPersentS);
 
   // useEffect(() => {
   //   if (cartData && cartData.length > 0) {
@@ -252,7 +255,7 @@ export default function CartLeft() {
         return;
       }
 
-      if (!customerAddressIsComplete) {
+      if(!customerAddressIsComplete){
         alert("Select Address");
         allReadyAlerted = true;
         return;
@@ -264,7 +267,7 @@ export default function CartLeft() {
           alert(
             "Wir können nicht an diese Adresse liefern. Bitte wählen Sie Abholung."
           );
-          // We cannot deliver to this address. Please select pickup
+          //We cannot deliver to this address. Please select pickup.
           allReadyAlerted = true;
         }
         return;
@@ -352,7 +355,6 @@ export default function CartLeft() {
     <div className="flex flex-col gap-4 w-full ">
       <div className="flex flex-col bg-slate-50 p-5 h-full w-full gap-7 rounded-2xl">
         <div className="flex flex-col gap-2 items-center">
-
           <h2 className="text-xl font-semibold border-b border-slate-200 py-3 w-full uppercase">
             {/* Shopping cart total */}
             {/* Gesamtsumme im Warenkorb */}
@@ -440,20 +442,7 @@ export default function CartLeft() {
 
           <CouponDisc total={itemTotal} />
 
-          {/* <div className="font-semibold border-b border-slate-200 py-3 w-full ">
-            <h3 className="text-sm font-semibold py-3 w-full text-left">
-              {" "}
-              Local Pickup (Restaurant)
-            </h3>
-          </div> */}
-
-          {/* <div className="border-b border-slate-200 py-3 w-full ">
-            <h3 className="text-sm font-semibold pt-3 pb-1 w-full text-left">
-             
-              Flat Rate
-            </h3>
-            <p className="text-sm  pb-3 w-full text-left"> $4</p>
-          </div> */}
+         
 
           <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between items-center">
             <div className="text-md font-semibold py-3 w-full text-left">
@@ -490,7 +479,7 @@ export default function CartLeft() {
         {/* disabled={true} */}
         <button
           disabled={isDisabled}
-          className="w-[200px] py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem] z-30"
+          className="w-[200px] py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem] z-50"
           onClick={() => {
             proceedToOrder();
           }}
@@ -500,7 +489,6 @@ export default function CartLeft() {
         </button>
       </div>
     </div>
-    
   );
 
   // useEffect(() => { console.log("empty dependeny array--------")},[])

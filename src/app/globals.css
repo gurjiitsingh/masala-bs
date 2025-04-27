@@ -118,6 +118,10 @@ margin-left: -400px !important;
 
 }
 
+.form-btn-style{
+  @apply bg-red-500 rounded-xl w-fit px-3 py-1 text-white
+}
+
 .checkout{
   z-index: 0 !important;
   background-color: #aaa;
