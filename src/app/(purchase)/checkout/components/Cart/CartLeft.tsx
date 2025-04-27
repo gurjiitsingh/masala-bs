@@ -33,14 +33,10 @@ export default function CartLeft() {
     chageDeliveryType,
     deliveryType,
     paymentType,
-    newOrderCondition,
-    setNewOrderCondition,
     customerAddressIsComplete,
     //deliveryCost,
     setDeliveryCost,
   } = UseSiteContext();
-
-  
 
   const router = useRouter();
 
@@ -256,7 +252,7 @@ export default function CartLeft() {
         return;
       }
 
-      if(!customerAddressIsComplete){
+      if (!customerAddressIsComplete) {
         alert("Select Address");
         allReadyAlerted = true;
         return;
@@ -356,6 +352,7 @@ export default function CartLeft() {
     <div className="flex flex-col gap-4 w-full ">
       <div className="flex flex-col bg-slate-50 p-5 h-full w-full gap-7 rounded-2xl">
         <div className="flex flex-col gap-2 items-center">
+
           <h2 className="text-xl font-semibold border-b border-slate-200 py-3 w-full uppercase">
             {/* Shopping cart total */}
             {/* Gesamtsumme im Warenkorb */}
@@ -503,6 +500,7 @@ export default function CartLeft() {
         </button>
       </div>
     </div>
+    
   );
 
   // useEffect(() => { console.log("empty dependeny array--------")},[])
