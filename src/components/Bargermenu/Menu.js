@@ -7,6 +7,7 @@ import { useClickAway } from 'react-use';
 //import { AiOutlineRollback } from 'react-icons/ai';
 import { BiHomeSmile, BiUser } from 'react-icons/bi';
 import { HiOutlineChatBubbleBottomCenterText } from 'react-icons/hi2';
+import { TbBrandBooking } from 'react-icons/tb';
 //import { FiSettings, FiShoppingCart } from 'react-icons/fi';
 import { UseSiteContext } from '@/SiteContext/SiteContext';
 import { IoClose } from "react-icons/io5";
@@ -76,7 +77,7 @@ const items = [
   { title: 'Heim', Icon: BiHomeSmile, href: '/' },
   { title: 'Über Uns', Icon: BiUser,href:'/about' },
   { title: 'Kontakt', Icon: HiOutlineChatBubbleBottomCenterText, href: '/contact' },
- 
+  { title: 'Tisch reservation', Icon: TbBrandBooking, href: '/reservation' },
 ]
 
 const framerMenuBackground = {
