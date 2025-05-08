@@ -11,8 +11,8 @@ import { generateCartHtml } from '@/lib/email/generateCartHtml';
 
 
 export async function POST(req:NextRequest) {
-  const { to, subject, items } = await req.json();
-  const emailBody = generateCartHtml(items);
+  const { to, subject, items,endTotalG } = await req.json();
+  const emailBody = generateCartHtml(items, endTotalG);
 
   try {
     const mg = new mailgun(formData);
