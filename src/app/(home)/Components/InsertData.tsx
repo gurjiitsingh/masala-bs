@@ -11,6 +11,8 @@ export default function InsertData({baseProductName,addOnData}:{baseProductName:
           price:addOnData.price,
           name:ProductName,
           image:addOnData.image,
+           categoryId:"",
+          productCat:"",
         } 
   return (
     <div className="min-w-[100px] flex text-slate-500 items-center bg-[#f7ad45] justify-between   rounded-3xl">
