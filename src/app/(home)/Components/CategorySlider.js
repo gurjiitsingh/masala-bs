@@ -12,7 +12,11 @@ export default function CategorySlider() {
     typeof window !== "undefined" ? window.innerWidth : 300
   );
   const [categoryData, setCategoryData] = useState([]);
-  const { productCategoryIdG, setProductCategoryIdG } = UseSiteContext();
+  const {
+    productCategoryIdG,
+    setProductCategoryIdG,
+    setDisablePickupCatDiscountIds,
+  } = UseSiteContext();
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -29,6 +33,12 @@ export default function CategorySlider() {
           (category) => category.isFeatured !== "no"
         );
         setCategoryData(featured);
+
+        const disablePickupCategoryIds = categories
+          .filter((category) => category.disablePickupDiscount === true)
+          .map((category) => category.id);
+
+        setDisablePickupCatDiscountIds(disablePickupCategoryIds);
       } catch (err) {
         console.error("Error fetching categories:", err);
       }
@@ -75,7 +85,9 @@ export default function CategorySlider() {
                 <div className="flex flex-col gap-1">
                   <div
                     className={`${
-                      productCategoryIdG === category.id ? "primary py-1 rounded-xl" : "py-1 rounded-xl"
+                      productCategoryIdG === category.id
+                        ? "primary py-1 rounded-xl"
+                        : "py-1 rounded-xl"
                     }`}
                   >
                     <div className="h-fit w-fit rounded-lg px-1">

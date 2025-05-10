@@ -53,6 +53,8 @@ export default function PageProductDetailComponent({
     price: priceTarget,
     name: product.name,
     image: product.image,
+     categoryId: product.categoryId,
+    productCat:product.productCat!,
   };
 //common code end
   return (
