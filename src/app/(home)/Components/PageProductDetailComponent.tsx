@@ -6,6 +6,7 @@ import CartButton from "@/components/Custom/AddToCart/CartButton";
 import { cartProductType } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
 import { addOnType } from "@/lib/types/addOnType";
+import { IoMdAdd } from "react-icons/io";
 
 export default function PageProductDetailComponent({
   product,
@@ -56,6 +57,13 @@ export default function PageProductDetailComponent({
      categoryId: product.categoryId,
     productCat:product.productCat!,
   };
+
+    const isCartDisabled = (() => {    
+  if (product.categoryId !== '2vvuGl0pgbvvyEPc7o83') return false;
+  const berlinTime = new Date().toLocaleString("en-US", { timeZone: "Europe/Berlin" });
+  const berlinHour = new Date(berlinTime).getHours();
+  return !(berlinHour >= 11 && berlinHour < 16);
+})();
 //common code end
   return (
     <div className="w-full  lg:w-[48%]   bg-zinc-50 shadow-lg flex flex-row   rounded-2xl items-center">
@@ -72,12 +80,36 @@ export default function PageProductDetailComponent({
               {productCategoryIdG !== "" && <>{product.sortOrder}.&nbsp;</>}
               {product.name}
             </div>
-            {!product.flavors && (
+
+
+
+            {/* {!product.flavors && (
             <div className="min-w-[100px] flex text-slate-500 items-center bg-[#f7ad45] justify-between   rounded-3xl">
               <div>
                 <CartButton cartProduct={cartProduct} />
               </div>
-            </div>)}
+            </div>)} */}
+           {!isCartDisabled ? (
+             <div className="min-w-[100px] flex text-slate-500 items-center bg-[#f7ad45] justify-between   rounded-3xl">
+  <CartButton cartProduct={cartProduct} />
+  </div>
+) : (
+  <div className="relative group">
+    <button
+      disabled
+      className="px-1 py-1 rounded-full bg-slate-500 cursor-not-allowed"
+    >
+      <IoMdAdd size={20} className="text-white" />
+    </button>
+     <div className="absolute bottom-full left-0 transform -translate-x-[100%] mb-2 w-max max-w-[200px] bg-gray-800 text-white text-xs p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50">
+      Mittagessen gibt’s nur von 11 bis 16 Uhr. Bitte etwas anderes wählen.
+    </div>
+  </div>
+)}
+             
+
+
+
 
           </div>
           <button onClick={() => alert(product.productDesc)} className="text-sm text-slate-500 font-extralight text-left max-w-fit md:max-w-[400px] max-h-[22px] overflow-hidden">
