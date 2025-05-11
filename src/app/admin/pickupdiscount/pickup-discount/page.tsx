@@ -50,7 +50,7 @@ const onSubmit = async (data: PickupDiscountForm) => {
       <Link href='/admin/pickupdiscount/disable-discount'><button className="bg-[#313131] text-sm text-white px-4 py-2 rounded-lg">Disable pickup discount</button></Link>
      {/* <Link href='/admin/categories/display-category'><button className="bg-[#313131] text-sm text-white px-4 py-2 rounded-lg">Display catgory</button></Link> */}
       </div>
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-4 border rounded-lg bg-white shadow-md">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-4  rounded-lg bg-white shadow-md">
       <label className="block text-sm font-medium text-gray-700">Select Pickup Discount</label>
       <select
         {...register("pickup_discount", { required: true })}
