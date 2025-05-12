@@ -12,10 +12,12 @@ export default function CategorySlider() {
     typeof window !== "undefined" ? window.innerWidth : 300
   );
   const [categoryData, setCategoryData] = useState([]);
+  const [displayCategory, setDisplayCategory] = useState("");
   const {
     productCategoryIdG,
     setProductCategoryIdG,
     setDisablePickupCatDiscountIds,
+    settings,
   } = UseSiteContext();
 
   useEffect(() => {
@@ -23,6 +25,15 @@ export default function CategorySlider() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    if (!productCategoryIdG) {
+      setDisplayCategory(settings.display_category);
+    } else {
+      setDisplayCategory(productCategoryIdG);
+    }
+  }, [settings, productCategoryIdG]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,7 +96,7 @@ export default function CategorySlider() {
                 <div className="flex flex-col gap-1">
                   <div
                     className={`${
-                      productCategoryIdG === category.id
+                      displayCategory === category.id
                         ? "primary py-1 rounded-xl"
                         : "py-1 rounded-xl"
                     }`}

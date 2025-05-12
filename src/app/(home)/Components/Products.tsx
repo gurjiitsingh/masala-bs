@@ -1,77 +1,94 @@
-// genaric component
+"use client";
 
-import {
- // fetchProductByCategoryId,
-  fetchProducts,
-} from "@/app/action/productsbase/dbOperation";
-import { ProductType } from "@/lib/types/productType";
 import React, { useEffect, useState } from "react";
-import PageProductDetailComponent from "./PageProductDetailComponent";
-import { UseSiteContext } from "@/SiteContext/SiteContext";
+import { fetchProducts } from "@/app/action/productsbase/dbOperation";
 import { fetchAddOnProducts } from "@/app/action/productsaddon/dbOperation";
-import SearchForm from "./SearchForm";
+import { ProductType } from "@/lib/types/productType";
 import { addOnType } from "@/lib/types/addOnType";
+import PageProductDetailComponent from "./PageProductDetailComponent";
+import SearchForm from "./SearchForm";
+import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 export default function Products() {
-  const { productCategoryIdG } = UseSiteContext();
-  const [products, setProduct] = useState<ProductType[]>([]);
-  const [allProducts, setAllProduct] = useState<ProductType[]>([]);
-  const [allAddOns, setAllAddOns] = useState<addOnType[]>([]);
+  const { productCategoryIdG, settings } = UseSiteContext();
 
+  const [products, setProducts] = useState<ProductType[]>([]);
+  const [allProducts, setAllProducts] = useState<ProductType[]>([]);
+  const [addOns, setAddOns] = useState<addOnType[]>([]);
+  const [categoryId, setCategoryId] = useState("");
+
+  // Set initial category
   useEffect(() => {
-    async function fetchInitialData() {
+    const fallbackCategory = settings.display_category as string;
+    setCategoryId(productCategoryIdG || fallbackCategory || "");
+  }, [settings, productCategoryIdG]);
+
+  // Fetch and filter products
+  useEffect(() => {
+    async function fetchData() {
       try {
-        const addOns = await fetchAddOnProducts();
-        setAllAddOns(addOns);
-  
-        const productData = await fetchProducts();
-        productData.sort((a: ProductType, b: ProductType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
-        setAllProduct(productData);
-  
-        if (!productCategoryIdG) {
-          const filtered = productData.filter(
-            (item) => item.categoryId === "cyswMDLgMXJ1sLj9ukzU"
+        const [fetchedAddOns, fetchedProducts] = await Promise.all([
+          fetchAddOnProducts(),
+          fetchProducts(),
+        ]);
+
+        const sortedProducts = fetchedProducts.sort(
+          (a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)
+        );
+
+        setAddOns(fetchedAddOns);
+        setAllProducts(sortedProducts);
+
+        if (categoryId) {
+          const filtered = sortedProducts.filter(
+            (p) => p.categoryId === categoryId
           );
-          setProduct(filtered);
+          setProducts(filtered);
         }
-      } catch (err) {
-        console.error("Error fetching product data:", err);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     }
-    fetchInitialData();
-  }, []);
-  
-  // Runs every time category changes or products are available
+
+    fetchData();
+  }, [categoryId]);
+
+  // Update when category or allProducts change
   useEffect(() => {
-    if (productCategoryIdG !== "" && allProducts.length > 0) {
-      const filtered = allProducts.filter(
-        (item) => item.categoryId === productCategoryIdG
-      );
-      filtered.sort((a: ProductType, b: ProductType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
-      setProduct(filtered);
-    }
-  }, [productCategoryIdG, allProducts]); // depends on both
+    if (!categoryId || allProducts.length === 0) return;
+    const filtered = allProducts.filter((p) => p.categoryId === categoryId);
+    setProducts(filtered);
+  }, [allProducts, categoryId]);
 
-
-  function handleSearchForm(e:string){ 
-    
-    //console.log("search text-----------", e)
-    const searchedProduct = allProducts.filter(item =>
-    item.name.toLowerCase().includes(e.toLowerCase())
-  );
-  setProduct(searchedProduct);
-  
+  // Search filter
+  function handleSearchForm(searchText: string) {
+    const filtered = allProducts.filter((p) =>
+      p.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setProducts(filtered);
   }
+
   return (
-    <div className="flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full">
-      <div className="flex items-center gap-2"><SearchForm handleSearchForm={handleSearchForm} /><div className="flex items-center light-bg rounded-full py-1 px-2 text-sm font-light md:font-normal">Gericht suchen oder Kategorie auswählen</div></div>  
-      <div className="flex flex-col md:flex-row md:flex-wrap md:mt-3 gap-1 md:gap-5 w-full">
-      {products.map((product, i) => {
-        return <PageProductDetailComponent 
-        key={product.id ?? `${product.name}-${i}`} 
-        allAddOns={allAddOns} product={product} />;
-      })}
+    
+      <div className="flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full">
+        <div className="flex items-center gap-2">
+          <SearchForm handleSearchForm={handleSearchForm} />
+          <div className="flex items-center light-bg rounded-full py-1 px-2 text-sm font-light md:font-normal">
+            Gericht suchen oder Kategorie auswählen
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row md:flex-wrap md:mt-3 gap-1 md:gap-5 w-full">
+          {products.map((product, i) => {
+            return (
+              <PageProductDetailComponent
+                key={product.id ?? `${product.name}-${i}`}
+                allAddOns={addOns}
+                product={product}
+              />
+            );
+          })}
+        </div>
       </div>
-    </div>
+    
   );
 }
