@@ -57,7 +57,7 @@ export default function PageProductDetailComponent({
      categoryId: product.categoryId,
     productCat:product.productCat!,
   };
-
+//fcid6UGEy5kCrrg8fgqe
     const isCartDisabled = (() => {    
   if (product.categoryId !== '2vvuGl0pgbvvyEPc7o83') return false;
   const berlinTime = new Date().toLocaleString("en-US", { timeZone: "Europe/Berlin" });
