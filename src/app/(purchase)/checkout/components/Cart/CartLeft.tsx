@@ -57,6 +57,7 @@ export default function CartLeft() {
   const [noOffers, setNoOffers] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [filteredCategoryDiscount, setFilteredCategoryDiscount] = useState(0);
+  const [ onlyItemsWithDisabledCouponCode, setOnlyItemsWithDisabledCouponCode ] = useState(false);
 
   const {
     cartData,
@@ -187,7 +188,7 @@ useEffect(() => {
 
 const excludedCategoryId = "cyswMDLgMXJ1sLj9ukzU";
 const allItemsExcluded = cartData.some(item => item.categoryId !== excludedCategoryId);
-
+setOnlyItemsWithDisabledCouponCode(allItemsExcluded)
      console.log("categories -----", allItemsExcluded)  
      if(allItemsExcluded){
           if (couponDisc.discountType === "flat") {
@@ -501,7 +502,9 @@ const allItemsExcluded = cartData.some(item => item.categoryId !== excludedCateg
             calculatedPickUpDiscount={calculatedPickUpDiscountL}
           />
 
-          <CouponDisc total={itemTotal} />
+        {onlyItemsWithDisabledCouponCode &&  <CouponDisc total={itemTotal} />}
+
+
 
           <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between items-center">
             <div className="text-md font-semibold py-3 w-full text-left">
