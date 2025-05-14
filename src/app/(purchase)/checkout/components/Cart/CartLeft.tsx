@@ -171,6 +171,25 @@ useEffect(() => {
       if (couponDisc?.price) {
         // console.log("coupondisc, minspend, itemTotal-----------",couponDisc.price,couponDisc.minSpend, itemTotal);
         if (couponDisc.minSpend! <= itemTotal) {
+        
+  // const excludedCategoryId = "eqU3erkGIAegmg073b8E";
+  // // Check if ALL cart items belong to the excluded category
+  // const allItemsExcluded = cartData.length > 0 && cartData.every(
+  //   (item) => item.categoryId === excludedCategoryId
+  // );
+
+
+// const excludedCategoryIds = ["eqU3erkGIAegmg073b8E", "abc123xyz", "cat456"]; // Add all excluded IDs here
+
+// // Check if there is at least one item that is NOT from an excluded category
+// const isCouponAllowed = cartData.some(item => !excludedCategoryIds.includes(item.categoryId));
+ 
+
+const excludedCategoryId = "cyswMDLgMXJ1sLj9ukzU";
+const allItemsExcluded = cartData.some(item => item.categoryId !== excludedCategoryId);
+
+     console.log("categories -----", allItemsExcluded)  
+     if(allItemsExcluded){
           if (couponDisc.discountType === "flat") {
             const price = +couponDisc?.price;
             setCalCouponDisscount(0);
@@ -187,6 +206,8 @@ useEffect(() => {
             setFlatCouponDisscount(0);
             setcouponDiscountPercentL(percent);
           }
+        }
+
         } else {
           alert(
             `Minmun purchase amount for discount is € ${couponDisc?.minSpend} , Remove coupon or add more item to cart`

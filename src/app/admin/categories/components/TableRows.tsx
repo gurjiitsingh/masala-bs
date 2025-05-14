@@ -62,6 +62,7 @@ function TableRows({ category }: { category: categoryType }) {
       <TableCell>{category.isFeatured}</TableCell>
       {/* <TableCell></TableCell> */}
       <TableCell>{category.desc}</TableCell>
+      <TableCell>{category.id}</TableCell>
       {/* <TableCell>
         {category?.isFeatured === true && (
           <span className="ml-2 bg-gradient-to-tr from-blue-500 to-indigo-400 text-white text-[10px] rounded-full px-3 py-1">
