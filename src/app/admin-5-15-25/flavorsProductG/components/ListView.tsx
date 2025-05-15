@@ -14,65 +14,58 @@ import {
 } from "@/components/ui/table";
 
 import TableRows from "./TableRows";
-import {  fetchcoupon } from "@/app/action/coupon/dbOperation";
-import { couponType } from "@/lib/types/couponType";
-//import FeaturcouponUpdate from "./FeaturcouponUpdate";
+import {  fetchflavorsProductG } from "@/app/action/flavorsProductG/dbOperation";
+import { flavorsProductGType } from "@/lib/types/flavorsProductGType";
+//import FeaturProductUpdate from "./FeaturProductUpdate";
 
 const ListView = () => {
 
  
-  //console.log("coupon addon view ----", id)
-  const [couponData, setcouponData] = useState<couponType[]>([]);
-  // var pageNo = 1;
-  // var limit = 10
+  const [productData, setProductData] = useState<flavorsProductGType[]>([]);
 
   useEffect(() => {
-    async function fetchcouponL() {
+    async function fetchProduct() {
       try {
-          const result = await fetchcoupon();
+          const result = await fetchflavorsProductG();
        
-        setcouponData(result);
+        setProductData(result);
       } catch (error) {
         console.log(error);
       }
     }
-    fetchcouponL();
+    fetchProduct();
     
   }, []);
 
 
   return (
     <>
-      <div className="mt-2">
-      <h3 className="text-2xl mb-4 font-semibold">
-        Coupon
+      <div className="mt-2 ">
+        <h3 className="text-2xl mb-4 font-semibold">
+        Flavours
         </h3>
         <div className="bg-slate-50 rounded-lg p-1">
           <Table>
-            {/* <TableCaption>coupon List</TableCaption> */}
+            {/* <TableCaption>Product List</TableCaption> */}
             <TableHeader>
               <TableRow>
                 <TableHead className="hidden md:table-cell">
-                   Code
+                   Name
                 </TableHead>
                 <TableHead className="hidden md:table-cell"> 
-                  Discount
+                  Ext Price
                 </TableHead>
                 {/* <TableHead className="hidden md:table-cell">Image</TableHead> */}
 
-                <TableHead>Min spend</TableHead>
+                {/* <TableHead>Category</TableHead> */}
                 {/* <TableHead>Status</TableHead> */}
-               
-                 <TableHead>Expiry</TableHead>
-                 <TableHead>Date</TableHead>
+                 <TableHead>Desc</TableHead>
                 <TableHead className="hidden md:table-cell">Action</TableHead>
-                <TableHead>Desc</TableHead>
-                 <TableHead>Exclude food</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {couponData?.map((coupon) => {
-                return <TableRows key={coupon.id} coupon={coupon} />;
+              {productData.map((product) => {
+                return <TableRows key={product.id} product={product} />;
               })}
             </TableBody>
           </Table>
