@@ -127,37 +127,43 @@ type rt = {
 
 
 
-export async function deleteProduct(id:string) {
 
- const docRef = doc(db, "productaddon", id);
-   await deleteDoc(docRef);                     
-   //return { errors: "Delete not implimented jet" };
-   // if (result?.rowCount === 1) {
 
-    // const imageUrlArray = oldImgageUrl.split("/");
-    // console.log(imageUrlArray[imageUrlArray.length - 1]);
-    // const imageName =
-    //   imageUrlArray[imageUrlArray.length - 2] +
-    //   "/" +
-    //   imageUrlArray[imageUrlArray.length - 1];
+export async function deleteProduct(id: string, oldImageUrl: string) {
+  const docRef = doc(db, "product", id);
 
-    // const image_public_id = imageName.split(".")[0];
-    // console.log(image_public_id);
-    // try {
-    //   const deleteResult = await deleteImage(image_public_id);
-    //   console.log("image delete data", deleteResult);
-    // } catch (error) {
-    //   console.log(error);
-    //   return {errors:"Somthing went wrong, can not delete product picture"}
-    // }
+  try {
+    // Step 1: Delete Firestore document
+    await deleteDoc(docRef);
+    console.log("Product deleted from Firestore:", id);
 
-       return {
-      message: "success",
-    };
-  // }else{
-  //   return {errors:"Somthing went wrong, can not delete product"}
-  // }
+    // Step 2: Delete image only if it's not the default image
+    if (oldImageUrl !== "/com.jpg") {
+      const imageUrlArray = oldImageUrl.split("/");
+      const imageName =
+        imageUrlArray[imageUrlArray.length - 2] +
+        "/" +
+        imageUrlArray[imageUrlArray.length - 1];
 
+      const imagePublicId = imageName.split(".")[0];
+      console.log("Deleting image with public ID:", imagePublicId);
+
+      try {
+        const deleteResult = await deleteImage(imagePublicId);
+        console.log("Image deleted:", deleteResult);
+      } catch (imageError) {
+        console.error("Error deleting image:", imageError);
+        return { errors: "Product deleted, but failed to delete image." };
+      }
+    }
+
+    // Step 3: Success response
+    return { message: "Product and image deleted successfully." };
+
+  } catch (error) {
+    console.error("Error deleting product from Firestore:", error);
+    return { errors: "Failed to delete product." };
+  }
 }
 
 export async function editProduct(formData: FormData) {

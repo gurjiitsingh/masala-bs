@@ -6,7 +6,7 @@ import { fetchAddOnProducts } from "@/app/action/productsaddon/dbOperation";
 import { ProductType } from "@/lib/types/productType";
 import { addOnType } from "@/lib/types/addOnType";
 import PageProductDetailComponent from "./PageProductDetailComponent";
-import SearchForm from "./SearchForm";
+
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 export default function Products() {
@@ -61,23 +61,19 @@ export default function Products() {
   }, [allProducts, categoryId]);
 
   // Search filter
-  function handleSearchForm(searchText: string) {
-    const filtered = allProducts.filter((p) =>
-      p.name.toLowerCase().includes(searchText.toLowerCase())
-    );
-    setProducts(filtered);
-  }
+
 
   return (
     
-      <div className="flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full">
-        <div className="flex items-center gap-2">
+      
+        <div className="container mx-auto  flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full ">
+        {/* <div className="flex items-center gap-2">
           <SearchForm handleSearchForm={handleSearchForm} />
           <div className="flex items-center light-bg rounded-full py-1 px-2 text-sm font-light md:font-normal">
             Gericht suchen oder Kategorie auswählen
           </div>
-        </div>
-        <div className="flex flex-col md:flex-row md:flex-wrap md:mt-3 gap-1 md:gap-5 w-full">
+        </div> */}
+        <div className="flex flex-col md:flex-row md:flex-wrap md:mt-3 gap-3 md:gap-5 w-full">
           {products.map((product, i) => {
             return (
               <PageProductDetailComponent

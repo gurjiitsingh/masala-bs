@@ -7,6 +7,7 @@ import { cartProductType } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
 import { addOnType } from "@/lib/types/addOnType";
 import { IoMdAdd } from "react-icons/io";
+import toast from "react-hot-toast";
 
 export default function PageProductDetailComponent({
   product,
@@ -59,7 +60,7 @@ export default function PageProductDetailComponent({
   };
 //fcid6UGEy5kCrrg8fgqe
     const isCartDisabled = (() => {    
-  if (product.categoryId !== '2vvuGl0pgbvvyEPc7o83') return false;
+  if (product.categoryId !== 'fcid6UGEy5kCrrg8fgqe') return false;
   const berlinTime = new Date().toLocaleString("en-US", { timeZone: "Europe/Berlin" });
   const berlinHour = new Date(berlinTime).getHours();
   return !(berlinHour >= 11 && berlinHour < 16);
@@ -96,7 +97,10 @@ export default function PageProductDetailComponent({
 ) : (
   <div className="relative group">
     <button
-      disabled
+      
+          onClick={() => {
+      toast("Mittagessen gibt’s nur von 11 bis 16 Uhr. Bitte etwas anderes wählen.");
+    }}
       className="px-1 py-1 rounded-full bg-slate-500 cursor-not-allowed"
     >
       <IoMdAdd size={20} className="text-white" />

@@ -8,9 +8,11 @@ import { fetchCategories } from "@/app/action/category/dbOperations";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 export default function CategorySlider() {
-  const [width, setWidth] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth : 300
-  );
+  const [width, setWidth] = useState(0); // Start with 0, safe for SSR
+  // const [width, setWidth] = useState(() =>
+  //   typeof window !== "undefined" ? window.innerWidth : 300
+  // );
+
   const [categoryData, setCategoryData] = useState([]);
   const [displayCategory, setDisplayCategory] = useState("");
   const {
@@ -21,7 +23,9 @@ export default function CategorySlider() {
   } = UseSiteContext();
 
   useEffect(() => {
+    // Only access window inside useEffect
     const handleResize = () => setWidth(window.innerWidth);
+    handleResize(); // set initial width
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -33,7 +37,6 @@ export default function CategorySlider() {
       setDisplayCategory(productCategoryIdG);
     }
   }, [settings, productCategoryIdG]);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,40 +89,52 @@ export default function CategorySlider() {
     slidesToScroll: 2,
   };
 
-  return (
-    <div className="-mt-20 h-full w-[98%] px-2 gap-1">
-      <Slider {...sliderSettings}>
-        {categoryData.map((category) => (
-          <div key={category.id} className="mx-2">
-            <button onClick={() => setProductCategoryIdG(category.id)}>
-              <div className="w-[100px]">
-                <div className="flex flex-col gap-1">
-                  <div
-                    className={`${
-                      displayCategory === category.id
-                        ? "primary py-1 rounded-xl"
-                        : "py-1 rounded-xl"
-                    }`}
-                  >
-                    <div className="h-fit w-fit rounded-lg px-1">
-                      <img
-                        className="rounded-lg h-20 w-48 object-fill"
-                        src={category.image || "/com.jpg"}
-                        alt={category.name || "Category"}
-                      />
+ return (
+  // <div className="relative z-10 mt-20 mb-7 container mx-auto ">
+    
+<div className="relative z-10 mt-10 mb-7 container mx-auto ">
+   <div className="container mx-auto w-full flex justify-end ">
+    <div className=" w-fit  text-zinc-500 light-bg rounded-t-2xl py-1 px-2 text-sm font-light md:font-normal">
+          Gericht suchen oder Kategorie auswählen
+        </div>
+</div>
+    <div className="mx-auto max-w-[1700px] min-h-[100px] bg-white/70 backdrop-blur-md rounded-b-xl rounded-tl-xl shadow-md p-3">
+      {categoryData.length > 0 && (
+        <Slider {...sliderSettings}>
+          {categoryData.map((category) => (
+            <div key={category.id} className="mx-2">
+              <button onClick={() => setProductCategoryIdG(category.id)}>
+                <div className="w-[100px]">
+                  <div className="flex flex-col gap-1">
+                    <div
+                      className={`${
+                        displayCategory === category.id
+                          ? "primary py-1 rounded-xl"
+                          : "py-1 rounded-xl"
+                      }`}
+                    >
+                      <div className="h-fit w-fit rounded-lg px-1">
+                        <img
+                          className="rounded-lg h-20 w-48 object-fill"
+                          src={category.image || "/com.jpg"}
+                          alt={category.name || "Category"}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-center w-[110px] items-center">
+                      <h3 className="text-[.8rem] text-slate-600 px-0">
+                        {category.name}
+                      </h3>
                     </div>
                   </div>
-                  <div className="flex flex-col justify-center w-[110px] items-center">
-                    <h3 className="text-[.8rem] text-slate-600 px-0">
-                      {category.name}
-                    </h3>
-                  </div>
                 </div>
-              </div>
-            </button>
-          </div>
-        ))}
-      </Slider>
+              </button>
+            </div>
+          ))}
+        </Slider>
+      )}
     </div>
-  );
+  </div>
+);
+
 }

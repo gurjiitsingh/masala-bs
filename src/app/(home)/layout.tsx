@@ -9,14 +9,15 @@ import { SideCart } from "@/components/MiniCart/SideCart";
 import { BargerMenu } from "@/components/Bargermenu/Menu";
 import Footer from "@/components/Custom/Footer";
 
-import CartBottom from "@/components/CartBottom/CartBottom"
-import Modal from "./Components/Modal";
+import CartBottom from "@/components/CartBottom/CartBottom";
+import Modal from "./components/Modal";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Masala taste of India",
   description: "Masala taste of India, Indian food",
   other: {
-    'google': 'notranslate',  
+    google: "notranslate",
   },
 };
 
@@ -32,16 +33,52 @@ export default function RootLayout({
           <CartProvider>
             <BargerMenu />
             <Modal />
-           <div translate="no" className="z-50">
-            <SideCart />
+            <Toaster
+              position="top-center"
+              containerStyle={{
+                top: "30%",
+              }}
+              toastOptions={{
+                style: {
+                  borderRadius: "10px",
+                  padding: "12px 16px",
+                  background: "#1e293b", // slate-800
+                  color: "#f8fafc", // slate-50
+                },
+                success: {
+                  style: {
+                    background: "#10b981", // emerald-500
+                    color: "#ffffff",
+                  },
+                },
+                error: {
+                  style: {
+                    background: "#ef4444", // red-500
+                    color: "#ffffff",
+                  },
+                },
+                loading: {
+                  style: {
+                    background: "#f59e0b", // amber-500
+                    color: "#ffffff",
+                  },
+                },
+              }}
+              reverseOrder={false}
+            />
+
+            <div translate="no" className="z-50">
+              <SideCart />
             </div>
             <div translate="no" className="z-50">
-            <Header />
+              <Header />
             </div>
             {children}
-           
+
             <Footer />
-            <div translate="no" className="sticky  bottom-8 flex justify-end pr-4 z-50"><CartBottom /></div> 
+            <div className="fixed bottom-8 right-4 z-50 w-fit">
+              <CartBottom />
+            </div>
           </CartProvider>
         </SiteProvider>
       </body>
