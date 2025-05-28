@@ -2,9 +2,9 @@
 
 import Products from "./components/Products";
 import CategorySlider from "./components/CategorySlider";
-import SearchForm from "./components/SearchForm";
 import HeroText from "@/components/Custom/HeroText";
 import Title from "@/components/Custom/Title";
+import SearchForm from "./components/SearchForm";
 
 //import { TnewProductSchema } from '@/lib/types';
 // import {  TnewProductSchema } from '@/lib/type/productType';
