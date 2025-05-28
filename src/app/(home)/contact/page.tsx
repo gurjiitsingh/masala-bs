@@ -3,7 +3,7 @@ import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from 'react-icons/fa'
 
 export default function Contact() {
   return (
-    <div className="container mx-auto px-4">
+    <div className="relative container mx-auto px-4">
     <div className="flex flex-col md:flex-row my-24 gap-8">
       {/* Address Info */}
       <div className="flex flex-col md:w-1/2">
