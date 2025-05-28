@@ -7,10 +7,10 @@ import { useClickAway } from 'react-use';
 //import { AiOutlineRollback } from 'react-icons/ai';
 import { BiHomeSmile, BiUser } from 'react-icons/bi';
 import { HiOutlineChatBubbleBottomCenterText } from 'react-icons/hi2';
-import { TbBrandBooking } from 'react-icons/tb';
 //import { FiSettings, FiShoppingCart } from 'react-icons/fi';
 import { UseSiteContext } from '@/SiteContext/SiteContext';
 import { IoClose } from "react-icons/io5";
+import { TbBrandBooking } from 'react-icons/tb';
 export const BargerMenu = () => {
   const { openBargerMenu, bargerMenuToggle } = UseSiteContext();
   const ref = useRef(null)
@@ -30,11 +30,11 @@ export const BargerMenu = () => {
             ></motion.div>
             <motion.div
               {...framerMenuPanel}
-              className="fixed   mx-auto right-5 left-5 rounded-b-3xl top-0 px-6 pt-12 pb-3  z-50   primary"
+              className="fixed   mx-auto right-5 left-5 rounded-b-3xl top-0 px-6 pt-12 pb-3  z-50   bg-dark"
               ref={ref}
               aria-label="Menu"
             >
-              <div className="flex w-full items-center justify-end  border-b-2 border-zinc-50">
+              <div translate="no" className="flex w-full items-center justify-end  border-b-2 border-zinc-50">
                
                 <button
                   onClick={bargerMenuToggle}

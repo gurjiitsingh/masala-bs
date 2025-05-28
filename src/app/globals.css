@@ -42,6 +42,13 @@
 .form-btn{
   @apply bg-red-500 rounded-xl w-fit px-3 py-1 text-white
 }
+
+.bg-dark{
+  @apply bg-[#64870d]
+}
+.text-dark{
+   @apply text-[#64870d]
+}
 /* #F2F0EC; */
 /* bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1]  */
 :root {
@@ -109,13 +116,13 @@ body {
 }
 
 .slick-arrow{
-  background-color: #aaa !important;
+  background-color: #438a57 !important;
   border-radius: 100%;
-  padding:auto;
+  padding-top:2px !important;
   z-index: 9999;
   height: 40px !important;
   width: 40px !important;
-  opacity: .5;
+  opacity: .7;
   z-index: 1 !important;
 } 
 .slick-prev{
