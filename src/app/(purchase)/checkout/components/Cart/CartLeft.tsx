@@ -111,7 +111,12 @@ export default function CartLeft() {
       ).toFixed(2);
       setCalculatedPickUpDiscount(+pickupDiscountRemovedCate);
       setdeliveryCostL(0);
+       if (parseInt(pickupDiscountRemovedCate) === 0) {
+       setPickUpDiscountPercent(0);
+      }else{
       setPickUpDiscountPercent(pickupDiscountPersent);
+      }
+
     } else if (
       deliveryType === "delivery" &&
       deliveryDis?.price !== undefined
@@ -304,6 +309,7 @@ export default function CartLeft() {
         flatDiscount: flatCouponDiscount,
         calCouponDiscount,
         couponDiscountPercentL,
+        couponCode: couponDisc?.code?.trim() ? couponDisc.code : "NA",//couponCode: couponDisc?.code ?? "NA",
         pickUpDiscountPercentL,
         noOffers,
       } as orderDataType;
@@ -338,7 +344,7 @@ export default function CartLeft() {
           <h2 className="text-xl font-semibold border-b border-slate-200 py-3 w-full uppercase">
             {/* Shopping cart total */}
             {/* Gesamtsumme im Warenkorb */}
-            Warenkorb-Summe
+            Warenkorb-Summe.
           </h2>
 
           <div className="font-semibold border-b border-slate-200 py-3 w-full flex flex-col justify-between gap-4">
