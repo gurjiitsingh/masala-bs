@@ -8,7 +8,11 @@ export async function createNewOrderFile(
   productTotalCost,
   totalDiscountG,
   PaymentType,
-  deliveryCost
+  deliveryCost,
+  deliveryType,
+  customerNote,
+  couponCode,
+  couponDiscount
 ) {
   const customAddress = JSON.parse(address);
   // console.log("cart data in create file -----------------",typeof(totalDiscountG),typeof(endTotalG));
@@ -117,6 +121,12 @@ export async function createNewOrderFile(
     myOrder.AddInfo.PaymentType = PaymentType;
     myOrder.AddInfo.DiscountPercent = totalDiscountG;
     myOrder.AddInfo.Total = endTotalG;
+    myOrder.AddInfo.DeliveryType = deliveryType || "";
+    // myOrder.AddInfo.CustomerNote = "sdsdfsdfsd";
+    // myOrder.AddInfo.CouponCode =  "sdfs";
+    //myOrder.AddInfo.CouponDiscount = couponDiscount || 0;
+    //  myOrder.AddInfo.CustomerID = "c56";
+    //   myOrder.AddInfo.TableNumber = "tn";
 
     myOrder.ServerData.CreateDateTime = new Date().toISOString();
     myOrder.ServerData.IpAddress = "127.0.0.1";
