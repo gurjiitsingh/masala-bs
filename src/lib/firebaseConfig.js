@@ -1,6 +1,6 @@
-//gurjiitsingh@gmail.com
+//gstadeveloper@gmail.com
 //Cloud Firestore
-//nextjs-course
+//food-app
 
 
 
