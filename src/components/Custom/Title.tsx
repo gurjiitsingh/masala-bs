@@ -18,8 +18,8 @@ export default function Title() {
         >
           <div className="">
             {" "}
-            Masala{" "}
-            <span className="text-4xl font-extralight ">Taste of India</span>
+            Masala
+            <span className="text-3xl font-extralight pl-1">Taste of India</span>
           </div>
         </h1>
       </div>
