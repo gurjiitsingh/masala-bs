@@ -139,7 +139,15 @@ export default function CartLeft() {
   ]);
 
   useEffect(() => {
+    console.log("deliveryType-----------------", deliveryType)
     if (itemTotal <= 0) return;
+    if(deliveryType === 'pickup'){
+      console.log("discount on pickup disabled----------")
+        setCalCouponDisscount(0);
+          setFlatCouponDisscount(0);
+      return;
+       
+    }
 
     if (couponDisc?.discount && couponDisc.minSpend! <= itemTotal) {
       const excludedCategoryIds = couponDisc.excludedCategoryIds || [];
@@ -149,6 +157,7 @@ export default function CartLeft() {
       setOnlyItemsWithDisabledCouponCode(isCouponAllowed);
 
       if (isCouponAllowed) {
+        
         if (couponDisc.discountType === "flat") {
           const price = +couponDisc.discount;
           setCalCouponDisscount(0);
@@ -156,6 +165,7 @@ export default function CartLeft() {
           setcouponDiscountPercentL(
             parseFloat(((price / itemTotal) * 100).toFixed(2))
           );
+          console.log("discount on pickup appll----------")
         } else {
           const percent = +couponDisc.discount;
           const totalDis = parseFloat(((itemTotal * percent) / 100).toFixed(2));
@@ -172,7 +182,7 @@ export default function CartLeft() {
       setCalCouponDisscount(0);
       setcouponDiscountPercentL(0);
     }
-  }, [couponDisc, itemTotal, cartData]);
+  }, [couponDisc, itemTotal, cartData,deliveryType]);
 
   useEffect(() => {
     const netPay = (
