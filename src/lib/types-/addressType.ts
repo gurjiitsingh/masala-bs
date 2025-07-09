@@ -86,7 +86,7 @@ export type TaddressCheckout ={
       email:string;
       firstName:string;
       lastName:string;
-      userId:string;
+     // userId:string;
       mobNo:string;
       addressLine1:string;
       addressLine2:string;
@@ -95,19 +95,16 @@ export type TaddressCheckout ={
       zipCode:string;
     } 
 
-   import { Timestamp } from 'firebase/firestore';
-
-export type addressResType = {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  userId: string;
-  mobNo: string;
-  addressLine1: string;
-  addressLine2: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  createdAt?: Timestamp; // optional Firestore server timestamp
-};
+    export type addressResType ={
+      id:string;
+      email:string;
+      firstName:string;
+      lastName:string;
+      userId:string;
+      mobNo:string;
+      addressLine1:string;
+      addressLine2:string;
+      city:string;
+      state:string;
+      zipCode:string;
+    } 

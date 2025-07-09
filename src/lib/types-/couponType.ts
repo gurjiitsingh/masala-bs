@@ -41,12 +41,12 @@ export const couponSchema = z.object({
   excludedCategoryIds: z.array(z.string()).optional(),
   offerType: z.string().optional(),
   isFeatured: z.boolean().optional(),
+  applyPickup: z.boolean().optional(),
+  applyDelivery: z.boolean().optional(),
   expiry: z.string().optional(),
   discountType: z.string().optional(),
   //image: z.any().refine((file: File) => file?.length !== 0, "File is required"),
   image: z.any().optional(),
-  applyPickup: z.boolean().optional(),
-  applyDelivery: z.boolean().optional(),
 });
 
 export type TcouponSchema = z.infer<typeof couponSchema>;

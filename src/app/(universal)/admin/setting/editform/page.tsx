@@ -82,7 +82,7 @@ const Page = () => {
                     </label>
                     <select {...register("settingName")}
                      onChange={(e)=>handleSelectChange(e)} 
-                    className="input-style">
+                    className="input-style bg-white text-black">
                       <option key="wer" value="notFind">
                         Select
                       </option>

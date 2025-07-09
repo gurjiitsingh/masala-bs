@@ -28,7 +28,9 @@ export const categorySchema = z.object({
     .max(30, { message: "Category name is to long" }),
   sortOrder: z.string().optional(),
   desc: z
-    .string().optional(),    
+    .string()
+    .min(4, { message: "Descrition of product is needed" })
+    .max(100, { message: "Description is too long" }),
     oldImgageUrl: z.any().optional(),
   slug: z.string().optional(),
   image: z.any().optional(),
