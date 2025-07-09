@@ -1,4 +1,5 @@
 import React from "react";
+import { allText } from "@/lib/constants/alltext";
 import { Sour_Gummy } from "next/font/google";
 
 const sourGummy = Sour_Gummy({
@@ -17,9 +18,8 @@ export default function Title() {
           className={`${sourGummy.className} rounded-2xl  text-5xl w-full font-bold    text-[#496208] `}
         >
           <div className="">
-            {" "}
-            Masala
-            <span className="text-3xl font-extralight pl-1">Taste of India</span>
+            {allText.brand}
+            <span className="text-xl font-light pl-1">{allText.tagline}</span>
           </div>
         </h1>
       </div>

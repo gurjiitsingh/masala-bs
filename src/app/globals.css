@@ -49,6 +49,40 @@
 .text-dark{
    @apply text-[#64870d]
 }
+
+
+/* sidebar */
+
+/* 💠 Material Indigo-Blue Theme (Enhanced Hover): globals.css */
+
+.sb-bg {
+  @apply bg-[#1E1F24]; /* Dark sidebar background */
+}
+
+.sb-tab {
+  @apply text-gray-300 hover:bg-[#4B4F65]; /* Darker bluish-gray hover */
+}
+
+.sb-tab-active {
+  @apply bg-[#3F51B5] text-white shadow-md; /* Active tab with indigo */
+}
+
+.sb-btn {
+  @apply bg-[#3F51B5] text-white hover:bg-[#2C3A99]; /* Deeper indigo on hover */
+}
+
+.sb-btn-outline {
+  @apply border border-[#3F51B5] text-[#3F51B5] hover:bg-[#3F51B5] hover:text-white;
+}
+
+.sb-header {
+  @apply text-[#3F51B5];
+}
+
+
+
+
+
 /* #F2F0EC; */
 /* bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1]  */
 :root {

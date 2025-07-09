@@ -1,3 +1,4 @@
+import { allText } from "@/lib/constants/alltext";
 import Link from "next/link";
 
 import React from "react";
@@ -10,56 +11,40 @@ export default function Footer() {
           <div className="flex items-center gap-1 w-full h-fit border border-amber-50 p-1 mx-1 rounded-2xl bg-amber-200">
             <div className="flex items-center  justify-start  rounded-full ">
               <Link href="/">
-                <img className="h-12 md:h-12" src="/logo.webp" alt="Logo" />
+                <img className="h-12 md:h-12" src="/logo.webp" alt={allText.logoAlt} />
               </Link>
             </div>
             <div className="flex items-center  h-fit">
             <span className="self-center text-md  text-slate-700">
-              Masala Taste of India
+              {allText.brandName}
             </span>
             </div>
           </div>
 
           <div className="flex flex-col gap-2 w-full px-2">
             <h3 className="tracking-wide text-xl font-bold uppercase ">
-              Links
+            {allText.sections.links.title}
             </h3>
             <ul className="flex flex-col gap-3">
-              <li className="border-b border-slate-400 pb-1">
-                <Link href="/">Home</Link>
-              </li>
-              <li className="border-b border-slate-400 pb-1">
-                <Link href="/">Menü</Link>
-              </li>
-              <li className="border-b border-slate-400 pb-1">
-                <Link href="/about">Über Uns</Link>
-              </li>
-              <li className="border-b border-slate-400 pb-1">
-                <Link href="/contact">Kontakt</Link>
-              </li>
-              <li className="border-b border-slate-400 pb-1">
-                <Link href="/reservation">Tisch reservation</Link>
-              </li>
-              <li className="pb-1">
-                <Link href="/allergene">Allergene</Link>
-              </li>
+              {allText.sections.links.items.map((item, idx) => (
+                <li key={idx} className={`pb-1 ${idx < allText.sections.links.items.length - 1 ? "border-b border-slate-400" : ""}`}>
+                  <Link href={item.href}>{item.name}</Link>
+                </li>
+              ))}
             </ul>
           </div>
           <div className="flex flex-col gap-2 w-full px-2">
             <h3 className="tracking-wide text-xl font-bold uppercase">
-              Company
+               {allText.sections.company.title}
             </h3>
             <ul className="space-y-1">
-              <li className="border-b border-slate-400 pb-1">
-                <a rel="noopener noreferrer" href="#">
-                  Privacy
-                </a>
-              </li>
-              <li>
-                <a rel="noopener noreferrer" href="#">
-                  Terms of Service
-                </a>
-              </li>
+               {allText.sections.company.items.map((item, idx) => (
+                <li key={idx} className={idx === 0 ? "border-b border-slate-400 pb-1" : ""}>
+                  <a rel="noopener noreferrer" href={item.href}>
+                    {item.name}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
           {/* <div className="space-y-3">
@@ -84,7 +69,7 @@ export default function Footer() {
           </div> */}
           <div className="flex flex-col gap-2 w-full px-2">
             <div className="tracking-wide text-xl font-bold uppercase ">
-              Social media
+             {allText.sections.social.title}
             </div>
             <div className="flex justify-start space-x-3">
               <a
@@ -136,13 +121,17 @@ export default function Footer() {
         </div>
       </div>
       <div className="primary-1 mt-12 pt-3 pb-6">
-        <div className="container mx-auto flex flex-col  items-center">
+         <div className="container mx-auto flex flex-col items-center">
           <p className="text-md text-slate-100">
-            Powered by <a href="http://www.gstadeveloper.com">GstaDeveloper.com</a>
+            {allText.footerBottom.poweredBy}{" "}
+            <a href={allText.footerBottom.poweredByUrl}>
+              {new URL(allText.footerBottom.poweredByUrl).hostname}
+            </a>
           </p>
           <p className="text-md text-slate-100">
-            Copyright © <span className="year">2025</span> All Rights Reserved
-            by <b>Masala Taste of india</b>
+            {allText.footerBottom.copyright.prefix}{" "}
+            {new Date().getFullYear()} {allText.footerBottom.copyright.suffix}{" "}
+            <b>{allText.footerBottom.copyright.company}</b>
           </p>
         </div>
       </div>
