@@ -9,14 +9,14 @@ import { addNewsetting, editsetting, fetchSettings } from "@/app/(universal)/act
 import { Button } from "@/components/ui/button";
 
 const Page = () => {
-  const [settingName, setSettingName] = useState<editSettingSchemaType[]>([]);
+  const [name, setname] = useState<editSettingSchemaType[]>([]);
   const [settingId, setSettingId] = useState<string>("");
   useEffect(() => {
     async function prefetch() {
       const settingsData = await fetchSettings();
       // console.log("cat id --------", categoriesData)
       //   const brandData = await fetchbrands();
-      setSettingName(settingsData);
+      setname(settingsData);
       // setBrand(brandData);
     }
     prefetch();
@@ -42,7 +42,7 @@ const Page = () => {
     console.log("formdata in client----- ", data);
     const formData = new FormData();
        formData.append("id", data.id!);
-    formData.append("settingValue", data.settingValue!);
+    formData.append("value", data.value!);
  
 
     const result = await editsetting(formData);
@@ -80,19 +80,19 @@ const Page = () => {
                     <label className="label-style" htmlFor="product-title">
                       Name<span className="text-red-500">*</span>{" "}
                     </label>
-                    <select {...register("settingName")}
+                    <select {...register("name")}
                      onChange={(e)=>handleSelectChange(e)} 
                     className="input-style bg-white text-black">
                       <option key="wer" value="notFind">
                         Select
                       </option>
                    
-                      {settingName.map(
+                      {name.map(
                         (setting) => {
                           //   console.log("cat id -------", category.id);
                           return (
-                            <option key={setting.settingName} value={setting.id}>
-                              {setting.settingName}
+                            <option key={setting.name} value={setting.id}>
+                              {setting.name}
                             </option>
                           );
                         }
@@ -100,7 +100,7 @@ const Page = () => {
                     </select>
                     {/* <span className="text-[0.8rem] font-medium text-destructive">
                       {errors.setting.id?.message && (
-                        <p>{errors.setting.settingName?.message}</p>
+                        <p>{errors.setting.name?.message}</p>
                       )}
                     </span> */}
                   </div>
@@ -110,13 +110,13 @@ const Page = () => {
                       Value<span className="text-red-500">*</span>{" "}
                     </label>
                     <input
-                      {...register("settingValue")}
+                      {...register("value")}
                       className="input-style"
                       placeholder="Enter Title"
                     />
                     <span className="text-[0.8rem] font-medium text-destructive">
-                      {errors.settingValue?.message && (
-                        <span>{errors.settingValue?.message}</span>
+                      {errors.value?.message && (
+                        <span>{errors.value?.message}</span>
                       )}
                     </span>
                   </div>

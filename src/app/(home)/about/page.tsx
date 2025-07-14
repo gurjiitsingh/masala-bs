@@ -41,7 +41,7 @@ export default function Page() {
               Masala - Taste of India
             </h3>
             <p className="text-[.9rem] text-[#222]">
-              Gifhorn: Braunschweiger Straße 93, 38518 Gifhorn
+              Steinbrink 26, 38122 Braunschweig-Broitzem, Germany
             </p>
           </div>
           <div className="pic flex w-full md:w-[45%]"></div>

@@ -2,10 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReservationFormDataType, reservationSchema } from "../../../../../types/ReservationFormData";
-import { Router } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ReservationFormDataType, reservationSchema } from "@/lib/types/ReservationFormData";
 
 //import { reservationSchema, ReservationFormData } from "@/lib/reservationSchema";
 

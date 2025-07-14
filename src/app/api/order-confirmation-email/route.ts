@@ -29,15 +29,15 @@ export async function POST(req:NextRequest) {
     
        // Email to customer
     const customerMail = await client.messages.create(DOMAIN, {
-      from: 'info@masala-bs.de',
+      from: 'info@masala-gf.shop',
       to,
       subject,
       html: emailBody,
     });
 
-     // Email to business/info
+  //   Email to business/info
      const internalMail = await client.messages.create(DOMAIN, {
-      from: 'info@masala-bs.de',
+      from: 'info@masala-gf.shop',
       to: 'info@masala-gf.de',
       subject: `New Order Received - ${subject}`,
       html: emailBody,
