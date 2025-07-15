@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function ReservationSuccessPage() {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#f0fdf4] px-6 text-center">
+      <div className="relative min-h-screen flex flex-col items-center justify-center  px-6 text-center">
         <div className="bg-white shadow-lg rounded-xl p-8 max-w-xl w-full border border-green-200">
           <div className="text-green-600 text-5xl mb-4">✅</div>
           <h1 className="text-3xl font-bold text-green-700 mb-2">Reservation Confirmed!</h1>
