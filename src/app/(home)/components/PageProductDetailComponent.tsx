@@ -2,12 +2,13 @@
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 import React, { useEffect, useState } from "react";
 import AddOn from "./AddOn";
-import CartButton from "@/components/Custom/AddToCart/CartButton";
+
 import { cartProductType } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
 import { addOnType } from "@/lib/types/addOnType";
 import { IoMdAdd } from "react-icons/io";
 import toast from "react-hot-toast";
+import CartButton from "@/components/AddToCart/CartButton";
 
 export default function PageProductDetailComponent({
   product,

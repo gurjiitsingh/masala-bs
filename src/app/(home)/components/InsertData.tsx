@@ -1,7 +1,8 @@
-import CartButton from '@/components/Custom/AddToCart/CartButton'
+
 import { cartProductType } from '@/lib/types/cartDataType'
 import { addOnType } from '@/lib/types/addOnType';
 import React from 'react'
+import CartButton from '@/components/AddToCart/CartButton';
 
 export default function InsertData({baseProductName,addOnData}:{baseProductName:string,addOnData:addOnType}) {
    const ProductName = baseProductName +" "+ addOnData.name;
