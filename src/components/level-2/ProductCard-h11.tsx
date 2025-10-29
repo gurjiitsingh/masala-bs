@@ -12,12 +12,8 @@ import toast from "react-hot-toast";
 import CartButton from "../AddToCart/CartButton";
 import AddOn from "../level-1/AddOn";
 import { formatCurrencyNumber } from "@/utils/formatCurrency";
-import Image from "next/image";
-
+import CartButtonAdd from "../AddToCart/CartButtonAdd";
 import { Cinzel, Lato, Roboto, Abel } from "next/font/google";
-// import { Montserrat, Oswald, Bebas_Neue, Anton, Poppins } from "next/font/google";
-// import { Great_Vibes, Pacifico, Dancing_Script } from "next/font/google";
-
 const cinzel = Cinzel({ subsets: ["latin"], weight: ["400", "600", "700"] });
 const lato = Lato({ subsets: ["latin"], weight: ["400", "700"] });
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
@@ -55,7 +51,7 @@ export default function ProdcutCardHorizontical({
   allAddOns: addOnType[];
 }) {
   const [addOnData, setAddOnData] = useState<addOnType[]>([]);
-  const { productCategoryIdG, settings } = UseSiteContext();
+  const {  settings } = UseSiteContext();
 
   useEffect(() => {
     if (allAddOns.length !== 0 && product.flavors) {
@@ -108,40 +104,30 @@ export default function ProdcutCardHorizontical({
     return !(berlinHour >= 11 && berlinHour < 16);
   })();
 
+  //common code end
   return (
-    <div
-      className="
-        bg-white border border-gray-200 rounded-xl shadow hover:shadow-md
-        transition-all duration-200  flex flex-col mt-21
-        w-full sm:w-full md:w-[320px] lg:w-[350px]
-      "
-    >
-      {/* Product Image */}
-      {/* <div className="w-full aspect-[4/3] bg-gray-100 flex items-center justify-center"> */}
-      <div className="w-full aspect-[4/3]  rounded-xl flex items-center justify-center h-[150px]">
+    <div className="border-b-1 border-slate-300 w-full bg-white     flex flex-row    items-center p-1">
+      <div className="rounded-2xl flex items-center justify-center w-[120px] h-[120px]  md:w-[150px]  md:h-[150px]  overflow-hidden">
         {product.image && (
-          <Image
+          <img
             src={product.image}
             alt={product.name}
-            width={400}
-            height={300}
-            className="rounded-full w-[230px] h-max-[230px] -mt-[90px] object-cover"
+            className="h-full  "
           />
         )}
       </div>
 
-      {/* Product Info */}
-      <div className="px-4 pb-4 pt-0 flex flex-col justify-between flex-1">
-        <div className="flex-1">
-          {/* Title */}
-          <h3
-            className={`${fontTitle.className} text-lg font-semibold text-gray-500 leading-snug line-clamp-2`}
-          >
-            {/* {productCategoryIdG && <>{product.sortOrder}.&nbsp;</>} */}
-            {product.name}
-          </h3>
+      <div className="w-full flex flex-col pl-3 justify-between">
+        <div className="w-full flex-col gap-4 justify-between ">
+          <div className="w-full flex gap-1 mb-2 justify-between ">
+            <div className="flex text-slate-500 font-bold items-start justify-start  min-w-[180px] ">
+           {/* product-card-add-title-cover-1 */}
+              {/* {productCategoryIdG !== "" && <>{product.sortOrder}.&nbsp;</>} */}
+              {product.name}
+            </div>
+          </div>
 
-          {/* Description */}
+           {/* Description */}
           {product.productDesc && (
             <p
               onClick={() =>
@@ -152,65 +138,52 @@ export default function ProdcutCardHorizontical({
               {product.productDesc}
             </p>
           )}
+
+          {/* <button onClick={() => alert(product.productDesc)}> */}
+
+          {/* <button
+            onClick={() =>
+              alert(product.productDesc ?? "Keine Beschreibung verfügbar")
+            }
+            className="text-sm text-slate-500 font-extralight text-left   overflow-hidden"
+          >
+            {product.productDesc}
+          </button> */}
+
+          {!product.flavors && (
+            <div className=" flex  items-center  justify-between py-[1px]   rounded-3xl">
+            
+              {/* common code start */}
+              {product.discountPrice !== undefined &&
+              product.discountPrice > 0 ? (
+                <div className="flex justify-between gap-3 items-center">
+                  {" "}
+                  <div className="text-md font-bold text-slate-500">{priceDiscounted}</div>
+                  <div className="line-through text-sm text-slate-500">{priceRegular}</div>
+                  {" "}
+                  </div>
+              ) : (
+                <div className="text-md font-bold text-slate-500">{priceRegular}</div>
+              )}
+               {/* Cart Button */}
+        <div className="w-full flex justify-center mx-3 ">
+          {/* {!isCartDisabled ? (
+            <CartButtonAdd cartProduct={cartProduct} />
+          ) : (
+            <div className="relative group">
+            
+            </div>
+          )} */}
+        </div>
+            </div>
+          )}
         </div>
 
-        {/* Price + AddToCart */}
-        {!product.flavors && (
-          <div className="flex items-center justify-between  mt-4">
-            {/* Price Section */}
-            <div>
-              {priceDiscounted ? (
-                <div
-                  className={`${fontPrice.className} flex gap-3 text-md font-medium text-gray-900`}
-                >
-                  <span className="text-gray-600 font-bold">
-                    {priceDiscounted}
-                  </span>
-                  <span className="line-through text-gray-400 mr-2 font-normal">
-                    {priceRegular}
-                  </span>
-                  
-                </div>
-              ) : (
-                <div
-                  className={`${fontPrice.className} text-md font-bold text-gray-800`}
-                >
-                  {priceRegular}
-                </div>
-              )}
-            </div>
-            {/* Cart Button */}
-            <div className="bg-[#F3FDE8] rounded-full ">
-              {!isCartDisabled ? (
-                <CartButton cartProduct={cartProduct} />
-              ) : (
-                <div className="relative group">
-                  <button
-                    onClick={() =>
-                      toast(
-                        "Lunch available only from 11 to 16. Please choose another item."
-                      )
-                    }
-                    className="px-2 py-1 rounded-full bg-gray-400 cursor-not-allowed"
-                  >
-                    <IoMdAdd size={20} className="text-white" />
-                  </button>
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-max max-w-[220px] bg-gray-800 text-white text-xs p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50">
-                    Lunch available only from 11 to 16.
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* AddOns */}
-        {product.flavors && addOnData.length > 0 && (
-          <div className="mt-4">
-            <AddOn baseProductName={product.name} addOnData={addOnData} />
-          </div>
-        )}
+       
       </div>
     </div>
   );
 }
+
+//bg-[#FF8989]
+//bg-amber-400
