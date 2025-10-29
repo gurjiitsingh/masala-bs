@@ -11,11 +11,34 @@ import dynamic from "next/dynamic";
 let Card: React.ComponentType<any>;
 const cardType = process.env.NEXT_PUBLIC_PRODUCT_CARD_TYPE;
 switch (cardType) {
-    case "3":
-    Card = dynamic(() => import("../level-2/ProductCard-v3")); // horizontal
+  case "1":
+    Card = dynamic(() => import("../level-2/ProductCard-h1")); // horizontal
     break;
+     case "11":
+    Card = dynamic(() => import("../level-2/ProductCard-h11")); // horizontal
+    break;
+      case "21":
+    Card = dynamic(() => import("../level-2/ProductCard-h21")); // horizontal
+    break;
+
   case "2":
     Card = dynamic(() => import("../level-2/ProductCard-v2")); // horizontal
+    break;
+  case "3":
+    Card = dynamic(() => import("../level-2/ProductCard-v3")); // horizontal
+    break;
+
+  case "4":
+    Card = dynamic(() => import("../level-2/ProductCard-v4")); // horizontal
+    break;
+  case "5":
+    Card = dynamic(() => import("../level-2/ProductCard-v5")); // horizontal
+    break;
+  case "6":
+    Card = dynamic(() => import("../level-2/ProductCard-h6")); // vertical
+    break;
+  case "7":
+    Card = dynamic(() => import("../level-2/ProductCard-v7")); // vertical
     break;
   default:
     Card = dynamic(() => import("../level-2/ProductCard-h1")); // vertical
@@ -44,7 +67,9 @@ export default function Products() {
           fetchProducts(),
         ]);
 
-        const published = fetchedProducts.filter((p) => p.status === "published");
+        const published = fetchedProducts.filter(
+          (p) => p.status === "published"
+        );
         const sorted = published.sort(
           (a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)
         );
@@ -86,32 +111,54 @@ export default function Products() {
   //     ? "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5"
   //     : "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5";
 
+  // ✅ Conditional container classes
+  let containerClass = "";
 
-      // ✅ Conditional container classes
-let containerClass = "";
+  switch (cardType) {
+    case "1":
+      // Horizontal cards
+      containerClass = "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5";
+      break;
+       case "11":
+      // Horizontal cards
+      containerClass = "flex flex-col md:flex-row md:flex-wrap gap-0 md:gap-0";
+      break;
+    case "2":
+      // Horizontal cards
+      containerClass =
+        //"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5";
+        "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5 justify-center";
+      break;
 
-switch (cardType) {
-  case "2":
-    // Horizontal cards
-    containerClass =
-      //"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5";
-       "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5 justify-center";
-    break;
-
-  case "3":
-    // Grid with 2/3/4 columns
-    containerClass =
-     // "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5";
-      "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5  justify-center";
-    break;
-
-  default:
-    // Single column (stacked cards)
-    containerClass =
-      "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5";
-    break;
-}
-
+    case "3":
+      // Grid with 2/3/4 columns
+      containerClass =
+        // "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5";
+        "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5  justify-center";
+      break;
+    case "4":
+      // Horizontal cards
+      containerClass =
+        //"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5";
+        "grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3";
+      break;
+    case "5":
+      // Horizontal cards
+      containerClass =
+        //"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5";
+        "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 ";
+      break;
+    case "6":
+      containerClass = "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5";
+      break;
+    case "7":
+      containerClass = "grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3";
+      break;
+    default:
+      // Single column (stacked cards)
+      containerClass = "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5";
+      break;
+  }
 
   return (
     <div className="container mx-auto w-full ">
